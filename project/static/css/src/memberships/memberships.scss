@@ -1,0 +1,165 @@
+.Memberships {
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    
+    z-index: 0;
+    position: relative;
+    
+    .bg {
+        width: 100vw;
+        height: 100vh;
+        
+        top: 0;
+        left: 0;
+        z-index: 1;
+        position: fixed;
+        
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+    
+    .layout {
+        width: 100%;
+        min-height: 100vh;
+        
+        top: 0;
+        left: 0;
+        z-index: 2;
+        position: absolute;
+        
+        display: flex;
+        flex-flow: row wrap;
+        
+        .top {
+            top: 0;
+            left: 0;
+            z-index: 3;
+            position: absolute;
+            
+            
+        }
+        
+        .left {
+            // width: 75%;
+            flex: 1;
+            
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+            background-color: rgba(0, 61, 0, 0.8);
+            
+            & > div {
+                color: #ffffffc7;
+                font-size: 1.25rem;
+                max-width: 800px;
+                
+                ul {
+                    padding-left: 2rem;
+                    
+                    i.icon {
+                        color: #ffff45;
+                        margin-left: -2rem;
+                    }
+                }
+                
+                
+                b { color: white; }
+            }
+        }
+        
+        .middle {
+            width: 60%;
+            margin: auto;
+            
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+            background-color: rgba(148, 148, 148, 0.8);
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .right {
+            width: 35%;
+            
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+            background-color: rgba(148, 148, 148, 0.8);
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+    }
+    
+    .congratulations {
+        width: 100%;
+        max-width: 400px;
+        margin: auto;
+        padding: 1rem;
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 10px;
+        text-align: center;
+        font-size: 18px;
+        max-width: 400px;
+        
+        h2 {
+            color: #065f46;
+            font-size: 2.5rem;
+        }
+    }
+}
+
+.Profil {
+    min-height: calc(100vh - 5rem);
+    
+    .menu {
+        margin-top: 1rem;
+        
+        .list {
+            border: 1px solid rgba(gray, .3);
+            
+            a {
+                padding: 0.75rem;
+                display: block;
+                border-bottom: 1px solid rgba(gray, .3);
+                
+                &:hover {
+                    color: #065f46;
+                }
+            }
+            
+            &:last-child {
+                border-bottom: 0;
+            }
+        }
+    }
+
+    .children {
+        .ui.two.buttons {
+            a,
+            a:hover,
+            a:focus,
+            a:visited {
+                color: inherit;
+            }
+        }
+    }
+    
+    @media (min-width: 1024px) {
+        min-height: calc(100vh - 8rem);
+    }
+}
+
+.ui.form {
+    .xsearch {
+        padding: .67857143em 2.1em .67857143em 1em;
+        line-height: 1.21428571em;
+        z-index: 2;
+        position: absolute;
+    }
+}

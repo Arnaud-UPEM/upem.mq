@@ -1,0 +1,131 @@
+<!-- 
+    Code from pen: https://codepen.io/geoffyuen/pen/FCBEg
+ -->
+ 
+{% extends 'base.html' %}
+{% load wagtailcore_tags %}
+
+{% block content %}
+<div class="container mx-auto p-4">
+    <h1 class="w-full lg:w-8/12 mx-auto">{{ page.title }}</h1>
+    
+    <div id="ACM" class="w-full lg:w-8/12 mx-auto">
+        
+        <!-- Contact block -->
+        <div class="w-full mb-4">
+            <p class="font-bold">Vous souhaitez</p>
+        </div>
+        <!-- /Contact block -->
+        
+        <div class="ui styled fluid accordion">
+            <div class="title">
+                <i class="dropdown icon"></i>
+                Nous contacter par téléphone
+            </div>
+            <div class="content">
+                <p class="transition hidden">Nous sommes joignables au numéro: <b>0596 70 32 54</b> et aux horaires ci-dessous.</p>
+                <table class="rwd-table">
+                    <tr>
+                        <th>Jour</th>
+                        <th>Matin</th>
+                        <th>Après-midi</th>
+                    </tr>
+                    <tr>
+                        <td data-th="Jour" class="font-bold">Lundi</td>
+                        <td data-th="Matin">8H30 - 12H30</td>
+                        <td data-th="Après-midi">13H30 - 16H30</td>
+                    </tr>
+                    <tr>
+                        <td data-th="Jour" class="font-bold">Mardi</td>
+                        <td data-th="Matin">8H30 - 12H30</td>
+                        <td data-th="Après-midi">13H30 - 16H30</td>
+                    </tr>
+                    <tr>
+                        <td data-th="Jour" class="font-bold">Mercredi</td>
+                        <td data-th="Matin">8H30 - 13H00</td>
+                        <td data-th="Après-midi"></td>
+                    </tr>
+                    <tr>
+                        <td data-th="Jour" class="font-bold">Jeudi</td>
+                        <td data-th="Matin">8H30 - 12H30</td>
+                        <td data-th="Après-midi">13H30 - 16H30</td>
+                    </tr>
+                    <tr>
+                        <td data-th="Jour" class="font-bold">Vendredi</td>
+                        <td data-th="Matin">8H30 - 12H30</td>
+                        <td data-th="Après-midi">13H30 - 16H30</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="title">
+                <i class="dropdown icon"></i>
+                Nous rendre visite ou payer sur place
+            </div>
+            <div class="content">
+                <p class="transition hidden">
+                    Nous nous trouvons à l'impasse Lamotte située à 5 rue Blondet, après l'église de Saint-Joseph.
+                    <a href="/contact/qui-sommes-nous" class="text-blue-500" target="_blank">Plus de détails ici.</a>
+                    <br>
+                    <span class="text-red-600 font-bold">Les paiements s'effectuent du 1er au 15 de chaque mois POUR LE MOIS SUIVANT.</span>
+                </p>
+                <table class="rwd-table">
+                    <tr>
+                        <th></th>
+                        <th>Matin</th>
+                        <th>Après-midi</th>
+                    </tr>
+                    <tr>
+                        <td data-th="Jour" class="font-bold">Lundi</td>
+                        <td data-th="Matin">8H30 - 12H30</td>
+                        <td data-th="Après-midi"></td>
+                    </tr>
+                    <tr>
+                        <td data-th="Jour" class="font-bold">Mardi</td>
+                        <td data-th="Matin"><i>Pas d'accueil le matin</i></td>
+                        <td data-th="Après-midi"></td>
+                    </tr>
+                    <tr>
+                        <td data-th="Jour" class="font-bold">Mercredi</td>
+                        <td data-th="Matin">8H30 - 13H00</td>
+                        <td data-th="Après-midi"></td>
+                    </tr>
+                    <tr>
+                        <td data-th="Jour" class="font-bold">Jeudi</td>
+                        <td data-th="Matin">8H30 - 12H30</td>
+                        <td data-th="Après-midi"></td>
+                    </tr>
+                    <tr>
+                        <td data-th="Jour" class="font-bold">Vendredi</td>
+                        <td data-th="Matin">8H30 - 12H30</td>
+                        <td data-th="Après-midi"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="title">
+                <i class="dropdown icon"></i>
+                Payer sur l'école de votre enfant
+            </div>
+            <div class="content">
+                <p class="transition hidden">
+                    Chaque mardi vous aurez la possiblité de payer sur l'école entre <b>6H00 et 7H30</b>.
+                    <br>
+                    <span class="text-red-600 font-bold">Ces paiements concernent UNIQUEMENT LA GARDERIE et s'effectuent seulement par CHEQUE.</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+    window.onload = function () {
+        document.querySelectorAll('select').forEach(item => {
+            item.className += ' ui dropdown';
+        });
+        
+        $('.ui.accordion').accordion();
+    }
+</script>
+{% endblock extra_js %}

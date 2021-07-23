@@ -1,0 +1,635 @@
+{% extends 'base.html' %}
+{% load wagtailcore_tags %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/css/ol.css" type="text/css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/css/splide.min.css">
+<link rel="stylesheet" href="/static/css/acm/acm.css" type="text/css">
+<style>
+    .ol-viewport {
+        height: 400px !important;
+    }
+</style>
+{% endblock extra_css %}
+
+{% block content %}
+<div id="Schools" class="container w-full lg:w-10/12 mx-auto p-4">
+    <h1 class="">{{ page.title }}</h1>
+    
+    <div class="block lg:flex flex-row">
+        <div class="left w-full flex bg-blue lg:w-4/12 lg:pr-4">
+            <div class="w-full flex flex-col">
+                {% for school in page.schools.all %}
+                <div class="trigger bg-white mb-4 p-4 rounded-lg cursor-pointer" data-target="{{ school.id }}" onclick="onClick(this)">
+                    <i class="icon map marker alternate"></i>
+                    {{ school.place.name }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="right w-full flex bg-blue lg:w-8/12 lg:pl-4">
+            
+            <div id="target" class="place school hidden" data-target="0">
+                <!-- Top Row -->
+                {% include 'widgets/place_widget.html' %}
+                <!-- /Gallery Row -->
+                <div class="school-details">
+                    <div class="director">
+                        <p>DIRECTEUR D'ETABLISSEMENT</p>
+                        <span>Mme. Jeanne Doe</span>
+                    </div>
+                    <div class="classrooms">
+                        <p>NOMBRE DE CLASSES</p>
+                        <span>N</span>
+                    </div>
+                    <div class="classmates">
+                        <p>NOMBRE D'ELEVES</p>
+                        <span>N</span>
+                    </div>
+
+                    <a class="directory_link" href="https://annuaire-education.fr/etablissement/Saint-Joseph/Ecole-maternelle--JEANNE-MERTON/9720289G.html" target="_blank">Plus d'informations sur l'annuaire de l'éducation</a>
+                </div>
+                
+                <div class="program">
+                    <div class="title">
+                        <h3>Programme Educatif</h3>
+                    </div>
+                    
+                    <div class="theme">
+                        <span><i>Thème</i></span>
+                        <h4>Notre thème</h4>
+                    </div>
+                    
+                    <div class="details">
+                        <p>Début :      <span class="start">    <i>Aucune donnée</i></span></p>
+                        <p>Fin :        <span class="end">      <i>Aucune donnée</i></span></p>
+                        <p>Durée :      <span class="duration"> <i>Aucune donnée</i></span></p>
+                        
+                        <p class="hidden"><a class="project" download>Télécharger projet pédagogique</a></p>
+                        <p class=""><a class="resume" download>Télécharger le résumé du projet pédagogique</a></p>
+                        <p class=""><a class="planning" download>Télécharger le planning d'activité</a></p>
+                        <p class=""><a class="reglement" download>Télécharger le règlement de fonctionnement</a></p>
+                    </div>
+                </div>
+                
+                <div class="director">
+                    <h3>Directrice</h3>
+                    
+                    <div class="profil">
+                        <div class="picture">
+                            <img src="https://via.placeholder.com/200x250">
+                        </div>
+                        <div class="details">
+                            <h4>M. John Doe</h4>
+                            <p><span class="type">              <i>Poste</i></span></p>
+                            <p><span class="grades">            <i>Diplôme 1</i> / <i>Diplôme 2</i></span></p>
+                            <p><span class="qualifications">    <i>Qualif. 1</i> / <i>Qualif. 2</i></span></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="employees hidden">
+                    <h3><span>8</span> Animatrices</h3>
+                    <div id="splide" class="splide">
+                        <div class="splide__track">
+                            <ul class="splide__list">
+                                <div class="profil over splide__slide">
+                                    <div class="picture">
+                                        <img src="https://via.placeholder.com/200x250">
+                                    </div>
+                                    <div class="details">
+                                        <h4>M. John Doe</h4>
+                                        <p><span><i>Poste</i></span></p>
+                                        <p><span><i>Diplôme 1</i> / <i>Diplôme 2</i></span></p>
+                                        <p><span><i>Qualif. 1</i> / <i>Qualif. 2</i></span></p>
+                                    </div>
+                                </div>
+                                <div class="profil over splide__slide">
+                                    <div class="picture">
+                                        <img src="https://via.placeholder.com/200x250">
+                                    </div>
+                                    <div class="details">
+                                        <h4>M. John Doe</h4>
+                                        <p><span><i>Poste</i></span></p>
+                                        <p><span><i>Diplôme 1</i> / <i>Diplôme 2</i></span></p>
+                                        <p><span><i>Qualif. 1</i> / <i>Qualif. 2</i></span></p>
+                                    </div>
+                                </div>
+                                <div class="profil over splide__slide">
+                                    <div class="picture">
+                                        <img src="https://via.placeholder.com/200x250">
+                                    </div>
+                                    <div class="details">
+                                        <h4>M. John Doe</h4>
+                                        <p><span><i>Poste</i></span></p>
+                                        <p><span><i>Diplôme 1</i> / <i>Diplôme 2</i></span></p>
+                                        <p><span><i>Qualif. 1</i> / <i>Qualif. 2</i></span></p>
+                                    </div>
+                                </div>
+                                <div class="profil over splide__slide">
+                                    <div class="picture">
+                                        <img src="https://via.placeholder.com/200x250">
+                                    </div>
+                                    <div class="details">
+                                        <h4>M. John Doe</h4>
+                                        <p><span><i>Poste</i></span></p>
+                                        <p><span><i>Diplôme 1</i> / <i>Diplôme 2</i></span></p>
+                                        <p><span><i>Qualif. 1</i> / <i>Qualif. 2</i></span></p>
+                                    </div>
+                                </div>
+                                <div class="profil over splide__slide">
+                                    <div class="picture">
+                                        <img src="https://via.placeholder.com/200x250">
+                                    </div>
+                                    <div class="details">
+                                        <h4>M. John Doe</h4>
+                                        <p><span><i>Poste</i></span></p>
+                                        <p><span><i>Diplôme 1</i> / <i>Diplôme 2</i></span></p>
+                                        <p><span><i>Qualif. 1</i> / <i>Qualif. 2</i></span></p>
+                                    </div>
+                                </div>
+                                <div class="profil over splide__slide">
+                                    <div class="picture">
+                                        <img src="https://via.placeholder.com/200x250">
+                                    </div>
+                                    <div class="details">
+                                        <h4>M. John Doe</h4>
+                                        <p><span><i>Poste</i></span></p>
+                                        <p><span><i>Diplôme 1</i> / <i>Diplôme 2</i></span></p>
+                                        <p><span><i>Qualif. 1</i> / <i>Qualif. 2</i></span></p>
+                                    </div>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_content %}
+<div class="ui dimmer">
+    <div class="wrapper">
+        <div class="top">
+            <div class="top__controls">
+                <i class="icon times"></i>
+            </div>
+        </div>
+        <div class="main">
+            <div class="main__left"><i class="icon angle left"></i></div>
+            <div class="main__center">
+                <img />
+            </div>
+            <div class="main__right"><i class="icon angle right"></i></div>
+            
+            
+        </div>
+        <div class="sub">
+            <div class="sub__container">
+                <div class="sub__container__images"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"></script>
+<script src="/static/vendor/splide/splide.min.js"></script>
+<script>
+    var map = undefined;
+    
+    var schools = undefined;
+    
+    class Gallery {
+        constructor () {}
+        
+        init () {
+            const gallery = document.getElementById('lightgallery');
+            
+            this.indexes = [];
+            
+            gallery.querySelectorAll('img, div.hidden div')
+            .forEach(item => {
+                if (item.tagName == 'DIV') {
+                    this.indexes.push(item.getAttribute('data-src'));
+                }
+                else {
+                    this.indexes.push(item.src);
+                }
+                
+                item.setAttribute('data-index', this.indexes.length - 1);
+                
+                item.addEventListener('click', (e) => {
+                    const _ = document.querySelector('.ui.dimmer img');
+                    _.src = e.target.src;
+                    _.setAttribute('data-index', e.target.getAttribute('data-index'));
+                    
+                    $('.ui.dimmer').dimmer('show');
+                });
+            });
+            
+            this.createSub();
+            
+            // this.initSelfEvents();
+        }
+        
+        
+        // Create bottom line with mini pictures
+        createSub () {
+            const gallery = document.getElementById('lightgallery');
+            
+            const container = document.querySelector('.sub__container__images');
+            container.innerHTML = '';
+            
+            gallery.querySelectorAll('img, div.hidden div')
+            .forEach(item => {
+                const _ = document.createElement('img');
+                if (item.tagName == 'DIV') {
+                    _.src = item.getAttribute('data-src');
+                }
+                else {
+                    _.src = item.src;
+                }
+                
+                container.appendChild(_);
+            });
+        }
+        
+        // Init bottom to fit the screen
+        initSub () {
+            
+        }
+        
+        
+        /* Events Part */
+        events () {}
+        
+        initSelfEvents () {
+            const self = this;
+            
+            document.querySelector('.ui.dimmer .top .top__controls .icon.times')
+            .addEventListener('click', () => self.close());
+            
+            document.querySelector('.ui.dimmer .main .main__left .icon.angle')
+            .addEventListener('click', () => self.mainPrev());
+            
+            document.querySelector('.ui.dimmer .main .main__right .icon.angle')
+            .addEventListener('click', () => self.mainNext());
+            
+            document.addEventListener('keyup', (e) => {
+                if (document.querySelector('.ui.dimmer.visible')) {
+                    if (e.key === 'ArrowLeft') self.mainPrev();
+                    else if (e.key === 'ArrowRight') self.mainNext();
+                    else if (e.key === 'Escape') self.close();
+                }
+            });
+        }
+        
+        
+        /* Logic Part */
+        logics () {}
+        
+        open () {
+            $('.ui.dimmer').dimmer('show');
+        }
+        
+        close () {
+            $('.ui.dimmer').dimmer('hide');
+        }
+        
+        mainNext () {
+            const img = document.querySelector('.ui.dimmer .main__center img');
+            
+            const index = parseInt(img.getAttribute('data-index'));
+            if (this.indexes[index + 1]) {
+                this.mainShow(index + 1);
+            }
+            else {
+                this.mainShow(0);
+            }
+        }
+        
+        mainPrev () {
+            const img = document.querySelector('.ui.dimmer .main__center img');
+            
+            const index = parseInt(img.getAttribute('data-index'));
+            if (this.indexes[index - 1]) {
+                this.mainShow(index - 1);
+            }
+            else {
+                this.mainShow(this.indexes.length - 1);
+            }
+        }
+        
+        mainShow (index) {
+            const img = document.querySelector('.ui.dimmer .main__center img');
+            console.log(index);
+            const target = this.indexes[index];
+            if (!target) {
+                return false;
+            }
+            
+            img.src = target;
+            img.setAttribute('data-index', index);
+        }
+    }
+    
+    var gallery = new Gallery();
+    
+    window.onload = function () {
+        // gallery.init();
+        gallery.initSelfEvents();
+        
+        var splide = new Splide('#splide', {
+            gap: 20,
+            type   : 'loop',
+            perMove: 1,
+            perPage: 3,
+            rewind: true,
+            autoplay: true,
+            lazyLoad: true,
+            pagination: false,
+        });
+        
+        splide.mount();
+    }
+    
+    function onClick (e) {
+        let trigger = e;
+        while(!e.classList.contains('trigger')) {
+            trigger = trigger.parentElement;
+        }
+        
+        const id = trigger.getAttribute('data-target');
+        if (id) {
+            getSchoolByID (id);
+            return;
+            
+            const target = document.querySelector(`.target[data-target="${id}"]`);
+            if (target && target.classList.contains('hidden')) {
+                document.querySelectorAll('.target').forEach(item => item.classList.add('hidden'));
+                
+                target.classList.remove('hidden');
+                drawMap(target.querySelector('.map.openlayers').id);
+            }
+        }
+    }
+    
+
+    function getSchoolByID (id) {
+        fetch(`/acm/ecoles-api/?id=${id}`, {
+            method: 'GET'
+        })
+        .then(res => {
+            return new Promise ((resolve) => {
+                res.json()
+                .then (data => resolve(data))
+            });
+        })
+        .then (res => {
+            console.log (res);
+            if (res.hasOwnProperty('school')) render (res.school);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    }
+    
+
+    function render (school) {
+        const target = document.getElementById('target');
+        
+        // Check target id to avoid to re-draw
+        if (target.getAttribute('data-target') == school.id) {
+            return true;
+        }
+        else {
+            target.setAttribute('data-target', school.id);
+        }
+        
+        // Check target visibility
+        if (target.classList.contains('hidden')) {
+            target.classList.remove('hidden');
+        }
+        
+        const m2 = (value, snippet) => {
+            return (value) ? snippet.replaceAll('$0', value) : '';
+        };
+        
+        const place = school.place;
+        console.log(place);
+        
+        const details = document.getElementById('target__details');
+        details.innerHTML = `<h2 class="mt-0">${place.name}</h2>`;
+        
+        details.innerHTML += m2(place.label, '<h4 class="mt-0">$0</h4>');
+        details.innerHTML += m2(place.email, '<i class="icon envelope outline"></i><a href="mailto:$0">$0</a><br>');
+        details.innerHTML += m2(place.address_1, '<i class="icon map marker alternate"></i>$0<br>');
+        details.innerHTML += m2(place.address_2, '<i class="icon map marker alternate"></i>$0<br>');
+        
+        let zip_city = (place.zip_code) ? place.zip_code : '';
+        zip_city += (place.city) ? (place.zip_code) ? `, ${place.city}` : place.city : '';
+        
+        details.innerHTML += `<i class="icon building outline"></i>${zip_city}<br>`;
+        
+        details.innerHTML += m2(place.phone_cell, '<i class="icon mobile"></i>$0<br>');
+        details.innerHTML += m2(place.phone_home, '<i class="icon fax"></i>$0<br>');
+        details.innerHTML += m2(place.phone_fax, '<i class="icon print"></i>$0<br>');
+        
+        // renderImages(place.gallery_images);
+        
+        renderSchool(school);
+        
+        drawMap (
+            place.latitude,
+            place.longitude
+        )
+        
+        return true;
+    }
+    
+    
+    function renderImages (images) {
+        const lg = document.getElementById('lightgallery');
+
+        if (!images) {
+            lg.parentElement.classList.add('hidden');
+            return false;
+        }
+        else {
+            // Un-hide parent .gallery
+            lg.parentElement.classList.remove('hidden');
+        }     
+        
+        const shown = lg.querySelector('.shown');
+        shown.innerHTML = '';
+        
+        for (const image of images.slice(0, 6)) {
+            shown.innerHTML += `<a style="flex:1 0 31%; margin:1px;"><img src="${image.url}"></a>`;
+        }
+        
+        const hidden = lg.querySelector('.hidden');
+        hidden.innerHTML = '';
+        
+        for (const image of images.slice(6)) {
+            hidden.innerHTML += `<div data-src="${image.url}"></div>`;
+        }
+        
+        gallery.init();
+    }
+    
+    
+    function renderSchool (school) {
+        // School details
+        const school_director = school.school_director || '<i>Aucune donnée</i>';
+        document.querySelector('.place .school-details .director span').innerHTML = school_director;
+
+        const total_classmates = school.total_classmates || '<i>Aucune donnée</i>';
+        document.querySelector('.place .school-details .classmates span').innerHTML = total_classmates;
+
+        const total_classrooms = school.total_classrooms || '<i>Aucune donnée</i>';
+        document.querySelector('.place .school-details .classrooms span').innerHTML = total_classrooms;
+
+        if (school.directory_link) {
+            document
+            .querySelector('.place .school-details .directory_link')
+            .setAttribute(
+                'href',
+                school.directory_link
+            );
+        }
+        else {
+            document
+            .querySelector('.place .school-details .directory_link')
+            .removeAttribute('href');
+        }
+
+        // Program
+        const program_theme = school.program_theme || '<i>Aucun thème</i>';
+        document.querySelector('.place .program .theme span').innerHTML = program_theme;
+
+        const program_start = school.program_start || '<i>Aucune donnée</i>';
+        document.querySelector('.place .program .details span.start').innerHTML = program_start;
+
+        const program_end = school.program_end || '<i>Aucune donnée</i>';
+        document.querySelector('.place .program .details span.end').innerHTML = program_end;
+
+        const program_duration = school.program_duration || '<i>Aucune donnée</i>';
+        document.querySelector('.place .program .details span.duration').innerHTML = program_duration;
+
+        /** @NOTE
+        *   Le programme éductaif complet sera gardé privé
+        *   et remplacé par un résumé
+        *
+        if (school.program_project_url) {
+            document
+            .querySelector('.place .program .details .project')
+            .setAttribute(
+                'href',
+                school.program_project_url
+                );
+            }
+            else {
+                document
+                .querySelector('.place .program .details .project')
+                .removeAttribute('href');
+            }
+        */
+
+        // Projet ped...
+
+        // Director
+        if (school.anim_director &&
+            school.anim_director.last_name && 
+            school.anim_director.first_name) {
+
+            document.querySelector('.place > .director').classList.remove('hidden');
+
+            const _ = `${school.anim_director.prefix}${school.anim_director.last_name} ${school.anim_director.first_name}`;
+
+            document.querySelector('.place .director .details h4').innerHTML = _;
+            
+            const director_type = school.anim_director.type;
+            document.querySelector('.place .director .details span.type').innerHTML = director_type;
+    
+            const director_grades = school.anim_director.grades;
+            document.querySelector('.place .director .details span.grades').innerHTML = director_grades;
+    
+            const director_qualifications = school.anim_director.qualifications;
+            document.querySelector('.place .director .details span.qualifications').innerHTML = director_qualifications;
+        }
+        else {
+            document.querySelector('.place > .director').classList.add('hidden');
+        }
+
+        // Employees
+        const employees = school.employees;
+
+        if (!employees || !employees.length) {
+            document.querySelector('.place .employees').classList.add('hidden');
+        }
+        else {
+            document.querySelector('.place .employees').classList.remove('hidden');
+
+        }
+    }
+    
+    
+    function drawMap (lat, lon) {
+        // lat = 14.6699989418;
+        // lon = -61.0373777448;
+        
+        document.getElementById('map').innerHTML = '';
+        
+        console.log(lat);
+        console.log(lon);
+        
+        var marker = new ol.Feature({
+            geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
+        });
+        
+        var layer = new ol.layer.Vector({
+            source: new ol.source.Vector({
+                features: [marker]
+            }),
+            style: new ol.style.Style({
+                image: new ol.style.Icon({
+                    anchor: [0.5, 46],
+                    anchorXUnits: 'fraction',
+                    anchorYUnits: 'pixels',
+                    src: window.location.origin + '/media/marker_icon.png'
+                })
+            })
+        });
+        
+        map = new ol.Map({
+            target: 'map',
+            renderer: 'canvas',
+            layers: [
+            new ol.layer.Tile({
+                source: new ol.source.OSM()
+            }),
+            layer
+            ],
+            view: new ol.View({
+                center: ol.proj.fromLonLat([lon, lat]),
+                zoom: 19
+            }) 
+        });
+    }
+    
+</script>
+{% endblock extra_js %}
+
+
+<!-- https://via.placeholder.com/250
+    https://via.placeholder.com/250
+    https://via.placeholder.com/250
+    https://via.placeholder.com/250
+    https://via.placeholder.com/250
+    https://via.placeholder.com/250 -->

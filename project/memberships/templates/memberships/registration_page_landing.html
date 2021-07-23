@@ -1,0 +1,26 @@
+
+{% extends 'memberships/base.html' %}
+{% load static wagtailcore_tags wagtailuserbar %}
+
+{% block alt_title %}
+Inscription terminée
+{% endblock %}
+
+{% block layout %}
+<div class="top">
+    <a href="/" class="p-4 flex flex-nowrap">
+        <img src="/media/demo/android-chrome-256x256.png" alt="" class="h-24 p-2 flex-1">
+        <div class="px-2 flex flex-col items-center justify-center uppercase text-white">
+            <div class="text-3xl mb-2">UPEM</div>
+            <div class="text-center">Affaires scolaires</div>
+        </div>
+    </a>
+</div>
+
+<div class="congratulations">
+    <h2 class="">Félicitations,</h2>
+    <p>Vous êtes maintenant inscrit avec l'adresse</p>
+    <p><b>{{ auth_form.email.value | default:'test@mail.fr' }}</b></p>
+    <p>Vous allez bientôt être redirigé vers la page de connexion.</p>
+</div>
+{% endblock %}

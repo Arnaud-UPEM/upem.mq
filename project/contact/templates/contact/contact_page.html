@@ -1,0 +1,435 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% load wagtailcore_tags %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/css/ol.css" type="text/css">
+<link rel="stylesheet" href="/static/css/acm/acm.css" type="text/css">
+<style>
+.ol-viewport {
+    height: 400px !important;
+}
+</style>
+{% endblock extra_css %}
+
+{% block content %}
+<section>
+    <div class="page banner">
+        <div class="bg purple"></div>
+        <div class="ui container">
+            <h1 class="header white">{{ page.title }}</h1>
+        </div>
+    </div>
+</section>
+
+<section class="beige">
+    <div class="ui container transparent">
+        <div class="flex flex-row flex-wrap">
+            <!-- LEFT SIDE -->
+            <div class="w-1/2">
+                <div class="flex flex-col">
+                    <!-- ANTENNE -->
+                    <div class="px-4 mb-4">
+                        {% with place=page.place %}
+                        <div id="target" class="target bg-white w-full flex flex-col rounded-lg overflow-hidden py-4" data-target="0">
+                            <!-- Top Row -->
+                            <div class="w-full block lg:flex flex-row px-4">
+            
+                                <div id="target__details" class="w-full lg:w-1/2">
+                                    <h3 class="name mt-0 header">{{ place.title }}</h3>
+                                    <h4 class="label mt-0">Label</h4>
+                                    
+                                    <p>
+                                        <i class="email icon envelope outline"></i>
+                                        <a href="">Email</a><br>
+                                    </p>
+                                    <p>
+                                        <i class="icon map marker alternate"></i>
+                                        Address 1<br>
+                                    </p>
+                                    <p>
+                                        <i class="icon map marker alternate"></i>
+                                        Address 2<br>
+                                    </p>
+                                    <p>
+                                        <i class="icon map marker alternate"></i>
+                                        Ville, Zip Code<br>
+                                    </p>
+            
+                                    <p>
+                                        <i class="icon mobile"></i>
+                                        Téléphone portable<br>
+                                    </p>
+                                    <p>
+                                        <i class="icon fax"></i>
+                                        Téléphone fixe<br>
+                                    </p>
+                                    <p>
+                                        <i class="icon fax"></i>
+                                        Téléphone fax<br>
+                                    </p>
+                                </div>
+            
+                            </div>
+                            <!-- /Top Row -->
+                            
+                            <!-- Gallery Row -->
+                            <div id="lightgallery" class="w-full hidden flex-row flex-wrap">
+                                {% for image in place.gallery_images.all %}
+                                <a style="flex:1 0 31%; margin:1px;"><img src="{{ image.url }}"></a>
+                                {% endfor %}
+                                <!-- <a style="flex:1 0 31%; margin:1px;"><img src="https://sachinchoolur.github.io/lightgallery.js/static/img/thumb-1.jpg"></a>
+                                <a style="flex:1 0 31%; margin:1px;"><img src="https://sachinchoolur.github.io/lightgallery.js/static/img/thumb-2.jpg"></a>
+                                <a style="flex:1 0 31%; margin:1px;"><img src="https://sachinchoolur.github.io/lightgallery.js/static/img/thumb-3.jpg"></a>
+                                <a style="flex:1 0 31%; margin:1px;"><img src="https://sachinchoolur.github.io/lightgallery.js/static/img/thumb-4.jpg"></a>
+                                <a style="flex:1 0 31%; margin:1px;"><img src="https://sachinchoolur.github.io/lightgallery.js/static/img/thumb-5.jpg"></a>
+                                <a style="flex:1 0 31%; margin:1px;"><img src="https://sachinchoolur.github.io/lightgallery.js/static/img/thumb-6.jpg"></a> -->
+                                <div class="hidden">
+            
+                                </div>
+                            </div>
+                            <!-- /Gallery Row -->
+                        </div>
+                        {% endwith %}
+                    </div>
+
+                    <!-- MAP -->
+                    <div class="px-4">
+                        <div id="map" class="map openlayers w-full"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT SIDE -->
+            <div class="w-1/2">
+                <!-- CONTACT -->
+                <div class="px-4">
+                    <!-- Contact block -->
+                    <div class="w-full p-4 bg-white rounded-lg mb-4">
+                        <div class="wsgi">
+                            {{ self.intro|richtext }}
+                        </div>
+                    </div>
+                    <!-- /Contact block -->
+                
+                    <!-- Contact block -->
+                    <div class="w-full p-4 bg-white rounded-lg mb-4">
+                        <h3 class="w-full mx-auto header">Formulaire</h3>
+                
+                        <form action="{% pageurl page %}" method="POST" class="ui form">
+                            {% csrf_token %}
+                
+                            {% for field in form %}
+                            <div class="field {% if field.errors %} has-error{% endif %}">
+                                {% render_field field class="form-control form-control-sm" placeholder=field.label %}
+                
+                                {% if field.id_for_label == "id_choix_0" %}
+                                <div class="mt-1 titlespecify{% if form.errors.choix_autre %} has-error{% endif %}" style=>
+                                    <input class="form-control form-control-sm" type='text' name='choix_autre' placeholder="Specify Title" />
+                                    {{ form.errors.choix_autre }}
+                                </div>
+                                {% endif %}
+                
+                                {% for error in field.errors %}
+                                <div class="ui pointing red basic label">
+                                    {{ error }}
+                                  </div>
+                                {% endfor %}
+                            </div>
+                            {% endfor %}
+                            
+                            <button class="ui button" type="submit">
+                                Soumettre
+                            </button>
+                        </form>
+                    </div>
+                    <!-- /Contact block -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_content %}
+<div class="ui dimmer">
+    <div class="container">
+        <div class="top">
+            <div class="top__controls">
+                <i class="icon times"></i>
+            </div>
+        </div>
+        <div class="main">
+            <div class="main__left"><i class="icon angle left"></i></div>
+            <div class="main__center">
+                <img />
+            </div>
+            <div class="main__right"><i class="icon angle right"></i></div>
+
+
+        </div>
+        <div class="sub">
+            <div class="sub__container">
+                <div class="sub__container__images"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"></script>
+<script>
+    var map = undefined;
+
+    var schools = undefined;
+
+    class Gallery {
+        constructor () {}
+
+        init () {
+            const gallery = document.getElementById('lightgallery');
+
+            this.indexes = [];
+        
+            gallery.querySelectorAll('img')
+            .forEach(item => {
+
+                this.indexes.push(item.src);
+                item.setAttribute('data-index', this.indexes.length - 1);
+
+
+                item.addEventListener('click', (e) => {
+                    const _ = document.querySelector('.ui.dimmer img');
+                    _.src = e.target.src;
+                    _.setAttribute('data-index', e.target.getAttribute('data-index'));
+                    
+                    $('.ui.dimmer').dimmer('show');
+                });
+            });
+
+            this.createSub();
+
+            this.initSelfEvents();
+        }
+
+
+        // Create bottom line with mini pictures
+        createSub () {
+            const gallery = document.getElementById('lightgallery');
+            const container = document.querySelector('.sub__container__images');
+
+            gallery.querySelectorAll('img')
+            .forEach(img => {
+                const _ = document.createElement('img');
+                _.src = img.src;
+
+                container.appendChild(_);
+            });
+        }
+
+        // Init bottom to fit the screen
+        initSub () {
+
+        }
+
+
+        /* Events Part */
+        events () {}
+
+        initSelfEvents () {
+            const self = this;
+
+            document.querySelector('.ui.dimmer .top .top__controls .icon.times')
+            .addEventListener('click', () => self.close());
+
+            document.querySelector('.ui.dimmer .main .main__left .icon.angle')
+            .addEventListener('click', () => self.mainPrev());
+
+            document.querySelector('.ui.dimmer .main .main__right .icon.angle')
+            .addEventListener('click', () => self.mainNext());
+
+            document.addEventListener('keyup', (e) => {
+                if (document.querySelector('.ui.dimmer.visible')) {
+                    if (e.key === 'ArrowLeft') self.mainPrev();
+                    else if (e.key === 'ArrowRight') self.mainNext();
+                    else if (e.key === 'Escape') self.close();
+                }
+            });
+        }
+
+
+        /* Logic Part */
+        logics () {}
+
+        open () {
+            $('.ui.dimmer').dimmer('show');
+        }
+
+        close () {
+            $('.ui.dimmer').dimmer('hide');
+        }
+
+        mainNext () {
+            const img = document.querySelector('.ui.dimmer .main__center img');
+
+            const index = parseInt(img.getAttribute('data-index'));
+            if (this.indexes[index + 1]) {
+                this.mainShow(index + 1);
+            }
+            else {
+                this.mainShow(0);
+            }
+        }
+
+        mainPrev () {
+            const img = document.querySelector('.ui.dimmer .main__center img');
+
+            const index = parseInt(img.getAttribute('data-index'));
+            if (this.indexes[index - 1]) {
+                this.mainShow(index - 1);
+            }
+            else {
+                this.mainShow(this.indexes.length - 1);
+            }
+        }
+
+        mainShow (index) {
+            const img = document.querySelector('.ui.dimmer .main__center img');
+
+            const target = this.indexes[index];
+            if (!target) {
+                return false;
+            }
+
+            img.src = target;
+            img.setAttribute('data-index', index);
+        }
+    }
+
+    var gallery = new Gallery();
+
+    window.onload = function () {
+
+        render ();
+
+        gallery.init();
+    }
+
+    function onClick (e) {
+        let trigger = e;
+        while(!e.classList.contains('trigger')) {
+            trigger = trigger.parentElement;
+        }
+
+        const id = trigger.getAttribute('data-target');
+        if (id) {
+            getSchoolByID (id);
+            return;
+
+            const target = document.querySelector(`.target[data-target="${id}"]`);
+            if (target && target.classList.contains('hidden')) {
+                document.querySelectorAll('.target').forEach(item => item.classList.add('hidden'));
+
+                target.classList.remove('hidden');
+                drawMap(target.querySelector('.map.openlayers').id);
+            }
+        }
+    }
+
+    function getSchoolByID (id) {
+        fetch(`/acm/ecoles-api/?id=${id}`, {
+            method: 'GET'
+        })
+        .then(res => {
+            return new Promise ((resolve) => {
+                res.json()
+                .then (data => resolve(data))
+            });
+        })
+        .then (res => {
+            console.log (res);
+            if (res.hasOwnProperty('school')) render (res.school);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    }
+
+
+    function render (school) {
+        const m2 = (value, snippet) => {
+            return (value) ? snippet.replaceAll('$0', value) : '';
+        };
+
+        const details = document.getElementById('target__details');
+        details.innerHTML = `<h3 class="mt-0 header">{{ page.place.name }}</h3>`;
+
+        details.innerHTML += m2('{{ page.place.label }}', '<h4 class="mt-0">$0</h4>');
+        details.innerHTML += m2('{{ page.place.email }}', '<i class="icon envelope outline"></i><a href="mailto:$0">$0</a><br><br>');
+        details.innerHTML += m2('{{ page.place.address_1 }}', '<i class="icon map marker alternate"></i>$0<br><br>');
+        details.innerHTML += m2('{{ page.place.address_2 }}', '<i class="icon map marker alternate"></i>$0<br><br>');
+
+        let zip_city = ('{{ page.place.zip_code }}') ? '{{ page.place.zip_code }}' : '';
+        zip_city += ('{{ page.place.city }}') ? ('{{ page.place.zip_code }}') ? `, {{ page.place.city }}` : '{{ page.place.city }}' : '';
+
+        details.innerHTML += `<i class="icon building outline"></i>${zip_city}<br><br>`;
+        
+        details.innerHTML += m2('{{ page.place.phone_cell }}', '<i class="icon mobile"></i>$0<br><br>');
+        details.innerHTML += m2('{{ page.place.phone_home }}', '<i class="icon fax"></i>$0<br><br>');
+        details.innerHTML += m2('{{ page.place.phone_fax }}', '<i class="icon print"></i>$0<br><br>');
+
+        drawMap (
+            {{ page.place.latitude|floatformat:'10' }},
+            {{ page.place.longitude|floatformat:'10' }}
+        )
+
+
+        return true;
+    }
+
+
+    function drawMap (lat, lon) {
+        // lat = 14.6699989418;
+        // lon = -61.0373777448;
+
+        console.log(lat);
+        console.log(lon);
+
+        var marker = new ol.Feature({
+            geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
+        });
+
+        var layer = new ol.layer.Vector({
+            source: new ol.source.Vector({
+                features: [marker]
+            }),
+            style: new ol.style.Style({
+                image: new ol.style.Icon({
+                    anchor: [0.5, 46],
+                    anchorXUnits: 'fraction',
+                    anchorYUnits: 'pixels',
+                    src: 'https://upeem.org/media/marker_icon.png'
+                })
+            })
+        });
+        
+        map = new ol.Map({
+            target: 'map',
+            renderer: 'canvas',
+            layers: [
+                new ol.layer.Tile({
+                    source: new ol.source.OSM()
+                }),
+                layer
+            ],
+            view: new ol.View({
+                center: ol.proj.fromLonLat([lon, lat]),
+                zoom: 20
+            }) 
+        });
+    }
+
+</script>
+{% endblock extra_js %}

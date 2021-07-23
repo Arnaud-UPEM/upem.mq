@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}alert-index-page{% endblock %}
+
+{% block extra_css %}
+{% endblock extra_css %}
+
+{% block content %}
+<div class="w-full lg:w-8/12 mx-auto my-20">
+    <div class="flex flex-row justify-center font-bold">
+        <h2 class="m-0">{{ page.title }}</h2>
+    </div>
+
+    <div>
+        {% include 'widgets/alerts_widget.html' %}
+    </div>
+</div>
+{% endblock %}

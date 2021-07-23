@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}loginpage{% endblock %}
+
+{% block extra_css %}
+{% endblock extra_css %}
+
+{% block content %}
+<section>
+    <div class="login">
+        <div class="congratulations">
+            <h2 class="">Félicitations,</h2>
+            <p>Vous êtes maintenant connecté.</p>
+            <p>Vous allez bientôt être redirigé vers la page d'accueil.</p>
+        </div>
+    </div>
+</section>
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+    window.onload = function () {
+        window.setTimeout (() => {
+            window.location.href = '/';
+        }, 3000);
+    }
+</script>
+{% endblock extra_js %}

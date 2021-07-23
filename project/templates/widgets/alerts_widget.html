@@ -1,0 +1,179 @@
+{% load wagtailcore_tags %}
+
+<div class="w-full lg:w-8/12 mx-auto p-8">
+
+    {% comment %}
+    <div class="alerts info" onclic="Alerts.open(this)">
+        <!-- Title -->
+        <div class="alerts__title">
+            <i class="icon"></i>
+            <p>Ouverture période d'encaissement</p>
+            <span>21/03/2021</span>
+        </div>
+        <!-- Body -->
+        <div class="alerts__body ">
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquet sit amet nunc id lobortis. Etiam aliquam, erat ac aliquet malesuada, ex massa auctor mi, eget volutpat nulla justo eget lorem. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Aliquam erat volutpat. Praesent odio sem, porttitor sed vehicula id, lacinia et augue. Ut finibus tellus vitae neque lobortis volutpat. Praesent nec velit scelerisque, eleifend ante et, tristique est. Vestibulum quis felis elit. Donec vestibulum justo justo, eu consectetur orci pretium et. Nullam varius felis ligula, commodo suscipit lacus finibus in. Morbi vitae metus ultrices, consectetur massa at, scelerisque lacus. Mauris risus turpis, maximus ac rhoncus quis, mollis at metus. Pellentesque malesuada ornare velit, eget suscipit risus bibendum quis. Praesent ut lacus sed erat commodo elementum eu convallis quam. 
+            </p>
+        </div>
+        <!-- Footer -->
+        <div class="alerts__footer">
+            <span class="alerts__footer__tag">
+                PERI
+            </span>
+            <span class="alerts__footer__tag">
+                ALSH
+            </span>
+        </div>
+    </div>
+    
+    <div class="alerts warning" onclic="Alerts.open(this)">
+        <!-- Title -->
+        <div class="alerts__title">
+            <i class="icon"></i>
+            <p>Sortie pédagogique sur centres de loisir</p>
+        </div>
+        <!-- Body -->
+        <div class="alerts__body ">
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec luctus sem ut pretium vulputate. Donec eleifend varius ornare. Donec sodales, urna in vulputate interdum, diam est condimentum dolor, non posuere ligula turpis ac felis. 
+            </p>
+        </div>
+        <!-- Footer -->
+        <div class="alerts__footer">
+            <span class="alerts__footer__tag">
+                ALSH
+            </span>
+            <span class="alerts__footer__tag">
+                Jeanne Merton
+            </span>
+            <span class="alerts__footer__tag">
+                Edouard Marceau
+            </span>
+        </div>
+    </div>
+    
+    <div class="alerts danger" onclic="Alerts.open(this)">
+        <!-- Title -->
+        <div class="alerts__title">
+            <i class="icon"></i>
+            <p>Ecoles fermées pour coupure d'eau</p>
+        </div>
+        <!-- Body -->
+        <div class="alerts__body ">
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec luctus sem ut pretium vulputate. Donec eleifend varius ornare. Donec sodales, urna in vulputate interdum, diam est condimentum dolor, non posuere ligula turpis ac felis. 
+            </p>
+        </div>
+        <!-- Footer -->
+        <div class="alerts__footer">
+            <span class="alerts__footer__tag">
+                PERI
+            </span>
+            <span class="alerts__footer__tag">
+                Bois du Parc
+            </span>
+            <span class="alerts__footer__tag">
+                Morne des olives
+            </span>
+            <span class="alerts__footer__tag">
+                Henri Maurice
+            </span>
+        </div>
+    </div>
+    
+    <div class="alerts success" onclic="Alerts.open(this)">
+        <!-- Title -->
+        <div class="alerts__title">
+            <i class="icon"></i>
+            <p>Ouverture des inscription 2021/2022</p>
+        </div>
+        <!-- Body -->
+        <div class="alerts__body ">
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec luctus sem ut pretium vulputate. Donec eleifend varius ornare. Donec sodales, urna in vulputate interdum, diam est condimentum dolor, non posuere ligula turpis ac felis. 
+            </p>
+        </div>
+        <!-- Footer -->
+        <div class="alerts__footer">
+            <span class="alerts__footer__tag">
+                PERI
+            </span>
+            <span class="alerts__footer__tag">
+                ALSH
+            </span>
+        </div>
+    </div>
+    {% endcomment %}
+
+    <div class="alerts no-alert">
+        Aucune alerte en cours
+    </div>
+    
+    {% for alert in alerts %}
+    <div 
+    data-id="{{ alert.id }}"
+    data-type="{{ alert.type }}"
+    data-lifespan="{{ alert.lifespan }}"
+    data-date_end="{{ alert.date_end|default:'Aucune' }}"
+    data-date_start="{{ alert.date_start|default:'Aucune' }}"
+    data-date_created="{{ alert.date_created|default:'Aucune' }}"
+    class="alerts {{ alert.type }}" 
+    onclick="Alerts.open(this)">
+        
+        <!-- Title -->
+        <div class="alerts__title">
+            <i class="icon"></i>
+            <p>{{ alert.title }}</p>
+        </div>
+        <!-- Body -->
+        <div class="alerts__body">
+            {{ alert.content|richtext }}
+        </div>
+        <!-- Footer -->
+        <div class="alerts__footer">
+            <div class="more">
+                Plus de détails
+            </div>
+            <div class="tags">
+                <span class="alerts__footer__tag">
+                    PERI
+                </span>
+                <span class="alerts__footer__tag">
+                    ALSH
+                </span>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    
+</div>
+
+<div class="ui small modal alerts danger">
+    <!-- Title -->
+    <div class="alerts__title">
+        <i class="icon"></i>
+        <p>Ouverture période d'encaissement</p>
+        <span>21/03/2021</span>
+    </div>
+    <!-- Body -->
+    <div class="alerts__body"></div>
+    <!-- Footer -->
+    <div class="alerts__footer">
+        <div class="meta">
+            <p>Date de création:    <span class="dc"></span></p>
+            <p>Date de publication: <span class="ds"></span></p>
+            <p>Date de fin:         <span class="de"></span></p>
+            <!-- <p>Durée de validité:   <span class="ls"></span> jours</p> -->
+        </div>
+
+        <div class="tags">
+            <span class="alerts__footer__tag">
+                PERI
+            </span>
+            <span class="alerts__footer__tag">
+                ALSH
+            </span>
+        </div>
+    </div>
+</div>

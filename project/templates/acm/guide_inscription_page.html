@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% load wagtailcore_tags %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/acm/acm.css" type="text/css">
+{% endblock extra_css %}
+
+{% block content %}
+<div class="container mx-auto p-4">
+    <h1 class="w-full lg:w-8/12 mx-auto">{{ page.title }}</h1>
+    
+    <div id="ACM" class="w-full lg:w-8/12 mx-auto">
+        
+        <!-- Contact block -->
+        <div class="w-full p-4 bg-white rounded-lg mb-4">
+            <p class="">
+                Ce guide d'inscription répertorie les questions les plus fréquentes posées sur les inscriptions et/ou sur les conditions de prise en charge des enfants en ALSH.
+                <br>
+                Pour toute autre question,  merci de nous contacter.
+                <br>
+                <span class="font-bold">
+                    <a class="text-blue-500" href="/acm/tarifs">Cliquer ici pour voir nos tarifs</a>,
+                    <a class="text-blue-500" href="/acm/horaires">et ici pour voir nos horaires</a>. 
+                </span>
+            </p>
+        </div>
+        <!-- /Contact block -->
+
+        <div class="ui styled fluid accordion">
+            <div class="title">
+                <i class="dropdown icon"></i>
+                Comment inscrire mon/mes enfant(s) à vos services ? 
+                <div class="ui turquoise label">PERI</div>
+                <div class="ui indigo label">ALSH</div>
+            </div>
+            <div class="content">
+                <p>
+                    <span class="font-bold">
+                        L'inscription aus services ACM (Garderie et centres de loisirs) de l'UPEEM peut s'effectué tout au long de l'année scolaire.
+                        <br>
+                        Elle se déroule en deux étapes.
+                    </span>
+                    <br>
+                </p>
+                <p>
+                    <span>
+                        La <b>pré-inscription</b> s'effectue en ligne sur le site
+                        <a class="text-blue-500 font-bold" href="https://uperiscolaire.com" target="_blank">Upériscolaire</a>.
+                    </span>
+                </p>    
+                <p>
+                    Une fois la pré-inscription terminée, n'oubliez pas de ramener tous les documents nécessaires :
+                    <div class="ui bulleted list">
+                        <div class="item">La <b>fiche d'inscription</b> et la <b>fiche sanitaire</b> récupérer sur Upériscolaire, dûment renseignées et <b>imprimées</b></div>
+                        <div class="item">1 <b>photo d'identité récente</b> de votre enfant (2 si inscription en ALSH)</div>
+                        <div class="item"><b>L'attestation d'assurance extrascolaire 2020-2021</b> (type 24/24 plus)</div>
+                        <div class="item"><b>La photocopie des pages de vaccinations</b></div>
+                        <div class="item">La copie du Projet d'Accueil Individualisé (si votre enfant en bénéficie)</div>
+                        <div class="item">Montant des prestations souhaitées en espèces ou par chèque</div>
+                    </div>
+                    <b>Aucun dossier incomplet ne sera accepté.</b>
+                </p>
+            </div>
+
+            <div class="title">
+                <i class="dropdown icon"></i>
+                Ou se trouvent vos centres de loisirs ?
+                <div class="ui indigo label">ALSH</div>
+            </div>
+            <div class="content">
+                <p>
+                    Nos centres se trouvent aux écoles <strong>Jeanne MERTON</strong> pour les maternelles et <strong>Edouard MARCEAU</strong> pour les primaires.
+                    <br>
+                    <a class="text-blue-500 font-bold" href="/acm/ecoles" target="_blank">Voir nos Ecoles</a>.
+                </p>
+            </div>
+
+            <div class="title">
+                <i class="dropdown icon"></i>
+                Quels sont les horaires d'accueil de vos centres/écoles ?
+                <div class="ui turquoise label">PERI</div>
+                <div class="ui indigo label">ALSH</div>
+            </div>
+            <div class="content">
+                <p>
+                    L'accueil <strong>périscolaire</strong> se fait de <strong>6h à 8h</strong> et de <strong>16h à 18h</strong>.
+                    <br>
+                    Et l'accueil sur <strong>centre</strong> se fait de <strong>8h à 16h</strong>.
+                    <br>
+                    <strong>A noter que l'accueil périscolaire est également disponible les jours de centres de loisirs, et compris dans le forfait du jour.</strong>
+                </p>
+            </div>
+
+            <div class="title">
+                <i class="dropdown icon"></i>
+                Quels sont les repas fournies au cours de la journée ?
+                <div class="ui indigo label">ALSH</div>
+            </div>
+            <div class="content">
+                <p>
+                    Les repas fournies sont le repas de <strong>midi</strong> ainsi que la collation de <strong>16h</strong>.
+                    <br>
+                    <strong>La collation de 10h est à la charge du parent, mais n'est pas obligatoire.</strong>
+                </p>
+            </div>
+
+            <div class="title">
+                <i class="dropdown icon"></i>
+                Quelle est la tenue vestimentaire sur les centres de loisirs ?
+                <div class="ui indigo label">ALSH</div>
+            </div>
+            <div class="content">
+                <p>
+                    Les enfants doivent porter un <strong>tee-shirt</strong> de couleur <strong>verte</strong> uniquement <strong>les jours de sortie</strong>.
+                    <br>
+                    Autrement une <strong>tenue correct</strong> est demandée, ainsi qu'un <strong>linge de rechange</strong> pour les <strong>maternelles</strong>.
+                    <br>
+                    <br>
+                    Pensez également à <strong>équiper</strong> votre enfant les <strong>jours de sortie</strong> accordément à l'activité proposée :
+                    <br>
+                    <i>- Sandales, serviette, casquette et maillot pour les sorties plage/piscine.</i>
+                    <br>
+                    <i>- Ou basquettes pour les sorties sportives.</i>
+                    Bouteille d'eau
+                </p>
+            </div>
+
+            <div class="title">
+                <i class="dropdown icon"></i>
+                Comment se déroule une journée sur le centre ?
+                <div class="ui indigo label">ALSH</div>
+            </div>
+            <div class="content">
+                <p>
+                    Sur les centres vos enfants sont <strong>accueilis</strong> depuis <strong>6h et jusqu'à 18h</strong>.
+                    <br>
+                    <br>
+                    En fonction du <a href="/acm/programmes-acm" target="_blank" class="text-blue-500"><strong>programme</strong></a>, les enfants seront réparties par <strong>atelier</strong> ou une <strong>activité</strong> leur est présentée.
+                    <br>
+                    <br>
+                    La collation du matin se fait à <strong>9h15</strong>. 
+                    <br>
+                    Et le déjeuner à <strong>12h</strong>, suivi à <strong>13h</strong> d'un <strong>temps de repos</strong> (sieste ou activités calmes) d'une heure.
+                    <br>
+                    <br>
+                    Puis les <strong>activités</strong> reprennent jusqu'à <strong>16h</strong>, heure des premiers départs.
+                    <br>
+                    Pour les enfants en <strong>garderie</strong> (16h à 18h), il y aura un goûter, un bilan de la journée ainsi que des activités récréatives.
+                </p>
+            </div>
+
+            <div class="title">
+                <i class="dropdown icon"></i>
+                Comment se déroule une journée de sortie ?
+                <div class="ui indigo label">ALSH</div>
+            </div>
+            <div class="content">
+                <p>
+                    Le bus de transport <strong>démarre à 9h</strong> pour se rendre sur le lieu de l'activité.
+                    <br>
+                    Une <strong>vérification des PAI</strong> s'effectue avant le départ, et le <strong>pointage des présences</strong> avant le départ et à l'arrivé sur site.
+                    <br>
+                    <br>
+                    La <strong>pause déjeuner</strong> se déroule de <strong>12h à 13h</strong>, pour ensuite reprendre les <strong>activités</strong>.
+                    <br>
+                    <br>
+                    Et pour finir le <strong>départ en bus</strong> et <strong>retour sur centre</strong> commence à partir de <strong>14h45</strong>.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+    window.onload = function () {
+        document.querySelectorAll('select').forEach(item => {
+            item.className += ' ui dropdown';
+        });
+        
+        $('.ui.accordion').accordion();
+    }
+</script>
+{% endblock extra_js %}

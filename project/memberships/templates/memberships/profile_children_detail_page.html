@@ -1,0 +1,170 @@
+{% extends 'memberships/profile_base.html' %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block articles %}
+{% if not errors %}
+<article>
+    {{ errors }}
+    <form class="ui form w-full" action="{% pageurl page %}{{ pk|default:'add' }}/" method="POST">
+        {% csrf_token %}
+        <h3 class="header">{{ pk | yesno:'Modification,Nouvel enfant' }}</h3>
+
+        <div class="field">
+            <label class="ui dividing header">Noms</label>
+            <div class="two fields">
+                <div class="field {% if form.last_name.errors %}error{% endif %}">
+                    <input 
+                    type="text" 
+                    name="last_name" 
+                    placeholder="Nom" 
+                    class="uppercase"
+                    value="{{ form.last_name.value|default:'' }}">
+                    {{ form.last_name.errors }}
+                </div>
+                <div class="field {% if form.first_name.errors %}error{% endif %}">
+                    <input 
+                    type="text" 
+                    name="first_name" 
+                    placeholder="Prénom" 
+                    class="capitalize"
+                    value="{{ form.first_name.value|default:'' }}">
+                    {{ form.first_name.errors }}
+                </div>
+                <div class="field {% if form.dob.errors %}error{% endif %}">
+                    <input 
+                    type="date"
+                    name="dob" 
+                    value="{{ form.dob.value|date:'c'|default:'' }}"
+                    placeholder="jj/mm/aaaa">
+                    {{ form.dob.errors }}
+                </div>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="ui dividing header">Education</label>
+            <div class="two fields">
+                <div class="eight wide field {% if form.school.errors %}error{% endif %}">
+                    <select class="ui fluid search dropdown" name="school">
+                        <option value="0">Etablissement</option>
+                        <option value="OTHER">Autre</option>
+                        <option value="MDG">Maternelle de Godissard</option>
+                        <option value="PCA">Primaire Chateauboeuf A</option>
+                        <option value="PCB">Primaire Chateauboeuf B</option>
+                        <option value="CCSC">Collège Cassien Sainte Claire</option>
+                        <option value="LJG">Lycée Technique Joseph Gaillard</option>
+                        <option value="LyBel">Lycée Bellevue</option>
+                        <option value="UNI">Université des Antilles</option>
+                    </select>
+                    {{ form.school.errors }}
+                </div>
+                <div class="three wide field {% if form.grade.errors %}error{% endif %}">
+                    <select class="ui fluid dropdown" name="grade">
+                        <option data-school="0" value="0">Classe</option>
+                        <option data-school="6" value="OTHER">Autre</option>
+                        <option data-school="1" value="TPS">Très Petite Section</option>
+                        <option data-school="1" value="PS">Petite Section</option>
+                        <option data-school="1" value="MS">Moyenne Section</option>
+                        <option data-school="1" value="GS">Grande Section</option>
+                        <option data-school="2" value="CP">CP</option>
+                        <option data-school="2" value="CE1">CE1</option>
+                        <option data-school="2" value="CE2">CE2</option>
+                        <option data-school="2" value="CM1">CM1</option>
+                        <option data-school="2" value="CM2">CM2</option>
+                        <option data-school="3" value="C6">6eme</option>
+                        <option data-school="3" value="C5">5eme</option>
+                        <option data-school="3" value="C4">4eme</option>
+                        <option data-school="3" value="C3">3eme</option>
+                        <option data-school="4" value="L2">2nd</option>
+                        <option data-school="4" value="L1">1ere</option>
+                        <option data-school="4" value="TERM">Terminale</option>
+                        <option data-school="5" value="UNI">Etudes</option>
+                    </select>
+                    {{ form.grade.errors }}
+                </div>
+            </div>
+        </div>
+
+        <div class="fields">
+            <div class="six wide field">
+                <div class="ui checkbox">
+                    <label>Soutien Scolaire</label>
+                    <input type="checkbox" tabindex="0" class="hidden">
+                </div>
+            </div>
+            <div class="six wide field">
+                <div class="ui checkbox">
+                    <label>Garderie</label>
+                    <input type="checkbox" tabindex="0" class="hidden">
+                </div>
+            </div>
+            <div class="six wide field">
+                <div class="ui checkbox">
+                    <label>Loisirs</label>
+                    <input type="checkbox" tabindex="0" class="hidden">
+                </div>
+            </div>
+            <div class="six wide field">
+                <div class="ui checkbox">
+                    <label>Conseil d'admnistration</label>
+                    <input type="checkbox" tabindex="0" class="hidden">
+                </div>
+            </div>
+            <div class="six wide field">
+                <div class="ui checkbox">
+                    <label>Conseil de classe</label>
+                    <input type="checkbox" tabindex="0" class="hidden">
+                </div>
+            </div>
+            <div class="six wide field">
+                <div class="ui checkbox">
+                    <label>Conseil d'école</label>
+                    <input type="checkbox" tabindex="0" class="hidden">
+                </div>
+            </div>
+        </div>
+        
+        <input type="number" name="member" hidden value="1">
+        <input type="submit" class="ui button" value="Valider">
+    </form>
+</article>
+{% endif %}
+{% endblock articles %}
+
+{% block profile_js %}
+<script>
+    $(function () {
+        const grade = '{{ form.grade.value|default:"" }}';
+        if (grade) {
+            const select = document.querySelector('select[name="grade"]');
+            const option = select.querySelector(`option[value="${grade}"]`);
+            
+            if (option) {
+                select.value = grade;
+                
+                const dropdown = select.parentElement;
+                
+                dropdown.querySelector('.text').innerHTML = option.innerHTML;
+                dropdown.querySelector('.menu .item.active').classList.remove('active default');
+                dropdown.querySelector(`.menu .item[data-value="${grade}"]`).classList.add('active default');
+            }
+        }
+
+        const school = '{{ form.school.value|default:"" }}';
+        if (school) {
+            const select = document.querySelector('select[name="school"]');
+            const option = select.querySelector(`option[value="${school}"]`);
+            
+            if (option) {
+                select.value = school;
+                
+                const dropdown = select.parentElement;
+                
+                dropdown.querySelector('.text').innerHTML = option.innerHTML;
+                dropdown.querySelector('.menu .item.active').classList.remove('active default');
+                dropdown.querySelector(`.menu .item[data-value="${school}"]`).classList.add('active default');
+            }
+        }
+    })
+</script>
+{% endblock profile_js %}

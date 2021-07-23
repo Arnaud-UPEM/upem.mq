@@ -1,0 +1,184 @@
+{% extends 'memberships/profile_base.html' %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block articles %}
+<article class="children">
+    <h3 class="header">Ma famille</h3>
+    <div class="ui link cards hidden">
+        <div class="add card self-start">
+            <div class="content">
+                <div class="header">Nouveau</div>
+                <div class="description">
+                    Ajouter un nouvel enfant à votre famille
+                </div>
+            </div>
+            <a target="_blank" href="{% pageurl page %}add/" class="ui bottom attached button">
+                <i class="add icon"></i>
+                Ajouter enfant
+            </a>
+        </div>
+
+        {% with children=user.member.children.all %}
+        {% for child in children %}
+            <div class="card self-start">
+                <div class="content">
+                    <!-- <img class="right floated mini ui image" src="https://semantic-ui.com/images/avatar/large/elliot.jpg"> -->
+                    <div class="header">
+                        {{ child.first_name }} {{ child.last_name }}
+                    </div>
+                    <div class="meta">
+                        {{ child.dob }}
+                    </div>
+                    <div class="description">
+                        {{ child.grade }}
+                        <br>
+                        {{ child.school }}
+                    </div>
+                </div>
+                <div class="extra content">
+                    <div class="ui two buttons">
+                        <a class="ui basic green button" target="_blank" href="{% pageurl page %}{{ child.id }}/">Modifier</a>
+                        <a class="ui basic red button" target="_blank" href="{% pageurl page %}delete/{{ child.id }}/">Supprimer</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        {% endwith %}
+    </div>
+</article>
+
+<article class="hidden">
+    <form class="ui form w-full" action="{% pageurl page %}/{{ pk|default:'add' }}" method="POST">
+        {% csrf_token %}
+        <h3 class="header">{{ pk | yesno:'Modification,Nouvel enfant' }}</h3>
+
+        <div class="field">
+            <label class="ui dividing header">Noms</label>
+            <div class="two fields">
+                <div class="field {% if form.last_name.errors %}error{% endif %}">
+                    <input 
+                    type="text" 
+                    name="last_name" 
+                    placeholder="Nom" 
+                    class="uppercase"
+                    value="{{ form.last_name.value|default:'' }}">
+                    {{ form.last_name.errors }}
+                </div>
+                <div class="field {% if form.first_name.errors %}error{% endif %}">
+                    <input 
+                    type="text" 
+                    name="first_name" 
+                    placeholder="Prénom" 
+                    class="capitalize"
+                    value="{{ form.first_name.value|default:'' }}">
+                    {{ form.first_name.errors }}
+                </div>
+                <div class="field {% if form.dob.errors %}error{% endif %}">
+                    <input 
+                    type="date"
+                    name="dob" 
+                    placeholder="jj/mm/aaaa">
+                    {{ form.dob.errors }}
+                </div>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="ui dividing header">Education</label>
+            <div class="two fields">
+                <div class="eight wide field">
+                    <select class="ui fluid search dropdown">
+                        <option value="0">Etablissement</option>
+                        <option value="OTHER">Autre</option>
+                        <option value="MDG">Maternelle de Godissard</option>
+                        <option value="PCA">Primaire Chateauboeuf A</option>
+                        <option value="PCB">Primaire Chateauboeuf B</option>
+                        <option value="CCSC">Collège Cassien Sainte Claire</option>
+                        <option value="LJG">Lycée Technique Joseph Gaillard</option>
+                        <option value="LyBel">Lycée Bellevue</option>
+                        <option value="UNI">Université des Antilles</option>
+                    </select>
+                </div>
+                <div class="three wide field">
+                    <select class="ui fluid dropdown">
+                        <option data-school="0" value="0">Classe</option>
+                        <option data-school="6" value="OTHER">Autre</option>
+                        <option data-school="1" value="TPS">Très Petite Section</option>
+                        <option data-school="1" value="PS">Petite Section</option>
+                        <option data-school="1" value="MS">Moyenne Section</option>
+                        <option data-school="1" value="GS">Grande Section</option>
+                        <option data-school="2" value="CP">CP</option>
+                        <option data-school="2" value="CE1">CE1</option>
+                        <option data-school="2" value="CE2">CE2</option>
+                        <option data-school="2" value="CM1">CM1</option>
+                        <option data-school="2" value="CM2">CM2</option>
+                        <option data-school="3" value="C6">6eme</option>
+                        <option data-school="3" value="C5">5eme</option>
+                        <option data-school="3" value="C4">4eme</option>
+                        <option data-school="3" value="C3">3eme</option>
+                        <option data-school="4" value="L2">2nd</option>
+                        <option data-school="4" value="L1">1ere</option>
+                        <option data-school="4" value="TERM">Terminale</option>
+                        <option data-school="5" value="UNI">Etudes</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="fields">
+            <div class="six wide field">
+                <div class="ui checkbox">
+                    <label>Soutien Scolaire</label>
+                    <input type="checkbox" tabindex="0" class="hidden">
+                </div>
+            </div>
+            <div class="six wide field">
+                <div class="ui checkbox">
+                    <label>Garderie</label>
+                    <input type="checkbox" tabindex="0" class="hidden">
+                </div>
+            </div>
+            <div class="six wide field">
+                <div class="ui checkbox">
+                    <label>Loisirs</label>
+                    <input type="checkbox" tabindex="0" class="hidden">
+                </div>
+            </div>
+            <div class="six wide field">
+                <div class="ui checkbox">
+                    <label>Conseil d'admnistration</label>
+                    <input type="checkbox" tabindex="0" class="hidden">
+                </div>
+            </div>
+            <div class="six wide field">
+                <div class="ui checkbox">
+                    <label>Conseil de classe</label>
+                    <input type="checkbox" tabindex="0" class="hidden">
+                </div>
+            </div>
+            <div class="six wide field">
+                <div class="ui checkbox">
+                    <label>Conseil d'école</label>
+                    <input type="checkbox" tabindex="0" class="hidden">
+                </div>
+            </div>
+        </div>
+        
+        <input type="number" name="member" id="" hidden disabled>
+        <input type="submit" class="ui button" value="Valider">
+    </form>
+</article>
+{% endblock articles %}
+
+{% block profile_js %}
+<script>
+    $(function () {
+        const page_url = '{% pageurl page %}';
+        function updateChild (e) {
+
+        }
+    });
+
+
+</script>
+{% endblock profile_js %}

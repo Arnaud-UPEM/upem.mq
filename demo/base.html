@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Base</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Roboto&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/css/splide.min.css">
+    
+    <link rel="stylesheet" href="common.css">
+</head>
+<body>
+    <!-- Layout -->
+    <!-- Titles -->
+    <!-- List -->
+    <!-- Notification -->
+    <!-- Label -->
+    <!-- Form -->
+    
+    <nav class="computer bg-green-800">
+        <div class="ui container">
+            <div class="flex flex-row flex-nowrap">
+                <div class="w-1/4">
+                    <div class="menu h-32 flex flex-row no-wrap">
+                        <a class="item h-full">
+                            <img class="h-full" src="/assets/android-chrome-256x256.png">
+                        </a>
+                        <a class="item flex flex-col items-center justify-center uppercase">
+                            <span class="text-3xl mb-2">
+                                UPEM
+                            </span>
+                            <span class="">
+                                Affaires scolaires
+                            </span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="w-3/4 ml-4 text-white">
+                    <div class="menu h-12 flex flex-row no-wrap justify-end">
+                        <div class="submenu flex flex-row no-wrap items-center">
+                            <a class="item h-full flex items-center px-4 border-r"><i class="icon phone"></i> 0596 60 95 95</a>
+                            <a class="item h-full flex items-center px-4 border-r"><i class="icon map marker alternate"></i> 28 Bb Allègres, FdF</a>
+                            <a class="item h-full flex items-center px-4 border-r" href="mailto:affaires.scolaires@upem.mq"><i class="icon envelope"></i> affaires.scolaires@upem.mq</a>
+                            
+                            <!-- Blank space -->
+                            <a class="item blank w-16 h-full"></a>
+                            
+                            <a class="item w-12 h-full flex items-center px-4 border-l"><i class="icon facebook f"></i></a>
+                            <a class="item w-12 h-full flex items-center px-4 border-l"><i class="icon instagram"></i></a>
+                            <a class="item w-12 h-full flex items-center px-4 border-l"><i class="icon twitter"></i></a>
+                            <a class="item w-12 h-full flex items-center px-4 border-l"><i class="icon youtube"></i></a>
+                        </div>
+                    </div>
+                    <div class="menu h-14 bg-green-500 flex flex-row no-wrap items-center font-bold uppercase">
+                        <a class="item h-full flex items-center px-4">Accueil</a>
+                        <div class="item ui dropdown simple h-full flex items-center px-4">
+                            L'UPEM
+                            <div class="menu">
+                                <div class="item">Qui sommes-nous ?</div>
+                                <div class="item">Nos missions</div>
+                                <div class="item">Organisation</div>
+                                <div class="item">Notre Historique</div>
+                                <div class="item">Les Administrateurs</div>
+                            </div>
+                        </div>
+                        <div class="item ui dropdown simple h-full flex items-center px-4">
+                            Nos services
+                            <div class="menu">
+                                <a class="item">Adhésion</a>
+                                <div class="item">Conseil de classe</div>
+                                <div class="item">Soutien scolaire</div>
+                                <div class="item">Pourquoi devenir adhérent ?</div>
+                            </div>
+                        </div>
+                        <a class="item h-full flex items-center px-4">Contact</a>
+                        <div class="item ui dropdown simple h-full flex items-center px-4">
+                            Demo
+                            <div class="menu">
+                                <a href="/demo_home.html" class="item">Home</a>
+                                <a href="/demo_about.html" class="item">About</a>
+                            </div>
+                        </div>
+                        <a class="item h-full flex items-center px-4 bg-green-600">Devenez adhérent</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <nav class="responsive">
+        <div class="w-full h-16 flex flex-row flex-nowrap">
+            <div id="mobile_item" class="menu">
+                <i class="bars icon"></i>
+            </div>
+            
+            <div class="menu py-1x flex flex-1 flex-row no-wrap justify-center">
+                <a class="item h-full">
+                    <img class="h-full" src="/assets/android-chrome-256x256.png">
+                </a>
+                <a class="item flex flex-col items-center justify-center uppercase">
+                    <span class="text-3xl">
+                        UPEM
+                    </span>
+                    <span class="">
+                        Affaires scolaires
+                    </span>
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="ui pushable segment">
+        <nav class="ui sidebar vertical menu">
+            <div class="menu h-12 flex flex-row no-wrap justify-end">
+                <div class="submenu flex flex-row no-wrap items-center">
+                    <a class="item h-full flex items-center px-4 border-r"><i class="icon phone"></i> 0596 60 95 95</a>
+                    <a class="item h-full flex items-center px-4 border-r"><i class="icon map marker alternate"></i> 28 Bb Allègres, FdF</a>
+                    <a class="item h-full flex items-center px-4 border-r" href="mailto:affaires.scolaires@upem.mq"><i class="icon envelope"></i> affaires.scolaires@upem.mq</a>
+                    
+                    <!-- Blank space -->
+                    <a class="item blank w-16 h-full"></a>
+                    
+                    <a class="item w-12 h-full flex items-center px-4 border-l"><i class="icon facebook f"></i></a>
+                    <a class="item w-12 h-full flex items-center px-4 border-l"><i class="icon instagram"></i></a>
+                    <a class="item w-12 h-full flex items-center px-4 border-l"><i class="icon twitter"></i></a>
+                    <a class="item w-12 h-full flex items-center px-4 border-l"><i class="icon youtube"></i></a>
+                </div>
+            </div>
+            <div class="menu h-14 bg-green-500 flex flex-row no-wrap items-center font-bold uppercase">
+                <a class="item h-full flex items-center px-4">Accueil</a>
+                <a class="item ui dropdown simple h-full flex items-center px-4">
+                    L'UPEM
+                    <div class="menu">
+                        <div class="item">Qui sommes-nous ?</div>
+                        <div class="item">Nos missions</div>
+                        <div class="item">Organisation</div>
+                        <div class="item">Notre Historique</div>
+                        <div class="item">Les Administrateurs</div>
+                    </div>
+                </a>
+                <a class="item ui dropdown simple h-full flex items-center px-4">
+                    Nos services
+                    <div class="menu">
+                        <div class="item">Pourquoi devenir adhérent ?</div>
+                    </div>
+                </a>
+                <a class="item h-full flex items-center px-4">Contact</a>
+                <a class="item h-full flex items-center px-4 bg-green-600">Devenez adhérent</a>
+            </div>
+        </nav>
+        
+        <div class="pusher">
+            <section>
+                <div class="home page front">
+                    <div class="filter"></div>
+                    <div class="bg">
+                        <img src="/assets/national-cancer-institute-VJVsEnR_vNE-unsplash.jpg" alt="">
+                    </div>
+                    <div class="top banner">
+                        <span class="join">Rejoignez</span>
+                        <hr>
+                        <span class="upem">l'upem</span>
+                    </div>
+                    <div class="bottom banner">
+                        <span class="intro">
+                            Pour une année scolaire <span class="sy">2021 - 2022</span> dans la réussite, Ensemble
+                        </span>
+                        <span class="slogan">
+                            <i class="icon quote left"></i>
+                            divini yich nou sé divini péyi-a
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE BANNER -->
+            <section>
+                <div class="page banner">
+                    <div class="ui container">
+                        <h1>L'UPEM · A propos</h1>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div class="ui container py-4 text-3xl">
+                    <div class="ui grid">
+                        <div class="col"><i class="american sign language interpreting icon"></i></div>
+                        <div class="col"><i class="assistive listening systems icon"></i></div>
+                        <div class="col"><i class="blind icon"></i></div>
+                        <div class="col"><i class="question circle icon"></i></div>
+                        <div class="col"><i class="balance scale icon"></i></div>
+                        <div class="col"><i class="icon university"></i></div>
+                        <div class="col"><i class="icon wheelchair"></i></div>
+                        <div class="col"><i class="icon wrench"></i></div>
+                        <div class="col"><i class="icon info"></i></div>
+                        <div class="col"><i class="icon info circle"></i></div>
+                        <div class="col"><i class="icon child"></i></div>
+                        <div class="col"><i class="graduation cap icon"></i></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TYPO -->
+            <section>
+                <div class="ui container py-4">
+                    <div class="ui grid two column">
+                        <div class="column">
+                            <h2 class="header">Notre Historique</h2>
+
+                            Né de la fédération de plusieurs associations et groupements indépendants de parents
+                            d’élèves, constituée solennellement le 23 mai 1992, l’UPEM (<b>U</b>nion des <b>P</b>arents d’<b>E</b>lèves de
+                            <b>M</b>artinique), est une association à but non lucratif régie par la loi du 1 er juillet 1901.
+                            <br>
+                            <br>
+    
+                            Depuis sa création l’UPEM est la principale association de parents d’élèves de Martinique.
+                            Force de proposition et de progrès, représentée dans la majeure partie des établissements
+                            scolaires du secondaire et des écoles du primaire.
+                            L’UPEM fait valoir ses points de vue auprès des différentes institutions, instances et autres
+                            organismes où elle siège.
+
+                            <br>
+                            <br>
+                            Depuis 29 années, les bénévoles, avec l’appui des salariés impliqués, militent pour que tous
+                            nos enfants bénéficient, dans le système éducatif public, de tous les moyens, outils et
+                            techniques nécessaires à leur meilleure réussite et total épanouissement.
+                            
+                            <br>
+                            <br>
+                            Alors, ils seront en mesure de réaliser leurs souhaits tant en Martinique que dans le monde et
+                            ainsi donner une forte réalité à notre devise : <b>DIVINI YICH NOU SE DIVINI PEYI-A</b>.
+                        </div>
+                        <div class="column">
+                            <img src="https://source.unsplash.com/random/500x500" alt="">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- QUOTES -->
+            <section class="" style="background-color: #f7f1e9;">
+                <div class="ui container transparent">
+                    <div class="quote big">
+                        <div class="left"><i class="icon quote left"></i></div>
+                        <blockquote>
+                            <div class="text">
+                                Face à cette société qui est en perte de repères, il est nécessaire de leur instiller des valeurs
+                                de vie, tels que l’esprit de solidarité, le goût de l’effort et de l’excellence.
+                                <br>
+                                Il est tout aussi important que la curiosité et l’ouverture soient des éléments moteurs pour qu’ils
+                                découvrent le monde tout autant que leur patrimoine culturel qui feront d’eux des Hommes et
+                                des Femmes avisés et conséquents.
+                            </div>
+                            <div class="author">
+                                - <i>Auteur</i>
+                            </div>
+                        </blockquote>
+
+                        <div class="ui grid">
+                            <div class="column">
+                                <div class="ui grid">
+                                    <div class="column">
+                                    </div>
+                                    <div class="column">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- HEADERS -->
+            <section class="" style="background-color: #f7f1e9;">
+                <div class="ui container transparent">
+                    <h1 class="header centered">
+                        Nos missions
+                        <div class="subheader">Vous représenter et vous accompagner</div>
+                    </h1>
+                </div>
+            </section>
+
+            <!-- HIGHLIGHTS FOUR -->
+            <section>
+                <div class="highlights four py-4">
+                    <div class="ui container">
+                        <div class="ui grid">
+                            <div class="four wide column">
+                                <div class="tile">
+                                    <div class="image">
+                                        <!-- <img src="https://source.unsplash.com/random/100" alt=""> -->
+                                        <i class="icon child"></i>
+                                    </div>
+                                    <h1 class="title">Conseil d'école</h1>
+                                    <div class="content">
+                                        consectetur adipiscing elit. 
+                                        Quisque tempus justo vel velit porttitor posuere. 
+                                        Curabitur sed turpis sit amet sem pellentesque tincidunt.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="four wide column">
+                                <div class="tile">
+                                    <div class="image">
+                                        <!-- <img src="https://source.unsplash.com/random/100" alt=""> -->
+                                        <i class="graduation cap icon"></i>
+                                    </div>
+                                    <h1 class="title">Conseil de classe</h1>
+                                    <div class="content">
+                                        consectetur adipiscing elit. 
+                                        Quisque tempus justo vel velit porttitor posuere. 
+                                        Curabitur sed turpis sit amet sem pellentesque tincidunt.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="four wide column">
+                                <div class="tile">
+                                    <div class="image">
+                                        <!-- <img src="https://source.unsplash.com/random/100" alt=""> -->
+                                        <i class="icon university"></i>
+                                    </div>
+                                    <h1 class="title">Conseil d'administration</h1>
+                                    <div class="content">
+                                        consectetur adipiscing elit. 
+                                        Quisque tempus justo vel velit porttitor posuere. 
+                                        Curabitur sed turpis sit amet sem pellentesque tincidunt.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="four wide column">
+                                <div class="tile">
+                                    <div class="image">
+                                        <!-- <img src="https://source.unsplash.com/random/100" alt=""> -->
+                                        <i class="balance scale icon"></i>
+                                    </div>
+                                    <h1 class="title">Conseil de discipline</h1>
+                                    <div class="content">
+                                        consectetur adipiscing elit. 
+                                        Quisque tempus justo vel velit porttitor posuere. 
+                                        Curabitur sed turpis sit amet sem pellentesque tincidunt.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HIGHLIGHTS LIST -->
+            <section>
+                <div class="highlights list bg-green-800">
+                    <div class="ui container">
+                        <div class="ui two column grid">
+                            <div class="column">
+                                <div class="tile">
+                                    <div class="image">
+                                        <!-- <img src="https://source.unsplash.com/random/50" alt=""> -->
+                                        <i class="plus icon"></i>
+                                    </div>
+                                    <div class="right">
+                                        <h1 class="title">Comité éducation santé citoyenneté</h1>
+                                        <div class="content">
+                                            consectetur adipiscing elit. 
+                                            Quisque tempus justo vel velit porttitor posuere. 
+                                            Curabitur sed turpis sit amet sem pellentesque tincidunt.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="tile">
+                                    <div class="image">
+                                        <!-- <img src="https://source.unsplash.com/random/50" alt=""> -->
+                                        <i class="icon info"></i>
+                                    </div>
+                                    <div class="right">
+                                        <h1 class="title">Conseil de l’éducation nationale (CEN)</h1>
+                                        <div class="content">
+                                            consectetur adipiscing elit. 
+                                            Quisque tempus justo vel velit porttitor posuere. 
+                                            Curabitur sed turpis sit amet sem pellentesque tincidunt.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="tile">
+                                    <div class="image">
+                                        <!-- <img src="https://source.unsplash.com/random/50" alt=""> -->
+                                        <i class="language icon"></i>
+                                    </div>
+                                    <div class="right">
+                                        <h1 class="title">Commission des langues régionales</h1>
+                                        <div class="content">
+                                            consectetur adipiscing elit. 
+                                            Quisque tempus justo vel velit porttitor posuere. 
+                                            Curabitur sed turpis sit amet sem pellentesque tincidunt.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="tile">
+                                    <div class="image">
+                                        <!-- <img src="https://source.unsplash.com/random/50" alt=""> -->
+                                        <i class="american sign language interpreting icon"></i>
+                                    </div>
+                                    <div class="right">
+                                        <h1 class="title">Commission des bourses de l’EN ou autre Ministère</h1>
+                                        <div class="content">
+                                            consectetur adipiscing elit. 
+                                            Quisque tempus justo vel velit porttitor posuere. 
+                                            Curabitur sed turpis sit amet sem pellentesque tincidunt.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- SPLIDE -->
+            <section>
+                <div class="ui container">
+                    <div id="splide" class="splide">
+                        <div class="splide__track">
+                            <ul class="splide__list">
+                                <a href="" target="_blank" class="splide__slide">
+                                    <img src="https://source.unsplash.com/random/800x600" alt="">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sed lacinia nunc, vitae tincidunt lacus. Nam ac dolor sed mi egestas ullamcorper. Curabitur elementum, nulla sed tristique maximus, orci neque congue dolor, id sollicitudin lorem sapien at nunc. In et justo sit amet tortor accumsan facilisis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sed lacinia nunc, vitae tincidunt lacus. Nam ac dolor sed mi egestas ullamcorper. Curabitur elementum, nulla sed tristique maximus, orci neque congue dolor, id sollicitudin lorem sapien at nunc. In et justo sit amet tortor accumsan facilisis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sed lacinia nunc, vitae tincidunt lacus. Nam ac dolor sed mi egestas ullamcorper. Curabitur elementum, nulla sed tristique maximus, orci neque congue dolor, id sollicitudin lorem sapien at nunc. In et justo sit amet tortor accumsan facilisis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sed lacinia nunc, vitae tincidunt lacus. Nam ac dolor sed mi egestas ullamcorper. Curabitur elementum, nulla sed tristique maximus, orci neque congue dolor, id sollicitudin lorem sapien at nunc. In et justo sit amet tortor accumsan facilisis.</p>
+                                </a>
+                            </ul>
+                        </div>
+                        <div class="splide__progress">
+                            <div class="splide__progress__bar">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- CARDS -->
+            <section>
+                <div class="ui container">
+                    <article class="ui attached segment p-4">
+                        <div class="ui link cards">
+                            <div class="card">
+                                <div class="image">
+                                    <img src="https://semantic-ui.com/images/avatar2/large/matthew.png">
+                                </div>
+                                <div class="content">
+                                    <div class="header">Eugène Mangata</div>
+                                    <div class="meta">
+                                        <a>Friends</a>
+                                    </div>
+                                    <div class="description">
+                                        Matthew is an interior designer living in New York.
+                                    </div>
+                                </div>
+                                <div class="extra content">
+                                    <span class="right floated">
+                                        Joined in 2013
+                                    </span>
+                                    <span>
+                                        <i class="user icon"></i>
+                                        75 Friends
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="image">
+                                    <img src="https://semantic-ui.com/images/avatar2/large/molly.png">
+                                </div>
+                                <div class="content">
+                                    <div class="header">Marie-Andrée Picardon</div>
+                                    <div class="meta">
+                                        <span class="date">Coworker</span>
+                                    </div>
+                                    <div class="description">
+                                        Molly is a personal assistant living in Paris.
+                                    </div>
+                                </div>
+                                <div class="extra content">
+                                    <span class="right floated">
+                                        Joined in 2011
+                                    </span>
+                                    <span>
+                                        <i class="user icon"></i>
+                                        35 Friends
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <article class="p-4 hidden">
+                        <div class="profil">
+                            <div class="picture">
+                                <img src="https://via.placeholder.com/200x250">
+                            </div>
+                            <div class="details">
+                                <h4>M. John Doe</h4>
+                                <p><span class="type">              <i>Poste</i></span></p>
+                                <p><span class="grades">            <i>Diplôme 1</i> / <i>Diplôme 2</i></span></p>
+                                <p><span class="qualifications">    <i>Qualif. 1</i> / <i>Qualif. 2</i></span></p>
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <div class="profil over splide__slide hidden">
+                        <div class="picture">
+                            <img src="https://via.placeholder.com/200x250">
+                        </div>
+                        <div class="details">
+                            <h4>M. John Doe</h4>
+                            <p><span><i>Poste</i></span></p>
+                            <p><span><i>Diplôme 1</i> / <i>Diplôme 2</i></span></p>
+                            <p><span><i>Qualif. 1</i> / <i>Qualif. 2</i></span></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CARDS SPLIDE -->
+            <section>
+                <div class="ui container">
+                    <div id="splide__cards" class="splide">
+                        <div class="splide__track">
+                            <ul class="splide__list ui link cards">
+                                <div class="card splide__slide">
+                                    <div class="image">
+                                        <img src="https://semantic-ui.com/images/avatar2/large/elyse.png">
+                                    </div>
+                                    <div class="content">
+                                        <div class="header">Marie-Nelly THIANT</div>
+                                        <div class="meta">
+                                            <a>Friends</a>
+                                        </div>
+                                        <div class="description">
+                                            Matthew is an interior designer living in New York.
+                                        </div>
+                                    </div>
+                                    <div class="extra content">
+                                        <span class="right floated">
+                                            Joined in 2013
+                                        </span>
+                                        <span>
+                                            <i class="user icon"></i>
+                                            75 Friends
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="card splide__slide">
+                                    <div class="image">
+                                        <img src="https://semantic-ui.com/images/avatar2/large/matthew.png">
+                                    </div>
+                                    <div class="content">
+                                        <div class="header">Eugène Mangata</div>
+                                        <div class="meta">
+                                            <a>Friends</a>
+                                        </div>
+                                        <div class="description">
+                                            Matthew is an interior designer living in New York.
+                                        </div>
+                                    </div>
+                                    <div class="extra content">
+                                        <span class="right floated">
+                                            Joined in 2013
+                                        </span>
+                                        <span>
+                                            <i class="user icon"></i>
+                                            75 Friends
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="card splide__slide">
+                                    <div class="image">
+                                        <img src="https://semantic-ui.com/images/avatar2/large/molly.png">
+                                    </div>
+                                    <div class="content">
+                                        <div class="header">Marie-Andrée Picardon</div>
+                                        <div class="meta">
+                                            <span class="date">Coworker</span>
+                                        </div>
+                                        <div class="description">
+                                            Molly is a personal assistant living in Paris.
+                                        </div>
+                                    </div>
+                                    <div class="extra content">
+                                        <span class="right floated">
+                                            Joined in 2011
+                                        </span>
+                                        <span>
+                                            <i class="user icon"></i>
+                                            35 Friends
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="card splide__slide">
+                                    <div class="image">
+                                        <img src="https://semantic-ui.com/images/avatar/large/elliot.jpg">
+                                    </div>
+                                    <div class="content">
+                                        <div class="header">Marie-Andrée Picardon</div>
+                                        <div class="meta">
+                                            <span class="date">Coworker</span>
+                                        </div>
+                                        <div class="description">
+                                            Molly is a personal assistant living in Paris.
+                                        </div>
+                                    </div>
+                                    <div class="extra content">
+                                        <span class="right floated">
+                                            Joined in 2011
+                                        </span>
+                                        <span>
+                                            <i class="user icon"></i>
+                                            35 Friends
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="card splide__slide">
+                                    <div class="image">
+                                        <img src="https://semantic-ui.com/images/avatar2/large/kristy.png">
+                                    </div>
+                                    <div class="content">
+                                        <div class="header">Marie-Andrée Picardon</div>
+                                        <div class="meta">
+                                            <span class="date">Coworker</span>
+                                        </div>
+                                        <div class="description">
+                                            Molly is a personal assistant living in Paris.
+                                        </div>
+                                    </div>
+                                    <div class="extra content">
+                                        <span class="right floated">
+                                            Joined in 2011
+                                        </span>
+                                        <span>
+                                            <i class="user icon"></i>
+                                            35 Friends
+                                        </span>
+                                    </div>
+                                </div>
+                            </ul>
+                        </div>
+                        <div class="splide__progress">
+                            <div class="splide__progress__bar">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section>
+                <div class="ui container">
+                    <form action="POST" class="ui form p-8">
+                        <div class="ui dividing header">Informations</div>
+                        <div class="field">
+                            <label>Noms</label>
+                            <div class="two fields">
+                                <div class="field">
+                                    <input type="text" name="membership[last-name]" placeholder="Nom">
+                                </div>
+                                <div class="field">
+                                    <input type="text" name="membership[first-name]" placeholder="Prénom">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="two fields">
+                                <div class="field">
+                                    <label for="">Email</label>
+                                    <input type="email" name="membership[email]" placeholder="Email">
+                                </div>
+                                <div class="field">
+                                    <label for="">Profession</label>
+                                    <input type="text" name="membership[job]" placeholder="Profession">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label>Adresse</label>
+                            <div class="field">
+                                <input type="text" name="membership[address]" placeholder="Adresse">
+                            </div>
+                            <div class="three fields">
+                                <div class="field">
+                                    <select class="ui fluid dropdown">
+                                        <option value="0"><i>Commune</i></option>
+                                        <option value="97216">Ajoupa-Bouillon</option>
+                                        <option value="97217">Anses-d'Arlet</option>
+                                        <option value="97218">Basse-Pointe</option>
+                                        <option value="97222">Bellefontaine</option>
+                                        <option value="97221">Carbet</option>
+                                        <option value="97222">Case-Pilote</option>
+                                        <option value="97223">Diamant</option>
+                                        <option value="97224">Ducos</option>
+                                        <option value="97250">Fonds-Saint-Denis</option>
+                                        <option value="97200">Fort-de-France</option>
+                                        <option value="97240">François</option>
+                                        <option value="97218">Grand'Rivière</option>
+                                        <option value="97213">Gros-Morne</option>
+                                        <option value="97232">Lamentin</option>
+                                        <option value="97214">Lorrain</option>
+                                        <option value="97218">Macouba</option>
+                                        <option value="97225">Marigot</option>
+                                        <option value="97290">Marin</option>
+                                        <option value="97260">Morne-Rouge</option>
+                                        <option value="97226">Morne-Vert</option>
+                                        <option value="97250">Prêcheur</option>
+                                        <option value="97211">Rivière-Pilote</option>
+                                        <option value="97215">Rivière-Salée</option>
+                                        <option value="97231">Robert</option>
+                                        <option value="97227">Sainte-Anne</option>
+                                        <option value="97228">Sainte-Luce</option>
+                                        <option value="97230">Sainte-Marie</option>
+                                        <option value="97270">Saint-Esprit</option>
+                                        <option value="97212">Saint-Joseph</option>
+                                        <option value="97250">Saint-Pierre</option>
+                                        <option value="97233">Schœlcher</option>
+                                        <option value="97220">Trinité</option>
+                                        <option value="97229">Trois-Îlets</option>
+                                        <option value="97280">Vauclin</option>
+                                    </select>
+                                </div>
+                                <div class="field">
+                                    <input type="number" name="membership[zip-code]" placeholder="Code Postal">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label>Téléphones</label>
+                            <div class="field">
+                                <div class="three fields">
+                                    <div class="field">
+                                        <input type="text" name="membership[phone-cell]" placeholder="Portable">
+                                    </div>
+                                    <div class="field">
+                                        <input type="text" name="membership[phone-home]" placeholder="Domicile">
+                                    </div>
+                                    <div class="field">
+                                        <input type="text" name="membership[phone-pro]" placeholder="Professionnel">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field children">
+                            <div class="ui dividing header">Enfants</div>
+                            <div class="field">
+                                <label>Enfant 1</label>
+                                <div class="field">
+                                    <label>Noms</label>
+                                    <div class="two fields">
+                                        <div class="field">
+                                            <input type="text" name="membership[last-name]" placeholder="Nom">
+                                        </div>
+                                        <div class="field">
+                                            <input type="text" name="membership[first-name]" placeholder="Prénom">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label>Etablissement</label>
+                                    <div class="two fields">
+                                        <div class="eight wide field">
+                                            <!-- <select class="ui fluid search dropdown">
+                                                <option value="">Etablissement</option>
+                                                <option value="PCA">Primaire Chateauboeuf A</option>
+                                                <option value="PCB">Primaire Chateauboeuf B</option>
+                                                <option value="CCSC">Collège Cassien Sainte Claire</option>
+                                                <option value="LJG">Lycée Technique Joseph Gaillard</option>
+                                                <option value="LB">Lycée Bellevue</option>
+                                            </select> -->
+                                            
+                                            <div class="ui fluid dropdown upward">
+                                                <select>
+                                                    <option value="">Etablissement</option>
+                                                    <option value="PCA">Primaire Chateauboeuf A</option>
+                                                    <option value="PCB">Primaire Chateauboeuf B</option>
+                                                    <option value="CCSC">Collège Cassien Sainte Claire</option>
+                                                    <option value="LJG">Lycée Technique Joseph Gaillard</option>
+                                                    <option value="LB">Lycée Bellevue</option>
+                                                </select>
+                                                <i class="dropdown icon"></i>
+                                                <input class="search" autocomplete="off" tabindex="0">
+                                                <div class="text">Primaire Chateauboeuf A</div>
+                                                <div class="menu transition hidden" tabindex="-1" style="display: block !important;">
+                                                    <div class="item active selected" data-value="PCA">Primaire Chateauboeuf A</div>
+                                                    <div class="item" data-value="PCB">Primaire Chateauboeuf B</div>
+                                                    <div class="item" data-value="CCSC">Collège Cassien Sainte Claire</div>
+                                                    <div class="item" data-value="LJG">Lycée Technique Joseph Gaillard</div>
+                                                    <div class="item" data-value="LB">Lycée Bellevue</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="three wide field">
+                                            <select class="ui fluid dropdown">
+                                                <option value="">Classe</option>
+                                                <option value="PCA">Section des petits</option>
+                                                <option value="PCB">CP</option>
+                                                <option value="CCSC">CM2</option>
+                                                <option value="LJG">4eme</option>
+                                                <option value="LB">Terminale</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fields">
+                                    <div class="six wide field">
+                                        <div class="ui checkbox">
+                                            <label>Soutien Scolaire</label>
+                                            <input type="checkbox" tabindex="0" class="hidden">
+                                        </div>
+                                    </div>
+                                    <div class="six wide field">
+                                        <div class="ui checkbox">
+                                            <label>Garderie</label>
+                                            <input type="checkbox" tabindex="0" class="hidden">
+                                        </div>
+                                    </div>
+                                    <div class="six wide field">
+                                        <div class="ui checkbox">
+                                            <label>Loisirs</label>
+                                            <input type="checkbox" tabindex="0" class="hidden">
+                                        </div>
+                                    </div>
+                                    <div class="six wide field">
+                                        <div class="ui checkbox">
+                                            <label>Conseil d'admnistration</label>
+                                            <input type="checkbox" tabindex="0" class="hidden">
+                                        </div>
+                                    </div>
+                                    <div class="six wide field">
+                                        <div class="ui checkbox">
+                                            <label>Conseil de classe</label>
+                                            <input type="checkbox" tabindex="0" class="hidden">
+                                        </div>
+                                    </div>
+                                    <div class="six wide field">
+                                        <div class="ui checkbox">
+                                            <label>Conseil d'école</label>
+                                            <input type="checkbox" tabindex="0" class="hidden">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui segment">
+                            <div class="field">
+                                <div class="ui toggle checkbox">
+                                    <input type="checkbox" name="gift" tabindex="0" class="hidden" checked="true">
+                                    <label>S'inscrire à la newsletter.</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+            
+            <!-- NEWSLETTER -->
+            <section>
+                <div class="ui container py-4">
+                    <div class="ui two column centered grid">
+                        <div class="column">
+                            <form class="ui form py-8" action="POST">
+                                <h1 class="ui header centered">
+                                    S'inscrire à notre newsletter
+                                    <div class="sub header">
+                                        Vous hésitez à devenir adhérent ?<br>Restez en contact avec nous en rejoignant notre newsletter.
+                                        <!-- Vous hésitez à devenir adhérent ? Restez en contact avec nous en vous inscrivant à notre newsletter. -->
+                                    </div>
+                                </h1>
+                                <div class="field">
+                                    <div class="two fields">
+                                        <div class="field">
+                                            <input type="text" placeholder="Nom">
+                                        </div>
+                                        <div class="field">
+                                            <input type="text" placeholder="Prénom">
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <input type="email" placeholder="Email">
+                                    </div>
+                                    <div class="ui button">Envoyer</div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/js/splide.min.js"></script>
+    <script>
+        window.onload = function () {
+            $(".ui.checkbox").checkbox();
+            $(".ui.dropdown").dropdown();
+            
+            var splide = new Splide('#splide', {
+                type: 'loop',
+                autoplay: true,
+                lazyLoad: true,
+                pauseOnHover: true,
+                pauseOnFocus: true,
+                heightRatio: 0.5,
+            });
+            
+            splide.mount();
+
+            var splide__cards = new Splide('#splide__cards', {
+                perPage: 4,
+                type: 'loop',
+                autoplay: true,
+                lazyLoad: true,
+                pauseOnHover: true,
+                pauseOnFocus: true,
+                // heightRatio: 0.5,
+            });
+            
+            splide__cards.mount();
+            
+            $('.ui.sidebar').sidebar({
+                context: $('.ui.pushable.segment'),
+                transition: 'overlay'
+            }).sidebar('attach events', '#mobile_item');
+
+            // $('.ui.sidebar').sidebar('toggle');
+        }
+    </script>
+</body>
+</html>

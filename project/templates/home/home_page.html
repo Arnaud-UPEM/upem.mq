@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}homepage{% endblock %}
+
+{% block extra_css %}
+{% endblock extra_css %}
+
+{% block content %}
+<section>
+    <div class="home page front">
+        <div class="filter"></div>
+        <div class="top banner">
+            <span class="join">Rejoignez</span>
+            <hr>
+            <span class="upem">l'upem</span>
+        </div>
+        <div class="bg">
+            <img src="/media/demo/national-cancer-institute-VJVsEnR_vNE-unsplash.jpg" alt="">
+        </div>
+        <div class="bottom banner">
+            <span class="intro">
+                Pour une année scolaire <span class="sy">2021 - 2022</span> dans la réussite, Ensemble
+            </span>
+            <span class="slogan">
+                <i class="icon quote left"></i>
+                divini yich nou sé divini péyi-a
+            </span>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="page banner">
+        <div class="bg darkgray"></div>
+        <div class="ui container">
+            <div class="newsletter columns">
+                <div class="left column">
+                    <form class="ui form" action="POST">
+                        <h3 class="header centered lightgray">
+                            S'inscrire à notre newsletter
+                        </h3>
+                        <h4 class="header centered lightgray">
+                            Vous hésitez à devenir adhérent ?<br>Restez en contact avec nous en rejoignant notre newsletter.
+                            <!-- Vous hésitez à devenir adhérent ? Restez en contact avec nous en vous inscrivant à notre newsletter. -->
+                        </h4>
+                        <div class="field">
+                            <div class="two fields">
+                                <div class="field">
+                                    <input type="text" placeholder="Nom">
+                                </div>
+                                <div class="field">
+                                    <input type="text" placeholder="Prénom">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <input type="email" placeholder="Email">
+                            </div>
+                            <div class="ui button">Envoyer</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="right column">
+                    <img src="/media/demo/brett-jordan-LPZy4da9aRo-unsplash.jpg" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="hidden">
+    <div class="page banner">
+        <div class="filter"></div>
+        <div class="bg">
+            <img src="/media/demo/mathyas-kurmann-fb7yNPbT0l8-unsplash.jpg" alt="">
+        </div>
+        <div class="ui container">
+            <div class="ui two column grid">
+                <div class="column">
+                    <form class="ui form py-8" action="POST">
+                        <h1 class="ui header centered">
+                            S'inscrire à notre newsletter
+                            <div class="sub header">
+                                Vous hésitez à devenir adhérent ?<br>Restez en contact avec nous en rejoignant notre newsletter.
+                                <!-- Vous hésitez à devenir adhérent ? Restez en contact avec nous en vous inscrivant à notre newsletter. -->
+                            </div>
+                        </h1>
+                        <div class="field">
+                            <div class="two fields">
+                                <div class="field">
+                                    <input type="text" placeholder="Nom">
+                                </div>
+                                <div class="field">
+                                    <input type="text" placeholder="Prénom">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <input type="email" placeholder="Email">
+                            </div>
+                            <div class="ui button">Envoyer</div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
+
+{% block extra_js %}
+{% endblock extra_js %}

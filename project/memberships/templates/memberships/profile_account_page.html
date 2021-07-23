@@ -1,0 +1,187 @@
+{% extends 'memberships/profile_base.html' %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block articles %}
+<article>
+    <form class="ui form w-full" action="{% pageurl page %}" method="POST">
+        {% csrf_token %}
+        <h3 class="header">Mon profil</h3>
+
+        <div class="field">
+            <label class="ui dividing header">Noms</label>
+            <div class="two fields">
+                <div class="field {% if form.last_name.errors %}error{% endif %}">
+                    <input 
+                        type="text" 
+                        name="last_name" 
+                        placeholder="Nom" 
+                        class="uppercase"
+                        value="{{ form.last_name.value|default:'' }}">
+                    {{ form.last_name.errors }}
+                </div>
+                <div class="field {% if form.first_name.errors %}error{% endif %}">
+                    <input 
+                        type="text" 
+                        name="first_name" 
+                        placeholder="Prénom" 
+                        class="capitalize"
+                        value="{{ form.first_name.value|default:'' }}">
+                    {{ form.first_name.errors }}
+                </div>
+            </div>
+        </div>
+
+        <div class="field">
+            <div class="two fields">
+                <div class="field {% if auth_form.email.errors %}error{% endif %}">
+                    <label for="email">Email</label>
+                    <input 
+                        id="email" 
+                        type="email" 
+                        name="email" 
+                        disabled
+                        class="lowercase"
+                        placeholder="Email"
+                        value="{{ user.email|default:'' }}">
+                    {{ user.email.errors }}
+                </div>
+
+                <div class="field {% if form.job.errors %}error{% endif %}">
+                    <label for="job">Profession</label>
+                    <input 
+                        id="job" 
+                        type="text" 
+                        name="job" 
+                        placeholder="Profession"
+                        class="capitalize"
+                        value="{{ form.job.value|default:'' }}">
+                    {{ form.job.errors }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="field">
+            <label class="ui dividing header">Adresse</label>
+            <div class="field {% if form.address1.errors %}error{% endif %}">
+                <input 
+                    type="text" 
+                    name="address1" 
+                    placeholder="Adresse"
+                    class="capitalize"
+                    value="{{ form.address1.value|default:'' }}">
+                {{ form.address1.errors }}
+            </div>
+            <div class="three fields">
+                <div class="field {% if form.zip_code.errors %}error{% endif %}">
+                    <select class="ui fluid dropdown" name="zip_code">
+                        <option value="0"><i>Commune</i></option>
+                        <option value="97216">Ajoupa-Bouillon</option>
+                        <option value="97217">Anses-d'Arlet</option>
+                        <option value="97218">Basse-Pointe</option>
+                        <option value="97222">Bellefontaine</option>
+                        <option value="97221">Carbet</option>
+                        <option value="97222">Case-Pilote</option>
+                        <option value="97223">Diamant</option>
+                        <option value="97224">Ducos</option>
+                        <option value="97250">Fonds-Saint-Denis</option>
+                        <option value="97200">Fort-de-France</option>
+                        <option value="97240">François</option>
+                        <option value="97218">Grand'Rivière</option>
+                        <option value="97213">Gros-Morne</option>
+                        <option value="97232">Lamentin</option>
+                        <option value="97214">Lorrain</option>
+                        <option value="97218">Macouba</option>
+                        <option value="97225">Marigot</option>
+                        <option value="97290">Marin</option>
+                        <option value="97260">Morne-Rouge</option>
+                        <option value="97226">Morne-Vert</option>
+                        <option value="97250">Prêcheur</option>
+                        <option value="97211">Rivière-Pilote</option>
+                        <option value="97215">Rivière-Salée</option>
+                        <option value="97231">Robert</option>
+                        <option value="97227">Sainte-Anne</option>
+                        <option value="97228">Sainte-Luce</option>
+                        <option value="97230">Sainte-Marie</option>
+                        <option value="97270">Saint-Esprit</option>
+                        <option value="97212">Saint-Joseph</option>
+                        <option value="97250">Saint-Pierre</option>
+                        <option value="97233">Schœlcher</option>
+                        <option value="97220">Trinité</option>
+                        <option value="97229">Trois-Îlets</option>
+                        <option value="97280">Vauclin</option>
+                    </select>
+                    {{ form.zip_code.errors }}
+            </div>
+            </div>
+        </div>
+        <div class="field">
+            <label class="ui dividing header">Téléphones <i>(0696 12 34 56 ou +596 696 12 34 56)</i></label>
+            <div class="field">
+                <div class="three fields">
+                    <div class="field {% if form.phone_cell.errors %}error{% endif %}">
+                        <input 
+                            type="text" 
+                            name="phone_cell" 
+                            placeholder="Portable"
+                            class="lowercase"
+                            value="{{ form.phone_cell.value|default:'' }}">
+                            
+                        {{ form.phone_cell.errors }}
+                    </div>
+                    <div class="field {% if form.phone_home.errors %}error{% endif %}">
+                        <input 
+                            type="text" 
+                            name="phone_home" 
+                            placeholder="Domicile"
+                            class="lowercase"
+                            value="{{ form.phone_home.value|default:'' }}">
+                            
+                        {{ form.phone_home.errors }}
+                    </div>
+                    <div class="field {% if form.phone_pro.errors %}error{% endif %}">
+                        <input 
+                            type="text" 
+                            name="phone_pro" 
+                            placeholder="Professionnel"
+                            class="lowercase"
+                            value="{{ form.phone_pro.value|default:'' }}">
+                            
+                        {{ form.phone_pro.errors }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui segment">
+            <div class="field">
+                <div class="ui toggle checkbox">
+                    <input type="checkbox" name="newsletter_sub" tabindex="0" class="hidden" {% if form.newsletter_sub.value %}checked{% endif %}>
+                    <label>S'inscrire à la newsletter.</label>
+                </div>
+            </div>
+        </div>
+        <input type="submit" class="ui button" value="Valider">
+    </form>
+</article>
+{% endblock articles %}
+
+{% block profile_js %}
+<script>
+    $(function () {
+        const city = '{{ form.zip_code.value|default:"" }}';
+        if (city) {
+            const select = document.querySelector('select[name="zip_code"]');
+            const option = select.querySelector(`option[value="${city}"]`);
+
+            if (option) {
+                select.value = city;
+
+                const dropdown = select.parentElement;
+
+                dropdown.querySelector('.text').innerHTML = option.innerHTML;
+                dropdown.querySelector('.menu .item.active').classList.remove('active default');
+                dropdown.querySelector(`.menu .item[data-value="${city}"]`).classList.add('active default');
+            }
+        }
+    })
+</script>
+{% endblock profile_js %}

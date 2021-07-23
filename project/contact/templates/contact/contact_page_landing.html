@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load wagtailcore_tags %}
+
+{% block content %}
+<div class="container mx-auto p-4">
+    <h1 class="w-8/12 mx-auto">{{ page.title }}</h1>
+    
+    <div id="Contact" class="w-8/12 mx-auto">
+        
+        <!-- Contact block -->
+        <div class="w-full p-4 bg-white rounded-lg mb-4">
+            <p>
+                {{ self.thank_you_text|richtext }}
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

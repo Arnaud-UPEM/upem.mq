@@ -1,0 +1,92 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+
+<div class="icon boxes">
+    {% comment %}
+    <a href="#" class="box">
+        <!-- Head -->
+        <div class="rounded-full overflow-hidden">
+            <img src="https://via.placeholder.com/150" loading="lazy">
+        </div>
+    
+        <!-- Title -->
+        <h2 class="">
+            Accueil sur Ecoles/Centres
+        </h2>
+    
+        <!-- Body -->
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec luctus sem ut pretium vulputate. Donec eleifend varius ornare.
+        </p>
+    </a>
+    
+    <a href="#" class="box">
+        <!-- Head -->
+        <div class="rounded-full overflow-hidden">
+            <img src="https://via.placeholder.com/150" loading="lazy">
+        </div>
+    
+        <!-- Title -->
+        <h2 class="">
+            10 Ecoles
+        </h2>
+    
+        <!-- Body -->
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec luctus sem ut pretium vulputate. Donec eleifend varius ornare.
+        </p>
+    </a>
+    
+    <a href="#" class="box">
+        <!-- Head -->
+        <div class="rounded-full overflow-hidden">
+            <img src="https://via.placeholder.com/150" loading="lazy">
+        </div>
+    
+        <!-- Title -->
+        <h2 class="">
+            2 Centres de Loisirs
+        </h2>
+    
+        <!-- Body -->
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec luctus sem ut pretium vulputate. Donec eleifend varius ornare.
+        </p>
+    </a>
+    
+    <a href="#" class="box">
+        <!-- Head -->
+        <div class="rounded-full overflow-hidden">
+            <img src="https://via.placeholder.com/150" loading="lazy">
+        </div>
+    
+        <!-- Title -->
+        <h2 class="">
+            Accueil sur Ecoles
+        </h2>
+    
+        <!-- Body -->
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec luctus sem ut pretium vulputate. Donec eleifend varius ornare.
+        </p>
+    </a>
+    {% endcomment %}
+
+    {% for box in boxes %}
+    <a {% if box.link %} href="{{ box.link }}" {% endif %} class="box">
+        <!-- Head -->
+        <div class="rounded-full overflow-hidden">
+            {% if box.image %}
+            {% image box.image fill-150x150 %}
+            {% else %}
+            <img src="https://via.placeholder.com/150" loading="lazy">
+            {% endif %}
+        </div>
+    
+        <!-- Title -->
+        <h2 class="">{{ box.title }}</h2>
+    
+        <!-- Body -->
+        {{ box.content|richtext }}
+    </a>
+    {% endfor %}
+</div>

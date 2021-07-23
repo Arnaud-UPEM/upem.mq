@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% load static wagtailcore_tags %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/home/home.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<div id="WhoAreWe" class="container w-full lg:w-10/12 mx-auto py-4">
+    <!-- <h1 class="">{{ page.title }}</h1> -->
+    
+    <main class="ui grid">
+        <div class="sixteen wide column">
+            <div class="wcard mission">
+                <div class="wrapper">
+                    <div class="title">Notre mission</div>
+                    <div class="content">
+                        <i class="icon blockquote left"><svg viewBox="0 0 512 512" width="14" title="quote-left">
+                            <path d="M464 256h-80v-64c0-35.3 28.7-64 64-64h8c13.3 0 24-10.7 24-24V56c0-13.3-10.7-24-24-24h-8c-88.4 0-160 71.6-160 160v240c0 26.5 21.5 48 48 48h128c26.5 0 48-21.5 48-48V304c0-26.5-21.5-48-48-48zm-288 0H96v-64c0-35.3 28.7-64 64-64h8c13.3 0 24-10.7 24-24V56c0-13.3-10.7-24-24-24h-8C71.6 32 0 103.6 0 192v240c0 26.5 21.5 48 48 48h128c26.5 0 48-21.5 48-48V304c0-26.5-21.5-48-48-48z" />
+                        </svg></i>
+                        <blockquote>Dans les ACM où nous sommes présents sont mis en œuvre des projets pédagogiques en relation avec les PEDT des villes, nous y intégrons la transmission de nos valeurs positives humaines et culturelles, ciments de l’UPEEM.</blockquote>
+                        <i class="icon blockquote right"><svg viewBox="0 0 512 512" width="14" title="quote-right">
+                            <path d="M464 32H336c-26.5 0-48 21.5-48 48v128c0 26.5 21.5 48 48 48h80v64c0 35.3-28.7 64-64 64h-8c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24h8c88.4 0 160-71.6 160-160V80c0-26.5-21.5-48-48-48zm-288 0H48C21.5 32 0 53.5 0 80v128c0 26.5 21.5 48 48 48h80v64c0 35.3-28.7 64-64 64h-8c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24h8c88.4 0 160-71.6 160-160V80c0-26.5-21.5-48-48-48z" />
+                        </svg></i>
+                    </div>
+                    <div class="author">- le Président de l'UPEEM</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="two column row">
+            <div class="col">
+                <div class="wcard structure bg-gradient-to-br from-purple-400 via-pink-500 to-red-500">
+                    <div class="wrapper">
+                        <div class="title">Notre structure</div>
+                        <div class="content">
+                            <div class="ui grid statistics">
+                                <div class="eight wide column">
+                                    <div class="statistic">
+                                        <div class="value">
+                                            <img src="/images/VvjU6fHr9169du9ZNeH6T0sojXE=/31/min-64x64/" class="inline-block" width="50px">
+                                            9
+                                        </div>
+                                        <div class="label">
+                                            Ecoles
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="eight wide column">
+                                    <div class="statistic">
+                                        <div class="text value">
+                                            <i class="icon child"></i>
+                                            PLUS DE<br>
+                                            800 
+                                        </div>
+                                        <div class="label">
+                                            Enfants inscrits
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="eight wide column">
+                                    <div class="statistic">
+                                        <div class="value">
+                                            2
+                                            <img src="/images/5c9mi_NUYWo99qFjQBxVzPzOOes=/32/original/" class="inline-block">
+                                        </div>
+                                        <div class="label">
+                                            Centres de loisirs
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="eight wide column">
+                                    <div class="statistic">
+                                        <div class="value">
+                                            118
+                                            <i class="icon users"></i>
+                                        </div>
+                                        <div class="label">
+                                            Collaborateurs
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col">
+                <div class="wcard partners">
+                    <div class="wrapper">
+                        <div class="title">Nos partenaires</div>
+                        <div class="content text-center">
+                            <div class="ui link list w-full">
+                                <a class="item"><img class="mx-auto" src="/images/B2kQDwP1EXQ8XqnS6tuL1Y-A1rY=/29/original/" alt=""></a>
+                                <a class="item"><img class="mx-auto" src="/images/r2ezwqPCv5QTfFp7uKo5g2CqMIQ=/30/original/" alt=""></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="sixteen wide column">
+            <div class="wcard whoarewe">
+                <div class="wrapper">
+                    <div class="title">Qui sommes-nous</div>
+                    <div class="content">
+                        <i class="icon blockquote left"><svg viewBox="0 0 512 512" width="14" title="quote-left">
+                            <path d="M464 256h-80v-64c0-35.3 28.7-64 64-64h8c13.3 0 24-10.7 24-24V56c0-13.3-10.7-24-24-24h-8c-88.4 0-160 71.6-160 160v240c0 26.5 21.5 48 48 48h128c26.5 0 48-21.5 48-48V304c0-26.5-21.5-48-48-48zm-288 0H96v-64c0-35.3 28.7-64 64-64h8c13.3 0 24-10.7 24-24V56c0-13.3-10.7-24-24-24h-8C71.6 32 0 103.6 0 192v240c0 26.5 21.5 48 48 48h128c26.5 0 48-21.5 48-48V304c0-26.5-21.5-48-48-48z" />
+                        </svg></i>
+                        <blockquote class="blockquote mx-auto">
+                            Née le 23 Mai 2020, l'<strong>UPEEM</strong>, l'<strong>Union des Parents d' Elèves et d' Etudiants de Martinique</strong> est le fruit de la volonté de professionnels et de bénévoles oeuvrant depuis plus de 20 ans dans le domaine de l'éducation et de la formation de travailler ensemble à élargir statutairement et géographiquement leurs champs d'actions.
+                            <br>
+                            Il s'agit pour ces partenaires d'oeuvrer à l'élaboration et à la mise en oeuvre de projets adaptés à notre réalité sociale et économique et notamment afin d'être en mesure comme stipulé dans l'objet social, de :
+                            <br>
+                            <ul>
+                                <li>
+                                    - Défendre l'intérêt général, matériel et moral des <strong>familles</strong> et de la <strong>jeunesse</strong>.
+                                </li>
+                                <li>
+                                    - Promouvoir un système Educatif Scolaire et Universitaire de qualité prenant sa place dans le contexte Caribéen.
+                                </li>
+                                <li>
+                                    - <strong>Promouvoir la mise en synergie de toutes les Associations autonomes de Parents d'Elèves</strong> <strong>et d'Etudiants de la Guadeloupe, la Guyane, et de Saint-Martin</strong>.
+                                </li>
+                                <li>
+                                    - D'impulser une dynamique collective pour l'évolution des programmes scolaires et universitaires de ces Régions.
+                                </li>
+                                <li>
+                                    - Organiser toute action en vue de la <strong>formation dans le domaine de l'Education Populaire</strong> des femmes et des hommes, tel que la <strong>création d'un centre de formation agréé</strong>.
+                                </li>
+                                <li>
+                                    - La mise en oeuvre d'actions de sensibilisation sur les problématiques sociétales et éducatives.
+                                </li>
+                                <li>
+                                    - <strong>La mise en oeuvre d'actions d'éveils culturels et personnels à destination des élèves...</strong>
+                                </li>
+                            </ul>
+                        </blockquote>
+                        <i class="icon blockquote right"><svg viewBox="0 0 512 512" width="14" title="quote-right">
+                            <path d="M464 32H336c-26.5 0-48 21.5-48 48v128c0 26.5 21.5 48 48 48h80v64c0 35.3-28.7 64-64 64h-8c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24h8c88.4 0 160-71.6 160-160V80c0-26.5-21.5-48-48-48zm-288 0H48C21.5 32 0 53.5 0 80v128c0 26.5 21.5 48 48 48h80v64c0 35.3-28.7 64-64 64h-8c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24h8c88.4 0 160-71.6 160-160V80c0-26.5-21.5-48-48-48z" />
+                        </svg></i>
+                    </div>
+                    <div class="author">- Projet Educatif de l'UPEEM</div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+</script>
+{% endblock %}

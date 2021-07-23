@@ -1,0 +1,16 @@
+{% load wagtailcore_tags %}
+<html>
+    <head>
+        <title>{{ page.title }}</title>
+    </head>
+    <body>
+        <h1>{{ page.title }}</h1>
+
+        <div>{{ page.intro|richtext }}</div>
+        <form action="{% pageurl page %}?p={{ fields_step.number|add:"1" }}" method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit">
+        </form>
+    </body>
+</html>

@@ -1,0 +1,123 @@
+{% extends 'memberships/base.html' %}
+{% load static wagtailcore_tags wagtailuserbar %}
+
+{% block alt_title %}
+Profil
+{% endblock %}
+
+{% block layout %}
+<div class="top">
+    <a href="/" class="p-4 flex flex-nowrap">
+        <img src="/media/demo/android-chrome-256x256.png" alt="" class="h-24 p-2 flex-1">
+        <div class="px-2 flex flex-col items-center justify-center uppercase text-white">
+            <div class="text-3xl mb-2">UPEM</div>
+            <div class="text-center">Affaires scolaires</div>
+        </div>
+    </a>
+</div>
+
+<div class="middle">
+    <form class="ui form" action="{% pageurl page %}?p=3" method="POST">
+        {% csrf_token %}
+        <h2 class="header centered">Complétez votre profil</h2>
+        <div class="field">
+            <label>Noms</label>
+            <div class="two fields">
+                <div class="field">
+                    <input type="text" name="membership[last-name]" placeholder="Nom">
+                </div>
+                <div class="field">
+                    <input type="text" name="membership[first-name]" placeholder="Prénom">
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <div class="two fields">
+                <div class="field">
+                    <label for="">Email</label>
+                    <input type="email" name="membership[email]" placeholder="Email">
+                </div>
+                <div class="field">
+                    <label for="">Profession</label>
+                    <input type="text" name="membership[job]" placeholder="Profession">
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <label>Adresse</label>
+            <div class="field">
+                <input type="text" name="membership[address]" placeholder="Adresse">
+            </div>
+            <div class="three fields">
+                <div class="field">
+                    <select class="ui fluid dropdown">
+                        <option value="0"><i>Commune</i></option>
+                        <option value="97216">Ajoupa-Bouillon</option>
+                        <option value="97217">Anses-d'Arlet</option>
+                        <option value="97218">Basse-Pointe</option>
+                        <option value="97222">Bellefontaine</option>
+                        <option value="97221">Carbet</option>
+                        <option value="97222">Case-Pilote</option>
+                        <option value="97223">Diamant</option>
+                        <option value="97224">Ducos</option>
+                        <option value="97250">Fonds-Saint-Denis</option>
+                        <option value="97200">Fort-de-France</option>
+                        <option value="97240">François</option>
+                        <option value="97218">Grand'Rivière</option>
+                        <option value="97213">Gros-Morne</option>
+                        <option value="97232">Lamentin</option>
+                        <option value="97214">Lorrain</option>
+                        <option value="97218">Macouba</option>
+                        <option value="97225">Marigot</option>
+                        <option value="97290">Marin</option>
+                        <option value="97260">Morne-Rouge</option>
+                        <option value="97226">Morne-Vert</option>
+                        <option value="97250">Prêcheur</option>
+                        <option value="97211">Rivière-Pilote</option>
+                        <option value="97215">Rivière-Salée</option>
+                        <option value="97231">Robert</option>
+                        <option value="97227">Sainte-Anne</option>
+                        <option value="97228">Sainte-Luce</option>
+                        <option value="97230">Sainte-Marie</option>
+                        <option value="97270">Saint-Esprit</option>
+                        <option value="97212">Saint-Joseph</option>
+                        <option value="97250">Saint-Pierre</option>
+                        <option value="97233">Schœlcher</option>
+                        <option value="97220">Trinité</option>
+                        <option value="97229">Trois-Îlets</option>
+                        <option value="97280">Vauclin</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <input type="number" name="membership[zip-code]" placeholder="Code Postal">
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <label>Téléphones</label>
+            <div class="field">
+                <div class="three fields">
+                    <div class="field">
+                        <input type="text" name="membership[phone-cell]" placeholder="Portable">
+                    </div>
+                    <div class="field">
+                        <input type="text" name="membership[phone-home]" placeholder="Domicile">
+                    </div>
+                    <div class="field">
+                        <input type="text" name="membership[phone-pro]" placeholder="Professionnel">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui segment">
+            <div class="field">
+                <div class="ui toggle checkbox">
+                    <input type="checkbox" name="gift" tabindex="0" class="hidden" checked="true">
+                    <label>S'inscrire à la newsletter.</label>
+                </div>
+            </div>
+        </div>
+        <input type="submit" class="ui button" value="Valider">
+    </form>
+</div>
+{% endblock %}

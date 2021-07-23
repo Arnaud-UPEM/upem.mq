@@ -1,0 +1,334 @@
+<!-- 
+    Code from pen: https://codepen.io/geoffyuen/pen/FCBEg
+ -->
+
+{% extends 'base.html' %}
+{% load wagtailcore_tags %}
+
+{% block content %}
+<div class="container mx-auto p-4">
+    <h1 class="w-full lg:w-8/12 mx-auto">{{ page.title }}</h1>
+    
+    <div id="ACM" class="w-full lg:w-8/12 mx-auto">
+        
+        <!-- Contact block -->
+        <!-- <div class="w-full p-4 bg-white rounded-lg mb-4"> -->
+        <div class="w-full mb-4">
+            <p class="">
+                <b>Retrouvez ici nos tarifs périscolaires (Garderie) et ALSH (Accueil de Loisirs Sans Hébergement).</b>
+                <br>
+                <span class="text-red-600 font-bold">Les paiements sur place s'effectuent du 1er au 15 de chaque mois POUR LE MOIS SUIVANT.</span>
+                <br>
+                <span><i>Q1/Q2 : Quotient familiaux CAF</i></span>
+                <div class="">
+                    <b class="block">Nos partenaires :</b>
+                    <img src="/images/wNceIqDZnAndOoZfOsY0sFBJVEs=/29/min-100x100/" class="inline-block mr-4">
+                    <img src="/images/huz_GpPi2HlSnxE97ygvGMiUt-A=/30/height-100/" class="inline-block">
+                </div>
+            </p>
+        </div>
+        <!-- /Contact block -->
+        
+        <div class="ui styled fluid accordion">
+            <div class="title">
+                <i class="dropdown icon"></i>
+                Périscolaire (Garderie)
+            </div>
+            <div class="content">
+                <table class="rwd-table">
+                    <tr>
+                        <th>NBRE DE MOIS</th>
+                        <th>1 Enfant</th>
+                        <th>2 Enfants</th>
+                        <th>3 Enfants</th>
+                        <th>4 Enfants</th>
+                    </tr>
+                    <tr>
+                        <td data-th="NBRS DE MOIS" class="font-bold">1 mois</td> 
+                        <td data-th="1 Enfant">20 €</td>
+                        <td data-th="2 Enfants">32 €</td> 
+                        <td data-th="3 Enfants">40 €</td> 
+                        <td data-th="4 Enfants">60 €</td>
+                    </tr>
+                    <tr>
+                        <td data-th="NBRS DE MOIS" class="font-bold">2 mois</td> 
+                        <td data-th="1 Enfant">40 €</td>
+                        <td data-th="2 Enfants">64 €</td> 
+                        <td data-th="3 Enfants">80 €</td> 
+                        <td data-th="4 Enfants">120 €</td>
+                    </tr>
+                    <tr>
+                        <td data-th="NBRS DE MOIS" class="font-bold">3 mois</td> 
+                        <td data-th="1 Enfant">60 €</td>
+                        <td data-th="2 Enfants">96 €</td> 
+                        <td data-th="3 Enfants">120 €</td> 
+                        <td data-th="4 Enfants">180 €</td>
+                    </tr>
+                    <tr>
+                        <td data-th="NBRS DE MOIS" class="font-bold">4 mois</td> 
+                        <td data-th="1 Enfant">80 €</td>
+                        <td data-th="2 Enfants">128 €</td> 
+                        <td data-th="3 Enfants">160 €</td> 
+                        <td data-th="4 Enfants">240 €</td>
+                    </tr>
+                    <tr>
+                        <td data-th="NBRS DE MOIS" class="font-bold">5 mois</td> 
+                        <td data-th="1 Enfant">100 €</td>
+                        <td data-th="2 Enfants">160 €</td> 
+                        <td data-th="3 Enfants">200 €</td> 
+                        <td data-th="4 Enfants">300 €</td>
+                    </tr>
+                    <tr>
+                        <td data-th="NBRS DE MOIS" class="font-bold">6 mois</td> 
+                        <td data-th="1 Enfant">120 €</td>
+                        <td data-th="2 Enfants">192 €</td> 
+                        <td data-th="3 Enfants">240 €</td> 
+                        <td data-th="4 Enfants">360 €</td>
+                    </tr>
+                    <tr>
+                        <td data-th="NBRS DE MOIS" class="font-bold">7 mois</td> 
+                        <td data-th="1 Enfant">140 €</td>
+                        <td data-th="2 Enfants">224 €</td> 
+                        <td data-th="3 Enfants">280 €</td> 
+                        <td data-th="4 Enfants">420 €</td>
+                    </tr>
+                    <tr>
+                        <td data-th="NBRS DE MOIS" class="font-bold">8 mois</td> 
+                        <td data-th="1 Enfant">160 €</td>
+                        <td data-th="2 Enfants">256 €</td> 
+                        <td data-th="3 Enfants">320 €</td> 
+                        <td data-th="4 Enfants">480 €</td>
+                    </tr>
+                    <tr>
+                        <td data-th="NBRS DE MOIS" class="font-bold">9 mois</td> 
+                        <td data-th="1 Enfant">180 €</td>
+                        <td data-th="2 Enfants">288 €</td> 
+                        <td data-th="3 Enfants">360 €</td> 
+                        <td data-th="4 Enfants">540 €</td>
+                    </tr>
+                    <tr>
+                        <td data-th="NBRS DE MOIS" class="font-bold">10 mois</td> 
+                        <td data-th="1 Enfant">200 €</td>
+                        <td data-th="2 Enfants">320 €</td> 
+                        <td data-th="3 Enfants">400 €</td> 
+                        <td data-th="4 Enfants">600 €</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="title">
+                <i class="dropdown icon"></i>
+                ALSH (Centre de loisirs) - Ecole maternelle JEANNE MERTON
+            </div>
+            <div class="content">
+                <table class="rwd-table">
+                    <tr>
+                        <th>PERIODE</th>
+                        <th>Nbrs de Jours</th>
+                        <th>Q1</th>
+                        <th>Q2</th>
+                        <th>NON ALLOCATAIRE</th>
+                    </tr>
+                    <tr class="font-bold" style="color: #99990c;">
+                        <td data-th="PERIODE" class="font-bold">TARIF DE LA JOURNÉE</td> 
+                        <td data-th="Nbrs de Jours">1</td>
+                        <td data-th="Q1">0,00 €</td> 
+                        <td data-th="Q2">4,00 €</td> 
+                        <td data-th="NON ALLOCATAIRE">17,00 €</td>
+                    </tr>
+                    <tr>
+                        <td data-th="PERIODE" class="font-bold">JANVIER 2021 (mercredi)</td> 
+                        <td data-th="Nbrs de Jours">4</td>
+                        <td data-th="Q1">0,00 €</td> 
+                        <td data-th="Q2">16,00 €</td> 
+                        <td data-th="NON ALLOCATAIRE">68,00 €</td>
+                    </tr>
+                    <tr>
+                        <td data-th="PERIODE" class="font-bold">FEVRIER 2021 (mercredi)</td> 
+                        <td data-th="Nbrs de Jours">2</td>
+                        <td data-th="Q1">0,00 €</td> 
+                        <td data-th="Q2">8,00 €</td> 
+                        <td data-th="NON ALLOCATAIRE">34,00 €</td>
+                    </tr>
+                    <tr>
+                        <td data-th="PERIODE" class="font-bold">CARNAVAL 2021</td> 
+                        <td data-th="Nbrs de Jours">7</td>
+                        <td data-th="Q1">0,00 €</td> 
+                        <td data-th="Q2">28,00 €</td> 
+                        <td data-th="NON ALLOCATAIRE">119,00 €</td>
+                    </tr>
+                    <tr>
+                        <td data-th="PERIODE" class="font-bold">MARS 2021 (mercredi)</td> 
+                        <td data-th="Nbrs de Jours">4</td>
+                        <td data-th="Q1">0,00 €</td> 
+                        <td data-th="Q2">16,00 €</td> 
+                        <td data-th="NON ALLOCATAIRE">68,00 €</td>
+                    </tr>
+                    <tr>
+                        <td data-th="PERIODE" class="font-bold">AVRIL 2021 (mercredi)</td> 
+                        <td data-th="Nbrs de Jours">3</td>
+                        <td data-th="Q1">0,00 €</td> 
+                        <td data-th="Q2">12,00 €</td> 
+                        <td data-th="NON ALLOCATAIRE">51,00 €</td>
+                    </tr>
+                    <tr>
+                        <td data-th="PERIODE" class="font-bold">PÂQUES 2021</td> 
+                        <td data-th="Nbrs de Jours">8</td>
+                        <td data-th="Q1">0,00 €</td> 
+                        <td data-th="Q2">32,00 €</td> 
+                        <td data-th="NON ALLOCATAIRE">136,00 €</td>
+                    </tr>
+                    <tr>
+                        <td data-th="PERIODE" class="font-bold">MAI 2021 (mercredi)</td>
+                        <td data-th="Nbrs de Jours">4</td>
+                        <td data-th="Q1">0,00 €</td> 
+                        <td data-th="Q2">16,00 €</td> 
+                        <td data-th="NON ALLOCATAIRE">68,00 €</td>
+                    </tr>
+                    <tr>
+                        <td data-th="PERIODE" class="font-bold">JUIN 2021 (mercredi)</td>
+                        <td data-th="Nbrs de Jours">5</td>
+                        <td data-th="Q1">0,00 €</td> 
+                        <td data-th="Q2">20,00 €</td> 
+                        <td data-th="NON ALLOCATAIRE">85,00 €</td>
+                    </tr>
+                    <tr>
+                        <td data-th="PERIODE" class="font-bold">GRDES VACANCES - JUILLET 2021</td>
+                        <td data-th="Nbrs de Jours">17</td>
+                        <td data-th="Q1">0,00 €</td> 
+                        <td data-th="Q2">68,00 €</td> 
+                        <td data-th="NON ALLOCATAIRE">289,00 €</td>
+                    </tr>
+                    <tr>
+                        <td data-th="PERIODE" class="font-bold">GRDES VACANCES - AOÛT 2021</td>
+                        <td data-th="Nbrs de Jours">10</td>
+                        <td data-th="Q1">0,00 €</td> 
+                        <td data-th="Q2">40,00 €</td> 
+                        <td data-th="NON ALLOCATAIRE">170,00 €</td>
+                    </tr>
+                
+                    <tr class="font-bold">
+                        <td data-th="PERIODE">TOTAL</td>
+                        <td data-th="Nbrs de Jours">64</td>
+                        <td data-th="Q1">0,00 €</td>
+                        <td data-th="Q2">256,00 €</td>
+                        <td data-th="NON ALLOCATAIRE">1 088,00 €</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="title">
+                <i class="dropdown icon"></i>
+                ALSH (Centre de loisirs) - Ecole primaire EDOUARD MARCEAU
+            </div>
+            <div class="content">
+                <table class="rwd-table">
+                    <tr>
+                        <th>PERIODE</th>
+                        <th>Nbrs de Jours</th>
+                        <th>Q1</th>
+                        <th>Q2</th>
+                        <th>NON ALLOCATAIRE</th>
+                    </tr>
+                    <tr class="font-bold" style="color: #99990c;">
+                        <td data-th="PERIODE" class="font-bold">TARIF DE LA JOURNÉE</td> 
+                        <td data-th="Nbrs de Jours">1</td>
+                        <td data-th="Q1">2,00 €</td> 
+                        <td data-th="Q2">7,00 €</td> 
+                        <td data-th="NON ALLOCATAIRE">20,00 €</td>
+                    </tr>
+                    <tr>
+                        <td data-th="PERIODE" class="font-bold">JANVIER 2021 (mercredi)</td> 
+                        <td data-th="Nbrs de Jours">4</td>
+                        <td data-th="Q1">8,00 €</td> 
+                        <td data-th="Q2">28,00 €</td> 
+                        <td data-th="NON ALLOCATAIRE">80,00 €</td>
+                    </tr>
+                    <tr>
+                        <td data-th="PERIODE" class="font-bold">FEVRIER 2021 (mercredi)</td> 
+                        <td data-th="Nbrs de Jours">2</td>
+                        <td data-th="Q1">4,00 €</td> 
+                        <td data-th="Q2">14,00 €</td> 
+                        <td data-th="NON ALLOCATAIRE">40,00 €</td>
+                    </tr>
+                    <tr>
+                        <td data-th="PERIODE" class="font-bold">CARNAVAL 2021</td> 
+                        <td data-th="Nbrs de Jours">7</td>
+                        <td data-th="Q1">14,00 €</td> 
+                        <td data-th="Q2">49,00 €</td> 
+                        <td data-th="NON ALLOCATAIRE">140,00 €</td>
+                    </tr>
+                    <tr>
+                        <td data-th="PERIODE" class="font-bold">MARS 2021 (mercredi)</td> 
+                        <td data-th="Nbrs de Jours">4</td>
+                        <td data-th="Q1">8,00 €</td> 
+                        <td data-th="Q2">28,00 €</td> 
+                        <td data-th="NON ALLOCATAIRE">80,00 €</td>
+                    </tr>
+                    <tr>
+                        <td data-th="PERIODE" class="font-bold">AVRIL 2021 (mercredi)</td> 
+                        <td data-th="Nbrs de Jours">3</td>
+                        <td data-th="Q1">6,00 €</td> 
+                        <td data-th="Q2">21,00 €</td> 
+                        <td data-th="NON ALLOCATAIRE">60,00 €</td>
+                    </tr>
+                    <tr>
+                        <td data-th="PERIODE" class="font-bold">PÂQUES 2021</td> 
+                        <td data-th="Nbrs de Jours">8</td>
+                        <td data-th="Q1">16,00 €</td> 
+                        <td data-th="Q2">59,00 €</td> 
+                        <td data-th="NON ALLOCATAIRE">160,00 €</td>
+                    </tr>
+                    <tr>
+                        <td data-th="PERIODE" class="font-bold">MAI 2021 (mercredi)</td>
+                        <td data-th="Nbrs de Jours">4</td>
+                        <td data-th="Q1">8,00 €</td> 
+                        <td data-th="Q2">28,00 €</td> 
+                        <td data-th="NON ALLOCATAIRE">80,00 €</td>
+                    </tr>
+                    <tr>
+                        <td data-th="PERIODE" class="font-bold">JUIN 2021 (mercredi)</td>
+                        <td data-th="Nbrs de Jours">5</td>
+                        <td data-th="Q1">10,00 €</td> 
+                        <td data-th="Q2">35,00 €</td> 
+                        <td data-th="NON ALLOCATAIRE">100,00 €</td>
+                    </tr>
+                    <tr>
+                        <td data-th="PERIODE" class="font-bold">GRDES VACANCES - JUILLET 2021</td>
+                        <td data-th="Nbrs de Jours">17</td>
+                        <td data-th="Q1">34,00 €</td> 
+                        <td data-th="Q2">119,00 €</td> 
+                        <td data-th="NON ALLOCATAIRE">340,00 €</td>
+                    </tr>
+                    <tr>
+                        <td data-th="PERIODE" class="font-bold">GRDES VACANCES - AOÛT 2021</td>
+                        <td data-th="Nbrs de Jours">10</td>
+                        <td data-th="Q1">20,00 €</td> 
+                        <td data-th="Q2">70,00 €</td> 
+                        <td data-th="NON ALLOCATAIRE">200,00 €</td>
+                    </tr>
+                
+                    <tr class="font-bold">
+                        <td data-th="PERIODE">TOTAL</td>
+                        <td data-th="Nbrs de Jours">64</td>
+                        <td data-th="Q1">128,00 €</td>
+                        <td data-th="Q2">448,00 €</td>
+                        <td data-th="NON ALLOCATAIRE">1 280,00 €</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+    window.onload = function () {
+        document.querySelectorAll('select').forEach(item => {
+            item.className += ' ui dropdown';
+        });
+        
+        $('.ui.accordion').accordion();
+    }
+</script>
+{% endblock extra_js %}

@@ -1,0 +1,12 @@
+{
+	"version": 3,
+	"file": "contact.css",
+	"sources": [
+		"../src/contact/contact.scss"
+	],
+	"sourcesContent": [
+		"#WhoAreWe {\n    .right {\n        .icon {\n            opacity: .75;\n            margin-bottom: 7px;\n        }\n\n        .ol-viewport {\n            height: 400px !important;\n        }\n    }\n}"
+	],
+	"names": [],
+	"mappings": "AAAA,AAEQ,SAFC,CACL,MAAM,CACF,KAAK,CAAC;EACF,OAAO,EAAE,GAAG;EACZ,aAAa,EAAE,GAAG,GACrB;;AALT,AAOQ,SAPC,CACL,MAAM,CAMF,YAAY,CAAC;EACT,MAAM,EAAE,gBAAgB,GAC3B"
+}

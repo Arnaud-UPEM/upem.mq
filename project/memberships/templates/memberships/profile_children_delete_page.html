@@ -1,0 +1,29 @@
+{% extends 'memberships/profile_base.html' %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block top_side %}
+{% if not errors %}
+<article class="ui grid">
+    <form action="{% pageurl page %}delete/{{ child.pk }}/" method="POST" class="ui form">
+        {% csrf_token %}
+        <!-- <h3 class="header">Suppression enfant</h3> -->
+        <p>Etes-vous sûr de vouloir supprimer l'enfant <b>{{ child.first_name }} {{ child.last_name }}</b> ?</p>
+        <a href="" class="ui button">Annuler</a>
+        <input type="submit" name="delete" value="Supprimer" class="ui button negative">
+    </form>
+</article>
+{% endif %}
+{% endblock %}
+
+{% block left_side %}
+{% endblock %}
+
+{% block articles %}
+{% endblock articles %}
+
+{% block profile_js %}
+<script>
+    $(function () {
+    });
+</script>
+{% endblock profile_js %}

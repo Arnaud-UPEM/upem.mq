@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}loginpage{% endblock %}
+
+{% block extra_css %}
+{% endblock extra_css %}
+
+{% block content %}
+<section>
+    <div class="login">
+        <form action="{% pageurl page %}" method="POST" class="ui form {% if message %}error{% endif %}">
+            {% csrf_token %}
+            <h2 class="header centered">
+                Se connecter,
+            </h2>
+            <div class="ui error message">
+                <div class="header">Echec de connexion</div>
+                <p>{{ message }}</p>
+                <!-- <p>Les identifiants sont invalides.</p> -->
+            </div>
+            <div class="field email">
+                <span></span>
+                <input 
+                    type="text" 
+                    name="email"
+                    placeholder="Email"
+                    value="{{ form.email.value|default:'' }}">
+            </div>
+            <div class="field password">
+                <span></span>
+                <input 
+                    type="password" 
+                    name="password"
+                    placeholder="Mot de passe">
+            </div>
+            <div class="field forgot">
+                <a>Mot de passe oublié ?</a>
+            </div>
+            <div class="field">
+                <input type="submit" class="ui button" value="Valider">
+            </div>
+            <div class="field signup">
+                <a href="/inscription"><b>Devenez adhérent</b></a>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock content %}
+
+{% block extra_js %}
+{% endblock extra_js %}

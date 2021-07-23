@@ -1,0 +1,410 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}aboutpage{% endblock %}
+
+{% block extra_css %}
+{% endblock extra_css %}
+
+{% block content %}
+<section>
+    <div class="page banner">
+        <div class="bg purple"></div>
+        <div class="ui container">
+            <h1 class="header white">L'UPEM · A propos</h1>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="ui container py-4">
+        <div class="ui grid two column">
+            <div class="column">
+                <h2 class="header">Notre Historique</h2>
+
+                Né de la fédération de plusieurs associations et groupements indépendants de parents
+                d’élèves, constituée solennellement le 23 mai 1992, l’UPEM (<b>U</b>nion des <b>P</b>arents d’<b>E</b>lèves de
+                <b>M</b>artinique), est une association à but non lucratif régie par la loi du 1 er juillet 1901.
+                <br>
+                <br>
+
+                Depuis sa création l’UPEM est la principale association de parents d’élèves de Martinique.
+                Force de proposition et de progrès, représentée dans la majeure partie des établissements
+                scolaires du secondaire et des écoles du primaire.
+                L’UPEM fait valoir ses points de vue auprès des différentes institutions, instances et autres
+                organismes où elle siège.
+
+                <br>
+                <br>
+                Depuis 29 années, les bénévoles, avec l’appui des salariés impliqués, militent pour que tous
+                nos enfants bénéficient, dans le système éducatif public, de tous les moyens, outils et
+                techniques nécessaires à leur meilleure réussite et total épanouissement.
+                
+                <br>
+                <br>
+                Alors, ils seront en mesure de réaliser leurs souhaits tant en Martinique que dans le monde et
+                ainsi donner une forte réalité à notre devise : <b>DIVINI YICH NOU SE DIVINI PEYI-A</b>.
+            </div>
+            <div class="column">
+                <img class="rounded" src="https://source.unsplash.com/random/500x500" alt="">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="page banner">
+        <div class="filter"></div>
+        <div class="bg">
+            <img src="/media/demo/bg-about.jpg" alt="">
+        </div>
+        
+        <div class="ui container">
+            <div class="quote big">
+                <div class="left"><i class="icon quote left"></i></div>
+                <blockquote>
+                    <div class="text">
+                        Face à cette société qui est en perte de repères, il est nécessaire de leur instiller des valeurs
+                        de vie, tels que l’esprit de solidarité, le goût de l’effort et de l’excellence.
+                        <br>
+                        Il est tout aussi important que la curiosité et l’ouverture soient des éléments moteurs pour qu’ils
+                        découvrent le monde tout autant que leur patrimoine culturel qui feront d’eux des Hommes et
+                        des Femmes avisés et conséquents.
+                    </div>
+                    <div class="author">
+                        - <span><i>Auteur</i></span>
+                    </div>
+                </blockquote>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="beige">
+    <div class="ui container transparent">
+        <h2 class="header centered">
+            Nos missions
+            <div class="subheader">Vous représenter et vous accompagner</div>
+        </h2>
+    </div>
+</section>
+
+<section>
+    <div class="highlights four py-4">
+        <div class="ui container">
+            <div class="ui grid">
+                <div class="four wide column">
+                    <div class="tile">
+                        <div class="image">
+                            <!-- <img src="https://source.unsplash.com/random/100" alt=""> -->
+                            <i class="icon child"></i>
+                        </div>
+                        <h1 class="title">Conseil d'école</h1>
+                        <div class="content">
+                            consectetur adipiscing elit. 
+                            Quisque tempus justo vel velit porttitor posuere. 
+                            Curabitur sed turpis sit amet sem pellentesque tincidunt.
+                        </div>
+                    </div>
+                </div>
+                <div class="four wide column">
+                    <div class="tile">
+                        <div class="image">
+                            <!-- <img src="https://source.unsplash.com/random/100" alt=""> -->
+                            <i class="graduation cap icon"></i>
+                        </div>
+                        <h1 class="title">Conseil de classe</h1>
+                        <div class="content">
+                            consectetur adipiscing elit. 
+                            Quisque tempus justo vel velit porttitor posuere. 
+                            Curabitur sed turpis sit amet sem pellentesque tincidunt.
+                        </div>
+                    </div>
+                </div>
+                <div class="four wide column">
+                    <div class="tile">
+                        <div class="image">
+                            <!-- <img src="https://source.unsplash.com/random/100" alt=""> -->
+                            <i class="icon university"></i>
+                        </div>
+                        <h1 class="title">Conseil d'administration</h1>
+                        <div class="content">
+                            consectetur adipiscing elit. 
+                            Quisque tempus justo vel velit porttitor posuere. 
+                            Curabitur sed turpis sit amet sem pellentesque tincidunt.
+                        </div>
+                    </div>
+                </div>
+                <div class="four wide column">
+                    <div class="tile">
+                        <div class="image">
+                            <!-- <img src="https://source.unsplash.com/random/100" alt=""> -->
+                            <i class="balance scale icon"></i>
+                        </div>
+                        <h1 class="title">Conseil de discipline</h1>
+                        <div class="content">
+                            consectetur adipiscing elit. 
+                            Quisque tempus justo vel velit porttitor posuere. 
+                            Curabitur sed turpis sit amet sem pellentesque tincidunt.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="highlights list bg-green-800">
+        <div class="ui container">
+            <div class="ui two column grid">
+                <div class="column">
+                    <div class="tile">
+                        <div class="image">
+                            <!-- <img src="https://source.unsplash.com/random/50" alt=""> -->
+                            <i class="plus icon"></i>
+                        </div>
+                        <div class="right">
+                            <h1 class="title">Comité éducation santé citoyenneté</h1>
+                            <div class="content">
+                                consectetur adipiscing elit. 
+                                Quisque tempus justo vel velit porttitor posuere. 
+                                Curabitur sed turpis sit amet sem pellentesque tincidunt.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="tile">
+                        <div class="image">
+                            <!-- <img src="https://source.unsplash.com/random/50" alt=""> -->
+                            <i class="icon info"></i>
+                        </div>
+                        <div class="right">
+                            <h1 class="title">Conseil de l’éducation nationale (CEN)</h1>
+                            <div class="content">
+                                consectetur adipiscing elit. 
+                                Quisque tempus justo vel velit porttitor posuere. 
+                                Curabitur sed turpis sit amet sem pellentesque tincidunt.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="tile">
+                        <div class="image">
+                            <!-- <img src="https://source.unsplash.com/random/50" alt=""> -->
+                            <i class="language icon"></i>
+                        </div>
+                        <div class="right">
+                            <h1 class="title">Commission des langues régionales</h1>
+                            <div class="content">
+                                consectetur adipiscing elit. 
+                                Quisque tempus justo vel velit porttitor posuere. 
+                                Curabitur sed turpis sit amet sem pellentesque tincidunt.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="tile">
+                        <div class="image">
+                            <!-- <img src="https://source.unsplash.com/random/50" alt=""> -->
+                            <i class="american sign language interpreting icon"></i>
+                        </div>
+                        <div class="right">
+                            <h1 class="title">Commission des bourses de l’EN ou autre Ministère</h1>
+                            <div class="content">
+                                consectetur adipiscing elit. 
+                                Quisque tempus justo vel velit porttitor posuere. 
+                                Curabitur sed turpis sit amet sem pellentesque tincidunt.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="beige">
+    <div class="ui container transparent">
+        <h2 class="header centered">
+            Notre organisation
+            <div class="subheader">Les personnnalités au coeur du combat</div>
+        </h2>
+    </div>
+</section>
+
+<section class="mb-20">
+    <div class="ui container">
+        <div id="splide__cards" class="splide organization">
+            <div class="splide__track">
+                <ul class="splide__list ui link cards">
+                    <div class="card splide__slide">
+                        <div class="image">
+                            <img src="https://semantic-ui.com/images/avatar2/large/matthew.png">
+                        </div>
+                        <div class="content">
+                            <div class="header">Didier LAGUERRE</div>
+                            <div class="meta president">
+                                <a>Président</a>
+                            </div>
+                            <div class="description hidden">
+                                Matthew is an interior designer living in New York.
+                            </div>
+                        </div>
+                        <div class="extra content hidden">
+                            <span class="right floated">
+                                Joined in 2013
+                            </span>
+                            <span>
+                                <i class="user icon"></i>
+                                75 Friends
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card splide__slide">
+                        <div class="image">
+                            <img src="https://semantic-ui.com/images/avatar2/large/elyse.png">
+                        </div>
+                        <div class="content">
+                            <div class="header">Catherine MAYAUD</div>
+                            <div class="meta vicepresident">
+                                <a>Vice-présidente</a>
+                            </div>
+                            <div class="description hidden">
+                                Matthew is an interior designer living in New York.
+                            </div>
+                        </div>
+                        <div class="extra content hidden">
+                            <span class="right floated">
+                                Joined in 2013
+                            </span>
+                            <span>
+                                <i class="user icon"></i>
+                                75 Friends
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card splide__slide">
+                        <div class="image">
+                            <img src="https://semantic-ui.com/images/avatar2/large/matthew.png">
+                        </div>
+                        <div class="content">
+                            <div class="header">Joé ARNETON</div>
+                            <div class="meta administrator">
+                                <a>Trésorier</a>
+                            </div>
+                            <div class="description hidden">
+                                Matthew is an interior designer living in New York.
+                            </div>
+                        </div>
+                        <div class="extra content hidden">
+                            <span class="right floated">
+                                Joined in 2013
+                            </span>
+                            <span>
+                                <i class="user icon"></i>
+                                75 Friends
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card splide__slide">
+                        <div class="image">
+                            <img src="https://semantic-ui.com/images/avatar2/large/matthew.png">
+                        </div>
+                        <div class="content">
+                            <div class="header">Jean-Michel MANGATA</div>
+                            <div class="meta employee">
+                                <a>Salarié</a>
+                            </div>
+                            <div class="description hidden">
+                                Matthew is an interior designer living in New York.
+                            </div>
+                        </div>
+                        <div class="extra content hidden">
+                            <span class="right floated">
+                                Joined in 2013
+                            </span>
+                            <span>
+                                <i class="user icon"></i>
+                                75 Friends
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card splide__slide">
+                        <div class="image">
+                            <img src="https://semantic-ui.com/images/avatar2/large/molly.png">
+                        </div>
+                        <div class="content">
+                            <div class="header">Marie-Andrée Picardon</div>
+                            <div class="meta employee">
+                                <a>Salarié</a>
+                            </div>
+                            <div class="description hidden">
+                                Molly is a personal assistant living in Paris.
+                            </div>
+                        </div>
+                        <div class="extra content hidden">
+                            <span class="right floated">
+                                Joined in 2011
+                            </span>
+                            <span>
+                                <i class="user icon"></i>
+                                35 Friends
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card splide__slide">
+                        <div class="image">
+                            <img src="https://semantic-ui.com/images/avatar2/large/kristy.png">
+                        </div>
+                        <div class="content">
+                            <div class="header">Eloïse NERO</div>
+                            <div class="meta employee">
+                                <a>Salarié</a>
+                            </div>
+                            <div class="description hidden">
+                                Molly is a personal assistant living in Paris.
+                            </div>
+                        </div>
+                        <div class="extra content hidden">
+                            <span class="right floated">
+                                Joined in 2011
+                            </span>
+                            <span>
+                                <i class="user icon"></i>
+                                35 Friends
+                            </span>
+                        </div>
+                    </div>
+                </ul>
+            </div>
+            <div class="splide__progress">
+                <div class="splide__progress__bar">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    window.onload = function () {
+        var splide__cards = new Splide('#splide__cards', {
+            perPage: 4,
+            type: 'loop',
+            autoplay: true,
+            lazyLoad: true,
+            pauseOnHover: true,
+            pauseOnFocus: true,
+            // heightRatio: 0.5,
+        });
+        
+        splide__cards.mount();
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/css/ol.css" type="text/css">
+<link rel="stylesheet" href="{% static 'css/contact/contact.css' %}" type="text/css">
+{% endblock extra_css %}
+
+{% block content %}
+<div id="WhoAreWe" class="container mx-auto flex">
+    <div class="left w-4/12 flex bg-blue p-4">
+        <div class="w-full flex flex-col">
+            {% for agency in page.agencies.all %}
+            <div class="trigger bg-white mb-4 p-4 rounded-lg cursor-pointer" data-target="{{ agency.id }}" onclick="onClick(this)">
+                <i class="icon map marker alternate"></i>
+                {{ agency.name }}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="right w-8/12 flex bg-blue p-4">
+        <div class="w-full flex flex-col rounded-lg overflow-hidden">
+            {% for agency in page.agencies.all %}
+            <div class="target bg-white hidden" data-target="{{ agency.id }}">
+                <!-- Top Row -->
+                <div class="flex flex-row">
+                    <img src="https://via.placeholder.com/250" >
+                    <div class="p-8">
+                        <h2 class="mt-0">{{ agency.name }}</h2>
+                        
+                        <i class="icon envelope outline"></i><a href="mailto:{{ agency.email }}">{{ agency.email }}</a><br>
+                        <i class="icon map marker alternate"></i>{{ agency.address_1 }}<br>
+                        <i class="icon map marker alternate"></i>{{ agency.address_2 }}<br>
+                        <i class="icon map marker alternate"></i>{{ agency.city }}<br>
+                        <i class="icon mobile"></i> {{ agency.phone_cell }}<br>
+                        <i class="icon fax"></i> {{ agency.phone_home }}<br>
+                    </div>
+                </div>
+                <!-- /Top Row -->
+                <!-- Bottom Row -->
+                <div class="w-full">
+                    <div id="map{{ agency.id }}" class="map openlayers" data-lon="{{ agency.longitude|floatformat:'10' }}" data-lat="{{ agency.latitude|floatformat:'10' }}"></div>
+                </div>
+                <!-- /Bottom Row -->
+                
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"></script>
+<script>
+    var map = undefined;
+
+    window.onload = function () {
+    }
+
+    function onClick (e) {
+        let trigger = e;
+        while(!e.classList.contains('trigger')) {
+            trigger = trigger.parentElement;
+        }
+
+        const id = trigger.getAttribute('data-target');
+        if (id) {
+            const target = document.querySelector(`.target[data-target="${id}"]`);
+            if (target && target.classList.contains('hidden')) {
+                document.querySelectorAll('.target').forEach(item => item.classList.add('hidden'));
+
+                target.classList.remove('hidden');
+                drawMap(target.querySelector('.map.openlayers').id);
+            }
+        }
+    }
+
+    function drawMap (target) {
+        console.log(target);
+        const lon = parseFloat( document.getElementById(target).getAttribute('data-lon').replace(',', '.') );
+        const lat = parseFloat( document.getElementById(target).getAttribute('data-lat').replace(',', '.') );
+        
+        if (lat && lon) {
+            console.log(lat);
+            console.log(lon);
+
+            // let marker = new ol.Feature({
+            //     type: 'icon',
+            //     geometry: new ol.geom.Point([lon, lat])
+            // })
+
+            
+            const svg = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve"><path style="fill:#FD003A;" d="M256,0C156.698,0,76,80.7,76,180c0,33.6,9.302,66.301,27.001,94.501l140.797,230.414  c2.402,3.9,6.002,6.301,10.203,6.901c5.698,0.899,12.001-1.5,15.3-7.2l141.2-232.516C427.299,244.501,436,212.401,436,180  C436,80.7,355.302,0,256,0z M256,270c-50.398,0-90-40.8-90-90c0-49.501,40.499-90,90-90s90,40.499,90,90  C346,228.9,306.999,270,256,270z"/><path style="fill:#E50027;" d="M256,0v90c49.501,0,90,40.499,90,90c0,48.9-39.001,90-90,90v241.991  c5.119,0.119,10.383-2.335,13.3-7.375L410.5,272.1c16.799-27.599,25.5-59.699,25.5-92.1C436,80.7,355.302,0,256,0z"/></svg>';
+            
+            var marker = new ol.Feature({
+                geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
+            });
+
+            // marker.setStyle(new ol.style.Style({
+            //     stroke: new ol.style.Stroke({
+            //         width: 6,
+            //         color: [237, 212, 0, 0.8],
+            //     })
+            // }));
+
+            // marker.setStyle(new ol.style.Style({
+            //     image: new ol.style.Icon({
+            //         anchor: [0.5, 1],
+            //         src: 'data/icon.png',
+            //     }),
+            // }))
+
+            var layer = new ol.layer.Vector({
+                source: new ol.source.Vector({
+                    features: [marker]
+                }),
+                style: new ol.style.Style({
+                    image: new ol.style.Icon({
+                        anchor: [0.5, 46],
+                        anchorXUnits: 'fraction',
+                        anchorYUnits: 'pixels',
+                        src: 'http://127.0.0.1:8001/media/marker_icon.png'
+                    })
+                })
+                // function (feature) {
+                //     return new ol.style.Style({
+                //         stroke: new ol.style.Stroke({
+                //             width: 6,
+                //             color: [237, 212, 0, 0.8],
+                //         })
+                //     })
+                //     return new ol.style.Style({
+                //         image: new ol.style.Icon({
+                //             opacity: 1,
+                //             src: 'data:image/svg+xml;utf8,' + svg,
+                //             scale: 0.3
+                //         })
+                //     });
+                // }
+            });
+            
+            map = new ol.Map({
+                target: target,
+                renderer: 'canvas',
+                layers: [
+                    new ol.layer.Tile({
+                        source: new ol.source.OSM()
+                    }),
+                    layer
+                ],
+                view: new ol.View({
+                    center: ol.proj.fromLonLat([lon, lat]),
+                    zoom: 20
+                }) 
+            });
+            
+            // map.addLayer(layer);
+        }
+    }
+
+</script>
+{% endblock extra_js %}
+<!-- 14.669989860137285, -61.037454858333675 -->

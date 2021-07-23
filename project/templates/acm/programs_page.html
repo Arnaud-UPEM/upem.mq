@@ -1,0 +1,171 @@
+<!-- 
+TODO
+    Download button for profram
+-->
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/css/ol.css" type="text/css">
+<link rel="stylesheet" href="{% static 'css/acm/acm.css' %}" type="text/css">
+{% endblock extra_css %}
+
+{% block content %}
+<div id="Programs" class="container w-full lg:w-10/12 mx-auto p-4">
+    <h1 class="">{{ page.title }}</h1>
+
+    <!-- Type selection -->
+    <div class="mt-4">
+        <h2>Sélectionner un centre</h2>
+        
+        <div class="centers flex flex-row">
+        {% with program=page.programs.first %}
+            {% for type, value in program.get_types.items %}
+            <div class="tag mr-2 p-2 bg-indigo-400 text-white font-bold rounded cursor-pointer flex items-center text-center" data-type="{{ type }}" onclick="center_onClick(this)">
+                {{ value }}
+            </div>
+            {% endfor %}
+        {% endwith %}
+        </div>
+    </div>
+    <!-- /Type selection -->
+    
+    <!-- Program selection -->
+    <div class="mt-8">
+        <h2>Sélectionner un programme</h2>
+
+        <div class="programs flex flex-row">
+            <h4 class="no-program italic">Aucun programme trouvé</h4>
+
+            {% for program in page.programs.all %}
+            <!-- Tag -->
+            <div 
+                class="tag mr-2 p-2 bg-indigo-400 text-white font-bold rounded cursor-pointer flex items-center text-center hidden" 
+                data-id="{{ program.id }}" 
+                data-type="{{ program.type }}" 
+                data-file="{{ program.file.url }}"
+                data-drive="{{ program.file_drive }}"
+                data-comment="{{ program.comment }}"
+                onclick="program_onClick(this)">
+                {{ program.name }}
+            </div>
+            <!-- /Tag -->
+            {% endfor %}
+        </div>
+    </div>
+    <!-- /Program selection -->
+
+    <div class="embed-wrapper mt-8">
+        <h2>Programme</h2>
+        <div class="comment italic hidden">
+            <h4>Note</h4>
+            <span></span>
+        </div>
+        <embed class="w-full mt-4" src="" style="min-height: 700px;" type="application/pdf">
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script src="/static/vendor/jquery/jquery-3.5.1.min.js"></script>
+<script src="/static/vendor/semantic/semantic.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"></script>
+<script>
+    var map = undefined;
+
+    window.onload = function () {
+        const first = document.querySelector('.centers .tag');
+        if (first) {
+
+        }
+    }
+
+    function center_onClick (e) {
+        // 1 - Centers tags
+        const selected = document.querySelector('.centers .tag.selected');
+        if (selected != e) {
+            if (selected) selected.classList.remove('selected');
+            e.classList.add('selected');
+        }
+
+        // 2 - Open programs tags
+        const type = e.getAttribute('data-type');
+        if (type) {
+            openPrograms(type);
+        }
+        else {
+            console.error ('No type found for: ' + e);
+        }
+    }
+
+    function program_onClick (e) {
+        // Highloght program tag
+        const selected = document.querySelector('.programs .tag.selected');
+        if (selected != e) {
+            if (selected) selected.classList.remove('selected');
+            e.classList.add('selected');
+        }
+
+        // Display program notes
+        showComment (e.getAttribute('data-comment'));
+
+        // Display program PDF
+        const file = e.getAttribute('data-file');
+        if (file) {
+            openFile(file);
+        }
+        else {
+            console.error ('No file found for: ' + e);
+        }
+    }
+
+    function openPrograms (type) {
+        
+        let at_least_one = false; 
+        document.querySelectorAll('.programs .tag').forEach(item => {
+            if (item.getAttribute('data-type') == type &&
+                item.classList.contains('hidden')) {
+                item.classList.remove('hidden');
+                at_least_one = true;
+            }
+            else if (!item.classList.contains('hidden')) {
+                item.classList.add('hidden');
+            }
+        });
+
+        if (at_least_one) {
+            document.querySelector('.programs .no-program').classList.add('hidden');
+        }
+        else {
+            document.querySelector('.programs .no-program').classList.remove('hidden');
+        }
+    }
+
+    function openFile (file) {
+        // const embed = document.createElement('embed');
+        // embed.className = 'w-full mt-4';
+        // embed.type = 'application/pdf';
+        // embed.src = file;
+
+        // document.querySelector('.embed-wrapper')
+        // .appendChild(embed);
+
+        file = file.replace('documents/', 'document/view/');
+        document.querySelector('embed').src = file;
+    }
+
+    function showComment (comment) {
+        const _ = document.querySelector('div.comment');
+
+        if (comment) {
+            _.classList.remove('hidden');
+            _.querySelector('span').innerHTML = comment;
+        }
+        else {
+            _.classList.add('hidden');
+            _.querySelector('span').innerHTML = '';
+        }
+    }
+</script>
+{% endblock extra_js %}
