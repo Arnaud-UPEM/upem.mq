@@ -52,6 +52,11 @@ nav {
       nav.computer .ui.container .bottom .green-800:hover {
         color: white;
         background-color: #49951d; }
+      nav.computer .ui.container .brown {
+        background-color: #523303; }
+        nav.computer .ui.container .brown:hover {
+          color: white !important;
+          background-color: #85540a; }
       nav.computer .ui.container .menu .item {
         cursor: pointer; }
         nav.computer .ui.container .menu .item:hover {
@@ -384,7 +389,7 @@ section {
     margin-top: 1rem;
     font-size: 1.5rem;
     font-family: 'Montserrat', sans-serif;
-    text-transform: capitalize; }
+    text-transform: none; }
   .header.white {
     color: white; }
   .header.lightgray {
@@ -516,6 +521,8 @@ h4.header {
   padding: 1rem 0; }
   .organization.splide .ui.cards .card .header {
     text-align: center; }
+    .organization.splide .ui.cards .card .header .first_name {
+      text-transform: capitalize; }
   .organization.splide .ui.cards .card .meta {
     text-align: center;
     font-weight: bold; }
@@ -580,13 +587,15 @@ h4.header {
   display: flex;
   align-items: center;
   justify-content: center; }
-  @media (min-height: 1024px) {
+  @media (min-height: 1px) {
     .login {
       min-height: calc(100vh - 8rem); }
       .login .form {
-        width: 400px;
+        width: 100vw;
+        max-width: 400px;
+        margin: 1rem;
         padding: 1.5rem 1rem;
-        background-color: rgba(255, 255, 255, 0.75); }
+        background-color: rgba(255, 255, 255, 0.9); }
         .login .form .ui.error.message {
           margin-top: 0; }
           .login .form .ui.error.message .header {

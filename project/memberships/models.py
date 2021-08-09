@@ -3,25 +3,28 @@ import re
 from logging import error
 
 from django import forms
+from django.contrib.auth import logout
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.forms import fields
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect
+from django.utils.timezone import now
 from django.utils.translation import templatize
 
-from wagtail.admin.edit_handlers import MultiFieldPanel, FieldPanel
+from wagtail.admin.edit_handlers import MultiFieldPanel, FieldPanel, InlinePanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.core.models import Page
 from wagtail.snippets.models import register_snippet
 
 from .data import ZIPS
 
-from core.models import SEOAbstractEmailForm, SEOPage
+from core.models import SEOAbstractEmailForm, SEOPage, login_required_view
 
 from user.forms import AuthForm, SignupForm
 from user.models import Auth
 
 from education.models import GradeEnum, School
+
 
 # from .forms import MemberForm
 
@@ -50,6 +53,46 @@ class SchoolYear (models.Model):
     def __str__(self):
         return f'#{self.id} - {self.date_start} {self.date_end}'
 
+
+@register_snippet
+class Contribution (models.Model):
+    name = models.CharField(max_length=128, default='', verbose_name='Intitulé')
+    description = models.TextField(default='', verbose_name='Description')
+
+    date_end = models.DateField(verbose_name='Date fin')
+    date_start = models.DateField(verbose_name='Date début')
+
+    is_active = models.BooleanField(default=False, verbose_name='Est actif ?')
+    is_payable = models.BooleanField(default=False, verbose_name='Disponible à l\'achat ?')
+
+    def activate (self):
+        _ = SchoolYear.objects.filter(is_active=True).exclude(id=self.id).update(is_active=False)
+        
+        if not self.is_active:
+            self.is_active = True
+            self.is_payable = True
+            self.save()
+
+    def __str__(self):
+        return f'#{self.id} - {self.name} - {self.date_start} {self.date_end}'
+
+
+@register_snippet
+class ContributionPlan (models.Model):
+    name = models.CharField(max_length=128, default='', verbose_name='Intitulé')
+    description = models.TextField(default='', verbose_name='Description')
+
+    price = models.FloatField(default=0.0, verbose_name='Prix')
+
+    contribution = models.ForeignKey(
+        Contribution,
+        on_delete=models.CASCADE,
+        related_name='plans'
+    )
+
+    def __str__(self):
+        return f'{self.name} - (Cotisation: {self.contribution})'
+        
 
 @register_snippet
 class Member (models.Model):
@@ -108,6 +151,7 @@ class Member (models.Model):
         return f'#{self.id} - {self.first_name} {self.last_name}'
 
 
+@register_snippet
 class MemberChild (models.Model):
     last_name = models.CharField(
         max_length=100, default='', verbose_name='Nom')
@@ -116,7 +160,7 @@ class MemberChild (models.Model):
 
     dob = models.DateField(verbose_name='Date de naissance')
 
-    grade = models.CharField(max_length=20, default=GradeEnum.DEFAUT, null=True, blank=True, choices=GradeEnum.choices(), verbose_name='Classe')
+    grade = models.CharField(max_length=20, default=GradeEnum.DEFAUT, null=True, blank=True, verbose_name='Classe')
     school = models.ForeignKey(
         School,
         null=True,
@@ -124,6 +168,9 @@ class MemberChild (models.Model):
         on_delete=models.SET_NULL,
         related_name='students'
     )
+
+    # bar = models.BooleanField(default=True)
+    # foo = models.BooleanField(default=True)
 
     member = models.ForeignKey(
         Member,
@@ -134,6 +181,32 @@ class MemberChild (models.Model):
     def __str__(self):
         return f'#{self.id} - {self.first_name} {self.last_name} - {self.dob}'
 
+
+@register_snippet
+class MemberContribution (models.Model):
+    price = models.FloatField(default=0.0, verbose_name='Prix achat')
+    date_bought = models.DateTimeField(default=now, verbose_name='Date achat')
+    
+    member = models.ForeignKey(
+        Member,
+        on_delete=models.CASCADE,
+        related_name='contributions'
+    )
+    
+    contribution_plan = models.ForeignKey(
+        ContributionPlan,
+        on_delete=models.CASCADE,
+        related_name='contribution_plan'
+    )
+
+    panels = [
+
+    ]
+
+
+####################################################################################
+# FORMS
+####################################################################################
 
 class MemberForm (forms.ModelForm):
     class Meta:
@@ -187,7 +260,6 @@ class MemberForm (forms.ModelForm):
         return self._clean_phone (phone)
 
     def clean_newsletter_sub (self):
-        print ('Hello')
         if 'newsletter_sub' in self.cleaned_data:
             if self.cleaned_data['newsletter_sub']:
                 return True
@@ -196,9 +268,28 @@ class MemberForm (forms.ModelForm):
 
 
 class MemberChildForm (forms.ModelForm):
+
     class Meta:
         model = MemberChild
         fields = '__all__'
+
+    def clean_last_name (self):
+        return self.cleaned_data['last_name'].upper()
+        
+    def clean_first_name (self):
+        return self.cleaned_data['first_name'].capitalize()
+
+    # def clean_grade (self):
+    #     print ('Hello')
+    #     grade = self.cleaned_data['grade']
+    #     if not grade:
+    #         raise ValidationError(f'Sélectionnez un choix valide.')
+
+    #     try:
+    #         _ = GradeEnum[grade]
+    #         return grade
+    #     except:
+    #         raise ValidationError(f'Sélectionnez un choix valide. {grade} n\'en fait pas partie.')
 
 
 class RegistrationForm (MemberForm, AuthForm):
@@ -398,6 +489,7 @@ class RegistrationPage (SEOPage):
     #     )
 
 
+# Test Registration landing page
 class RegistrationLandingPage (SEOPage):
     template = 'memberships/registration_page_landing.html'
 
@@ -563,21 +655,31 @@ class RegistrationPage2 (SEOPage):
         )
 
 
+# Profile Page Dashboard
 class ProfilePage (Page):
     template = 'memberships/profile_page.html'
 
     class Meta:
         verbose_name = 'Profile: Main Page'
 
+    @login_required_view ('/unauthorized')
+    def serve(self, request, *args, **kwargs):
+        return super().serve(request, *args, **kwargs)
 
+
+# Profil Page User Account 
 class ProfileAccountPage (Page):
     template = 'memberships/profile_account_page.html'
 
     class Meta:
         verbose_name = 'Profile: Account Page'
 
+    @login_required_view ('/unauthorized')
     def serve (self, request, *args, **kwargs):
-        if request.user.is_authenticated:
+        form = None
+        errors = []
+
+        try:
             member = Member.objects.get(auth__email=request.user)
             form = MemberForm(request.POST or None, instance=member)
 
@@ -595,19 +697,23 @@ class ProfileAccountPage (Page):
                     print (request.POST['zip_code'])
                     print (form.errors)
 
-            context = self.get_context (request)
-            context['form'] = form
-
-            return render (
-                request,
-                self.template,
-                context
+        except Member.DoesNotExist:
+            errors.append(
+                'Impossible de récupérer les données du profil.'
             )
 
-        else:
-            return HttpResponse('Accès interdit', status=401)
+        context = self.get_context (request)
+        context['form'] = form
+        context['errors'] = errors
+
+        return render (
+            request,
+            self.template,
+            context
+        )
 
 
+# Profil: Child Pages List/Create/Update/Delete
 class ProfileChildrenIndexPage (RoutablePageMixin, Page):
     template = 'memberships/profile_children_page.html'
     template_detail = 'memberships/profile_children_detail_page.html'
@@ -617,6 +723,7 @@ class ProfileChildrenIndexPage (RoutablePageMixin, Page):
         verbose_name = 'Profile: Children Index Page'
 
     @route (r'^/$')
+    @login_required_view ('/unauthorized')
     def list (self, request, *args, **kwargs):
         if request.user.is_authenticated:
             member = Member.objects.get(auth__email=request.user)
@@ -651,6 +758,7 @@ class ProfileChildrenIndexPage (RoutablePageMixin, Page):
     """ Create, Read, Update """
     @route(r'^add/$')
     @route(r'^(\d+)/$', name='pk')
+    @login_required_view ('/unauthorized')
     def cru (self, request, pk=0):
         if request.user.is_authenticated:
             errors = []
@@ -677,7 +785,7 @@ class ProfileChildrenIndexPage (RoutablePageMixin, Page):
                 print (request.POST)
                 if form.is_valid():
                     form.save()
-                    template = self.template
+                    return HttpResponseRedirect(self.get_url())
 
                 else:
                     print (form.errors)
@@ -685,6 +793,8 @@ class ProfileChildrenIndexPage (RoutablePageMixin, Page):
             context = self.get_context (request)
             context['pk'] = pk
             context['form'] = form
+            context['grades'] = GradeEnum.choices()[1:]
+            context['schools'] = School.objects.all()
 
             return render (
                 request,
@@ -696,6 +806,7 @@ class ProfileChildrenIndexPage (RoutablePageMixin, Page):
             return HttpResponse('Accès interdit', status=401)
 
     @route(r'^delete/(\d+)/$', name='pk')
+    @login_required_view ('/unauthorized')
     def delete (self, request, pk):
         template = self.template_delete
         context = self.get_context (request)
@@ -727,6 +838,7 @@ class ProfileChildrenIndexPage (RoutablePageMixin, Page):
             context
         )
 
+    @login_required_view ('/unauthorized')
     def _render (self, request, template, context_udt = {}):
         context = self.get_context(request)
         context.update(context_udt)
@@ -737,6 +849,26 @@ class ProfileChildrenIndexPage (RoutablePageMixin, Page):
         )
 
 
+# Profil
+class ProfileContribution (RoutablePageMixin, Page):
+    template = 'memberships/profile_contribution.html'
+
+    class Meta:
+        verbose_name = 'Profil: Cotisations'
+
+    @route (r'^/$')
+    @login_required_view ('/unauthorized')
+    def list (self, request):
+        context = self.get_context(request)
+        return render (
+            request,
+            self.template,
+            context
+        )
+
+
+
+# ???
 class ProfileChildrenPage (RoutablePageMixin, Page):
     template = 'memberships/profile_children_page.html'
 

@@ -669,7 +669,12 @@ h4.header {
         padding: 1rem 0;
         
         .ui.cards .card {
-            .header { text-align: center; }
+            .header {
+                text-align: center;
+                .first_name {
+                    text-transform: lowercase;
+                }
+            }
             
             .meta {
                 text-align: center;

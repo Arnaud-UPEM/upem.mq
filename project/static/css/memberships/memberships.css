@@ -76,9 +76,11 @@
       font-size: 2.5rem; }
 
 .Profil {
-  min-height: calc(100vh - 5rem); }
+  min-height: calc(100vh - 5rem);
+  background-color: rgba(0, 0, 0, 0.1); }
   .Profil .menu {
-    margin-top: 1rem; }
+    margin-top: 1rem;
+    background-color: white; }
     .Profil .menu .list {
       border: 1px solid rgba(128, 128, 128, 0.3); }
       .Profil .menu .list a {
@@ -89,11 +91,57 @@
           color: #065f46; }
       .Profil .menu .list:last-child {
         border-bottom: 0; }
+  .Profil section {
+    padding: 1rem;
+    background-color: white; }
+    .Profil section.message.lightgreen {
+      background-color: #49951d9c; }
+    .Profil section.message.lightbrown {
+      background-color: #523303bd; }
+    .Profil section.message p {
+      font-size: 1.1rem;
+      font-weight: bold; }
+  .Profil .children .card .header .first_name {
+    text-transform: capitalize; }
   .Profil .children .ui.two.buttons a,
   .Profil .children .ui.two.buttons a:hover,
   .Profil .children .ui.two.buttons a:focus,
   .Profil .children .ui.two.buttons a:visited {
     color: inherit; }
+  .Profil .cotisations .cotisation {
+    background-color: transparent; }
+    .Profil .cotisations .cotisation .header {
+      padding-top: 0; }
+    .Profil .cotisations .cotisation > .ui.cards .ui.card .image img {
+      max-height: 250px;
+      object-fit: cover; }
+    .Profil .cotisations .cotisation > .ui.cards .ui.card .plans.ui.cards {
+      padding: 1rem;
+      display: inherit; }
+      .Profil .cotisations .cotisation > .ui.cards .ui.card .plans.ui.cards .card {
+        width: 250px; }
+        .Profil .cotisations .cotisation > .ui.cards .ui.card .plans.ui.cards .card .date {
+          display: none; }
+        .Profil .cotisations .cotisation > .ui.cards .ui.card .plans.ui.cards .card .price {
+          display: inline; }
+        .Profil .cotisations .cotisation > .ui.cards .ui.card .plans.ui.cards .card .icon.add {
+          display: inline; }
+        .Profil .cotisations .cotisation > .ui.cards .ui.card .plans.ui.cards .card .icon.check {
+          display: none; }
+        .Profil .cotisations .cotisation > .ui.cards .ui.card .plans.ui.cards .card.bought a {
+          background-color: #5dbd26; }
+        .Profil .cotisations .cotisation > .ui.cards .ui.card .plans.ui.cards .card.bought .date {
+          display: inline; }
+        .Profil .cotisations .cotisation > .ui.cards .ui.card .plans.ui.cards .card.bought .price {
+          display: none; }
+        .Profil .cotisations .cotisation > .ui.cards .ui.card .plans.ui.cards .card.bought .icon.add {
+          display: inline; }
+        .Profil .cotisations .cotisation > .ui.cards .ui.card .plans.ui.cards .card.bought .icon.check {
+          display: none; }
+    .Profil .cotisations .cotisation > .ui.cards .ui.card.active .plans.ui.cards {
+      display: inherit; }
+    .Profil .cotisations .cotisation.past .extra.content {
+      display: none; }
   @media (min-width: 1024px) {
     .Profil {
       min-height: calc(100vh - 8rem); } }

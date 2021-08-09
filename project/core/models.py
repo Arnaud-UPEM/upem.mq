@@ -1,4 +1,5 @@
 from django.db import models
+from django.shortcuts import HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
 
 from wagtail.admin.edit_handlers import MultiFieldPanel, FieldPanel
@@ -6,6 +7,34 @@ from wagtail.core.models import Page
 from wagtail.contrib.forms.models import AbstractEmailForm
 
 # Create your models here.
+
+def login_required (redirect):
+    def inner (func):
+        def wrapper (request, *args, **kwargs):
+            if request.user.is_authenticated:
+                return func (request, *args, **kwargs)
+
+            else:
+                return HttpResponseRedirect(redirect)
+
+        return wrapper
+
+    return inner
+
+
+def login_required_view (redirect):
+    def inner (func):
+        def wrapper (self, request, *args, **kwargs):
+            if request.user.is_authenticated:
+                return func (self, request, *args, **kwargs)
+
+            else:
+                return HttpResponseRedirect(redirect)
+
+        return wrapper
+
+    return inner
+
 
 class SEOPage (Page):
     seo_keywords = models.CharField(

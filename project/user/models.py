@@ -36,7 +36,7 @@ class LoginPage (SEOPage):
     landing_page_template = 'user/login_page_landing.html'
 
     class Meta:
-        verbose_name = 'Login Page'
+        verbose_name = 'Auth: Connexion'
 
     def serve (self, request, *args, **kwargs):
         template = self.template
@@ -68,7 +68,25 @@ class LoginLandingPage (SEOPage):
     template = 'user/login_page_landing.html'
 
     class Meta:
-        verbose_name = 'Login Page Landing Test'
+        verbose_name = 'Auth: Connexion - Landing Test'
+
+
+class LogoutPage (Page):
+    class Meta:
+        verbose_name = 'Auth: Deconnexion'
+
+    def serve(self, request, *args, **kwargs):
+        logout(request)
+        return render (
+            request,
+            self.get_template(request, *args, **kwargs),
+            {}
+        )
+
+
+class UnauthorizedPage (Page):
+    class Meta:
+        verbose_name = 'Auth: Accès non autorisé'
 
 
 # class Person (models.Model):

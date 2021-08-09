@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}loginpage{% endblock %}
+
+{% block extra_css %}
+{% endblock extra_css %}
+
+{% block content %}
+<section>
+    <div class="logout">
+        <div class="header">
+            Accès non autorisé,
+        </div>
+        Vous allez bientôt être redirigé.
+    </div>
+</section>
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+    window.onload = function () {
+        window.setTimeout(() => {
+            window.location.href = '/';
+        }, 3000);
+    };
+</script>
+{% endblock extra_js %}

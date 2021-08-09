@@ -195,7 +195,7 @@ class PlaceGalleryImage (Orderable):
 
 
 @register_snippet
-class School (models.Model):
+class SchoolWidget (models.Model):
     """ School """
     school_director = models.CharField(max_length=240, default='', blank=True, verbose_name='Directeur Ecole (Nom Complet)')
     

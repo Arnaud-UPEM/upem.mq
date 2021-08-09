@@ -6,6 +6,8 @@ from enum import Enum, IntEnum
 
 from django.db import models
 
+from wagtail.snippets.models import register_snippet
+
 # Create your models here.
 
 class CEnum (Enum):
@@ -21,52 +23,52 @@ class CIntEnum (IntEnum):
 
 
 class TypeEtabEnum (CEnum):
-    DEFAUT  = 'Défaut'
-    AUTRE   = 'Autre'
+    DEFAUT  = 'DEFAUT'
+    AUTRE   = 'AUTRE'
     ECOLE   = 'Ecole'
     COLLEGE = 'Collège'
     LYCEE   = 'Lycée'
-    ADMIN   = 'Service Administratif'
-    INFO    = 'Information et orientation'
+    ADMIN   = 'SERVICE ADMINSTRATIF'
+    INFO    = 'INFORMATION ET ORIENTATION'
 
 
 class StatusEnum (CEnum):
-    DEFAUT  = 'Défaut'
-    AUTRE   = 'Autre'
-    PUBLIC  = 'Public'
-    PRIVE   = 'Privé'
+    DEFAUT  = 'DEFAUT'
+    AUTRE   = 'AUTRE'
+    PUBLIC  = 'PUBLIC'
+    PRIVE   = 'PRIVE'
 
 
 class TypeContratPriveEnum (CEnum):
-    DEFAUT  = 'Défaut'
-    AUTRE                       = 'Autre'
-    SANS_OBJET                  = 'Sans Objet'
-    HORS_CONTRAT                = 'Hors Contrat'
-    CONTRAT_ASSO_TTS_CLASSES    = 'Contrat d\'Association Toutes Classes'
-    CONTRAT_ASSO_PART_CLASSES   = 'Contrat d\'Association Parties des Classes'
-    CONTRAT_SIMPLE_TTS_CLASSES  = 'Contrat Simple Toutes Classes'
-    CONTRAT_SIMPLE_PART_CLASSES = 'Contrat Simple Partie des Classes'
+    DEFAUT                      = 'DEFAUT'
+    AUTRE                       = 'AUTRE'
+    SANS_OBJET                  = 'SANS OBJET'
+    HORS_CONTRAT                = 'HORS CONTRAT'
+    CONTRAT_ASSO_TTS_CLASSES    = 'CONTRAT D\'ASSOCIATION TOUTES CLASSES'
+    CONTRAT_ASSO_PART_CLASSES   = 'CONTRAT ASSOCIATION PARTIE DES CLASSES'
+    CONTRAT_SIMPLE_TTS_CLASSES  = 'CONTRAT SIMPLE TOUTES CLASSES'
+    CONTRAT_SIMPLE_PART_CLASSES = 'CONTRAT SIMPLE POUR PARTIE DES CLASSES'
 
 
 class EtatEnum (CEnum):
-    DEFAUT  = 'Défaut'
-    AUTRE   = 'Autre'
-    OUVERT  = 'Ouvert'
-    FERME   = 'Fermé'
+    DEFAUT  = 'DEFAUT'
+    AUTRE   = 'AUTRE'
+    OUVERT  = 'OUVERT'
+    FERME   = 'A FERMER'
 
 
 class MinistereTutelleEnum (CEnum):
-    DEFAUT  = 'Défaut'
+    DEFAUT  = 'DEFAUT'
 
 
 class LibelleNatureEnum (CEnum):
-    DEFAUT  = 'Défaut'
-    AUTRE   = 'Autre'
+    DEFAUT  = 'DEFAUT'
+    AUTRE   = 'AUTRE'
 
 
 class GradeEnum (Enum):
     DEFAUT  = 'Défaut'
-    OTHER   = 'Autre'
+    OTHER   = 'AUTRE'
     TPS     = 'Très Petite Section'
     PS      = 'Petite Section'
     MS      = 'Moyenne Section'
@@ -90,16 +92,19 @@ class GradeEnum (Enum):
         return [(key.value, key.name) for key in cls]
 
 
+''' MODELS '''
+
+@register_snippet
 class School (models.Model):
     identifiant_de_l_etablissement  = models.CharField(max_length=128, default='', blank=True, null=True)
     nom_etablissement               = models.CharField(max_length=128, default='', blank=True, null=True)
 
-    type_etablissement              = models.CharField(max_length=128, default=TypeEtabEnum.DEFAUT, blank=True, null=True, choices=TypeEtabEnum.choices())
-    status_public_prive             = models.CharField(max_length=128, default=StatusEnum.DEFAUT, blank=True, null=True, choices=StatusEnum.choices())
-    # libelle_nature​                  = models.CharField(max_length=128, default='', blank=True, null=True, choices=LibelleNatureEnum.DEFAUT)
+    type_etablissement              = models.CharField(max_length=128, default='DEFAUT', blank=True, null=True, choices=TypeEtabEnum.choices())
+    status_public_prive             = models.CharField(max_length=128, default='DEFAUT', blank=True, null=True, choices=StatusEnum.choices())
+    # libelle_nature​                  = models.CharField(max_length=128, default='', blank=True, null=True, choices='DEFAUT')
 
     # Accueil
-    etat                            = models.CharField(max_length=128, default=EtatEnum.DEFAUT, blank=True, null=True, choices=EtatEnum.choices())
+    etat                            = models.CharField(max_length=128, default='DEFAUT', blank=True, null=True, choices=EtatEnum.choices())
 
     ecole_maternelle                = models.BooleanField(default=False, blank=True, null=True)
     ecole_elementaire               = models.BooleanField(default=False, blank=True, null=True)
@@ -108,10 +113,13 @@ class School (models.Model):
     voie_professionnelle            = models.BooleanField(default=False, blank=True, null=True)
 
     # Contact
-    fax                             = models.CharField(max_length=20, default='', blank=True, null=True)
-    web                             = models.CharField(max_length=20, default='', blank=True, null=True)
-    telephone                       = models.CharField(max_length=20, default='', blank=True, null=True)
-    mail                            = models.EmailField(max_length=64, default='', blank=True, null=True)
+    fax                             = models.CharField(max_length=128, default='', blank=True, null=True)
+    telephone                       = models.CharField(max_length=128, default='', blank=True, null=True)
+    mail                            = models.CharField(max_length=128, default='', blank=True, null=True)
+
+    # URLs
+    web                             = models.URLField(default='', blank=True, null=True)
+    fiche_onisep                    = models.URLField(default='', blank=True, null=True)
 
     # Address
     adresse_1                       = models.CharField(max_length=128, default='', blank=True, null=True)
@@ -154,13 +162,12 @@ class School (models.Model):
 
     # SCHOOL
     siren_siret                         = models.CharField(max_length=64, default='', blank=True, null=True)       
-    fiche_onisep                        = models.CharField(max_length=128, default='', blank=True, null=True)
     nombre_d_eleves                     = models.IntegerField(default=0, blank=True, null=True)
     # nom_circonscription               = models.CharField(max_length=64 , default='', blank=True, null=True)                 
     date_ouverture                      = models.CharField(max_length=64 , default='', blank=True, null=True)       
     date_maj_ligne                      = models.CharField(max_length=64 , default='', blank=True, null=True)
 
-    type_contrat_prive                  = models.CharField(max_length=64 , default=TypeContratPriveEnum.DEFAUT, blank=True, null=True, choices=TypeContratPriveEnum.choices())        
+    type_contrat_prive                  = models.CharField(max_length=64 , default='DEFAUT', blank=True, null=True, choices=TypeContratPriveEnum.choices())        
 
     # ministere_tutelle​                       = models.CharField(max_length=64 , default='', blank=True, null=True, choices=MinistereTutelleEnum.DEFAUT)  
     # etablissement_mere                         
@@ -182,6 +189,9 @@ class School (models.Model):
     # code_zone_animation_pedagogique       =
     # libelle_zone_animation_pedagogique    =
 
+    def __str__(self) -> str:
+        return self.nom_etablissement
+
     def get_school_type_tags (self):
         tags = []
 
@@ -191,7 +201,7 @@ class School (models.Model):
         if self.ecole_elementaire:
             tags.append('ELE')
 
-        if any(self.voie_generale, self.voie_technologique, self.voie_professionnelle):
+        if any([self.voie_generale, self.voie_technologique, self.voie_professionnelle]):
             tags.append('LYC')
 
         if not tags:

@@ -74,7 +74,7 @@
                 <div class="w-3/4 ml-4 text-white">
                     <div class="top h-12 flex flex-row no-wrap justify-end">
                         <a class="item h-full flex items-center px-4 border-r"><i class="icon phone"></i> 0596 60 95 95</a>
-                        <a class="item h-full flex items-center px-4 border-r"><i class="icon map marker alternate"></i> 28 Bb Allègres, FdF</a>
+                        <a class="item h-full flex items-center px-4 border-r"><i class="icon map marker alternate"></i> 28 Bb Allègre, FdF</a>
                         <a class="item h-full flex items-center px-4 border-r" href="mailto:affaires.scolaires@upem.mq"><i class="icon envelope"></i> affaires.scolaires@upem.mq</a>
                         
                         <!-- Blank space -->
@@ -127,8 +127,25 @@
 
                         <!-- Right side -->
                         <div class="flex flex-row no-wrap">
+                            {% if user.is_authenticated %}
+                            <a href="/inscription" class="item brown h-full flex items-center px-4">Devenez candidat</a>
+                            <div class="item ui dropdown simple h-full flex items-center px-4">
+                                Mon compte
+                                <div class="menu">
+                                    <a href="/mon-profil/dashboard"     class="item">Vue d'ensemble</a>
+                                    <a href="/mon-profil/compte"        class="item">Profil</a>
+                                    <a href="/mon-profil/mes-enfants"   class="item">Mes enfants</a>
+                                    <a href="/mon-profil/"              class="item">Page</a>
+                                    <a href="/mon-profil/"              class="item">Blocs</a>
+                                    <a href="/mon-profil/"              class="item">Modals</a>
+                                </div>
+                            </div>
+                            
+                            {% else %}
                             <a href="/inscription" class="item green-800 h-full flex items-center px-4">Devenez adhérent</a>
                             <a href="/connexion" class="item h-full flex items-center px-4">Se connecter</a>
+
+                            {% endif %}
                         </div>
                     </div>
                 </div>

@@ -12,7 +12,7 @@
                     Ajouter un nouvel enfant à votre famille
                 </div>
             </div>
-            <a target="_blank" href="{% pageurl page %}add/" class="ui bottom attached button">
+            <a target="" href="{% pageurl page %}add/" class="ui bottom attached button">
                 <i class="add icon"></i>
                 Ajouter enfant
             </a>
@@ -24,7 +24,7 @@
                 <div class="content">
                     <!-- <img class="right floated mini ui image" src="https://semantic-ui.com/images/avatar/large/elliot.jpg"> -->
                     <div class="header">
-                        {{ child.first_name }} {{ child.last_name }}
+                        <span class="first_name">{{ child.first_name }}</span> {{ child.last_name }}
                     </div>
                     <div class="meta">
                         {{ child.dob }}
@@ -37,7 +37,7 @@
                 </div>
                 <div class="extra content">
                     <div class="ui two buttons">
-                        <a class="ui basic green button" target="_blank" href="{% pageurl page %}{{ child.id }}/">Modifier</a>
+                        <a class="ui basic green button" target="" href="{% pageurl page %}{{ child.id }}/">Modifier</a>
                         <a class="ui basic red button" target="_blank" href="{% pageurl page %}delete/{{ child.id }}/">Supprimer</a>
                     </div>
                 </div>

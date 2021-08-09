@@ -414,6 +414,8 @@ h4.header {
   padding: 1rem 0; }
   .organization.splide .ui.cards .card .header {
     text-align: center; }
+    .organization.splide .ui.cards .card .header .first_name {
+      text-transform: lowercase; }
   .organization.splide .ui.cards .card .meta {
     text-align: center;
     font-weight: bold; }

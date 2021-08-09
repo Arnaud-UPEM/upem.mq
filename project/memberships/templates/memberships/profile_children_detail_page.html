@@ -2,9 +2,7 @@
 {% load wagtailcore_tags wagtailimages_tags %}
 
 {% block articles %}
-{% if not errors %}
 <article>
-    {{ errors }}
     <form class="ui form w-full" action="{% pageurl page %}{{ pk|default:'add' }}/" method="POST">
         {% csrf_token %}
         <h3 class="header">{{ pk | yesno:'Modification,Nouvel enfant' }}</h3>
@@ -34,7 +32,7 @@
                     <input 
                     type="date"
                     name="dob" 
-                    value="{{ form.dob.value|date:'c'|default:'' }}"
+                    value="{{ form.dob.value|date:'Y-m-d'|default:form.dob.value|default:'' }}"
                     placeholder="jj/mm/aaaa">
                     {{ form.dob.errors }}
                 </div>
@@ -47,21 +45,27 @@
                 <div class="eight wide field {% if form.school.errors %}error{% endif %}">
                     <select class="ui fluid search dropdown" name="school">
                         <option value="0">Etablissement</option>
-                        <option value="OTHER">Autre</option>
+                        {% for school in schools %}
+                        <option value="{{ school.id }}" data-tag="{{ school.get_school_type_tags }}">{{ school.nom_etablissement }}</option>
+                        {% endfor %}
+                        <!-- <option value="OTHER">Autre</option>
                         <option value="MDG">Maternelle de Godissard</option>
                         <option value="PCA">Primaire Chateauboeuf A</option>
                         <option value="PCB">Primaire Chateauboeuf B</option>
                         <option value="CCSC">Collège Cassien Sainte Claire</option>
                         <option value="LJG">Lycée Technique Joseph Gaillard</option>
                         <option value="LyBel">Lycée Bellevue</option>
-                        <option value="UNI">Université des Antilles</option>
+                        <option value="UNI">Université des Antilles</option> -->
                     </select>
                     {{ form.school.errors }}
                 </div>
-                <div class="three wide field {% if form.grade.errors %}error{% endif %}">
+                <div class="four wide field {% if form.grade.errors %}error{% endif %}">
                     <select class="ui fluid dropdown" name="grade">
                         <option data-school="0" value="0">Classe</option>
-                        <option data-school="6" value="OTHER">Autre</option>
+                        {% for grade in grades %}
+                        <option value="{{ grade.0 }}" data-tag="">{{ grade.0 }}</option>
+                        {% endfor %}
+                        <!-- <option data-school="6" value="OTHER">Autre</option>
                         <option data-school="1" value="TPS">Très Petite Section</option>
                         <option data-school="1" value="PS">Petite Section</option>
                         <option data-school="1" value="MS">Moyenne Section</option>
@@ -78,7 +82,7 @@
                         <option data-school="4" value="L2">2nd</option>
                         <option data-school="4" value="L1">1ere</option>
                         <option data-school="4" value="TERM">Terminale</option>
-                        <option data-school="5" value="UNI">Etudes</option>
+                        <option data-school="5" value="UNI">Etudes</option> -->
                     </select>
                     {{ form.grade.errors }}
                 </div>
@@ -128,7 +132,6 @@
         <input type="submit" class="ui button" value="Valider">
     </form>
 </article>
-{% endif %}
 {% endblock articles %}
 
 {% block profile_js %}
@@ -142,28 +145,37 @@
             if (option) {
                 select.value = grade;
                 
-                const dropdown = select.parentElement;
+                // const dropdown = select.parentElement;
                 
-                dropdown.querySelector('.text').innerHTML = option.innerHTML;
-                dropdown.querySelector('.menu .item.active').classList.remove('active default');
-                dropdown.querySelector(`.menu .item[data-value="${grade}"]`).classList.add('active default');
+                // dropdown.querySelector('.text').innerHTML = option.innerHTML;
+                // dropdown.querySelector('.menu .item.active').classList.remove('active default');
+                // dropdown.querySelector(`.menu .item[data-value="${grade}"]`).classList.add('active default');
             }
         }
 
-        const school = '{{ form.school.value|default:"" }}';
+        const school = parseInt('{{ form.school.value|default:"0" }}');
         if (school) {
             const select = document.querySelector('select[name="school"]');
             const option = select.querySelector(`option[value="${school}"]`);
+
+            console.log (option);
             
             if (option) {
                 select.value = school;
                 
-                const dropdown = select.parentElement;
+                // const dropdown = select.parentElement;
                 
-                dropdown.querySelector('.text').innerHTML = option.innerHTML;
-                dropdown.querySelector('.menu .item.active').classList.remove('active default');
-                dropdown.querySelector(`.menu .item[data-value="${school}"]`).classList.add('active default');
+                // dropdown.querySelector('.text').innerHTML = option.innerHTML;
+                // dropdown.querySelector('.menu .item.active').classList.remove('active default');
+                // dropdown.querySelector(`.menu .item[data-value="${school}"]`).classList.add('active default');
+
+                // print ('World')
             }
+
+            // Extra
+            select.addEventListener('change', () => {
+                console.log('Hello');
+            });
         }
     })
 </script>

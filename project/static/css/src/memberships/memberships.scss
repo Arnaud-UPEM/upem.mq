@@ -116,9 +116,11 @@
 
 .Profil {
     min-height: calc(100vh - 5rem);
+    background-color: rgba(0, 0, 0, 0.1);
     
     .menu {
         margin-top: 1rem;
+        background-color: white;
         
         .list {
             border: 1px solid rgba(gray, .3);
@@ -139,7 +141,26 @@
         }
     }
 
+    section {
+        padding: 1rem;
+        background-color: white;
+        
+        &.message {
+            &.lightgreen { background-color: #49951d9c; }
+            &.lightbrown { background-color: #523303bd; }
+
+            p {
+                font-size: 1.1rem;
+                font-weight: bold;
+            }
+        }
+    }
+
     .children {
+        .card .header .first_name {
+            text-transform: capitalize;
+        }
+
         .ui.two.buttons {
             a,
             a:hover,
@@ -149,7 +170,68 @@
             }
         }
     }
+
+    .cotisations {
+        .cotisation {
+            background-color: transparent;
+
+            .header {
+                padding-top: 0;
+            }
+
+            & > .ui.cards .ui.card {
+                .image {
+                    img {
+                        max-height: 250px;
+                        object-fit: cover;
+                    }
+                }
     
+                .plans.ui.cards {
+                    padding: 1rem;
+                    display: inherit;
+    
+                    .card {
+                        width: 250px;
+
+                        .date { display: none; }
+                        .price { display: inline; }
+
+                        .icon.add { display: inline; }
+                        .icon.check { display: none; }
+
+                        &.bought {
+                            a {
+                                background-color: #5dbd26;
+                            }
+
+                            .date { display: inline; }
+                            .price { display: none; }
+
+                            .icon.add { display: inline; }
+                            .icon.check { display: none; }
+                        }
+                    }
+                }
+
+                &.active {
+                    .plans.ui.cards { display: inherit; }
+                }
+            }
+
+            &.past {
+                .extra.content {
+                    display: none;
+                }
+            }
+        }
+
+        section.active {
+
+        }
+    }
+
+
     @media (min-width: 1024px) {
         min-height: calc(100vh - 8rem);
     }

@@ -1,0 +1,213 @@
+{% extends 'memberships/profile_base.html' %}
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block articles %}
+<article class="cotisations">
+    <section class="cotisation active">
+        <h2 class="header">
+            Cotisations actives
+        </h2>
+
+        <div class="ui link cards">
+            <div class="ui fluid card">
+                <div class="image">
+                    <img src="https://semantic-ui.com/images/avatar2/large/matthew.png">
+                </div>
+                <div class="content">
+                    <div class="header">Cotisation 2021 - 2022</div>
+                    <div class="meta">
+                        <a>01/01/2021 - 31/08/2022</a>
+                    </div>
+                    <div class="description">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ac feugiat eros, ut vehicula leo. Donec eu condimentum odio. Fusce accumsan nunc vulputate tincidunt ultricies.
+                    </div>
+                </div>
+                <div class="plans ui cards">
+                    <div class="card">
+                        <div class="content">
+                            <div class="header">Tarif de base</div>
+                            <div class="description">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            </div>
+                        </div>
+                        <a class="ui bottom attached button">
+                            <i class="add icon"></i>
+                            <b>20 €</b>
+                        </a>
+                    </div>
+                    <div class="card">
+                        <div class="content">
+                            <div class="header">Veronika Ossi</div>
+                            <div class="description">
+                                Veronika Ossi is a set designer living in New York who enjoys kittens, music, and partying.
+                            </div>
+                        </div>
+                        <a class="ui bottom attached button">
+                            <i class="add icon"></i>
+                            Add Friend
+                        </a>
+                    </div>
+                    <div class="card">
+                        <div class="content">
+                            <div class="header">Jenny Hess</div>
+                            <div class="description">
+                                Jenny is a student studying Media Management at the New School
+                            </div>
+                        </div>
+                        <a class="ui bottom attached button">
+                            <i class="add icon"></i>
+                            Add Friend
+                        </a>
+                    </div>
+                </div>
+                <div class="extra content">
+                    <span class="right floated">
+                        1 tarif
+                    </span>
+                    <span>
+                        <i class="icon credit card outline"></i>
+                        A partir de 20€
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cotisation past">
+        <h2 class="header">
+            Cotisations passées
+        </h2>
+
+        <div class="ui link cards">
+            <div class="ui fluid card">
+                <div class="image">
+                    <img src="https://semantic-ui.com/images/avatar2/large/matthew.png">
+                </div>
+                <div class="content">
+                    <div class="header">Cotisation 2020 - 2021</div>
+                    <div class="meta">
+                        <a>01/01/2020 - 31/08/2021</a>
+                    </div>
+                    <div class="description">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ac feugiat eros, ut vehicula leo. Donec eu condimentum odio. Fusce accumsan nunc vulputate tincidunt ultricies.
+                    </div>
+                </div>
+                <div class="plans ui cards">
+                    <div class="card">
+                        <div class="content">
+                            <div class="header">Tarif de base</div>
+                            <div class="description">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            </div>
+                        </div>
+                        <a class="ui bottom attached button">
+                            <i class="add icon"></i>
+                            <i class="check icon"></i>
+                            <b class="price"><span>20</span> €</b>
+                            <b class="date">Acheté le <span>10/10/2021 15h59</span></b>
+                        </a>
+                    </div>
+                    <div class="card">
+                        <div class="content">
+                            <div class="header">Tarif Premium</div>
+                            <div class="description">
+                                Veronika Ossi is a set designer living in New York who enjoys kittens, music, and partying.
+                            </div>
+                        </div>
+                        <a class="ui bottom attached button">
+                            <i class="add icon"></i>
+                            40 €
+                        </a>
+                    </div>
+                    <div class="card">
+                        <div class="content">
+                            <div class="header">Tarif Premium +</div>
+                            <div class="description">
+                                Jenny is a student studying Media Management at the New School
+                            </div>
+                        </div>
+                        <a class="ui bottom attached button">
+                            <i class="add icon"></i>
+                            50 €
+                        </a>
+                    </div>
+                </div>
+                <div class="extra content">
+                    <span class="right floated">
+                        1 tarif
+                    </span>
+                    <span>
+                        <i class="user icon"></i>
+                        A partir de 20€
+                    </span>
+                </div>
+            </div>
+            <div class="ui fluid card">
+                <div class="image">
+                    <img src="https://semantic-ui.com/images/avatar2/large/molly.png">
+                </div>
+                <div class="content">
+                    <div class="header">Molly</div>
+                    <div class="meta">
+                        <span class="date">Coworker</span>
+                    </div>
+                    <div class="description">
+                        Molly is a personal assistant living in Paris.
+                    </div>
+                </div>
+                <div class="extra content">
+                    <span class="right floated">
+                        Joined in 2011
+                    </span>
+                    <span>
+                        <i class="user icon"></i>
+                        35 Friends
+                    </span>
+                </div>
+            </div>
+            <div class="ui fluid card">
+                <div class="image">
+                    <img src="https://semantic-ui.com/images/avatar2/large/elyse.png">
+                </div>
+                <div class="content">
+                    <div class="header">Elyse</div>
+                    <div class="meta">
+                        <a>Coworker</a>
+                    </div>
+                    <div class="description">
+                        Elyse is a copywriter working in New York.
+                    </div>
+                </div>
+                <div class="extra content">
+                    <span class="right floated">
+                        Joined in 2014
+                    </span>
+                    <span>
+                        <i class="user icon"></i>
+                        151 Friends
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+</article>
+{% endblock articles %}
+
+{% block profile_js %}
+<script>
+    $(function () {
+        // document.querySelectorAll('section > .ui.cards .ui.card').forEach(item => {
+        //     item.addEventListener('click', (e) => {
+        //         if (e.target === false) {
+
+        //         }
+
+        //         item.classList.toggle('active');
+        //     });
+
+        //     item
+        //     .querySelectorAll
+        // });
+    });
+</script>
+{% endblock profile_js %}

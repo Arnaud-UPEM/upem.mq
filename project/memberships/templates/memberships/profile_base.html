@@ -10,49 +10,51 @@
 
 {% block content %}
 <section class="Profil">
-    <div class="ui container py-4">
-        {% if errors %}
-        <div class="ui error message">
-            <div class="header">
-                Une ou plusieurs erreurs sont survenues
-            </div>
-            <ul class="list">
-            {% for error in errors %}
-                <li>{{ error }}</li>
-            {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
-
+    <div class="ui container transparent py-4">        
         {% block top_side %}
         {% endblock %}
-
+        
         <div class="ui grid two columns">
             <div class="four wide column">
-            {% block left_side %}
+                {% block left_side %}
                 <div class="menu">
                     <div class="list">
                         <a href="/mon-profil/dashboard">Vue d'ensemble</a>
                         <a href="/mon-profil/compte">Mon profil</a>
                         <a href="/mon-profil/mes-enfants">Mes enfants</a>
-                        <a href="">Mes cotisations</a>
+                        <a href="/mon-profil/mes-cotisations">Mes cotisations</a>
                         <a href="">Mes dons</a>
                         <a href="">Documents</a>
-                        <a href="">Déconnexion</a>
+                        <a href="/deconnexion">Déconnexion</a>
                     </div>
                 </div>
-
+                
                 {% block extra_left_side %}
                 {% endblock %}
-            {% endblock left_side %}
+                {% endblock left_side %}
             </div>
             
             <div class="twelve wide column">
+                {% if errors %}
+                
+                <div class="ui negative message">
+                    <div class="header">
+                        Une ou plusieurs erreurs sont survenues.
+                    </div>
+                    <ul class="list">
+                        {% for error in errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% else %}
+                
                 {% block articles %}
                 <article>
                     <h3 class="header">Bonjour, Arnaud ANGELY</h3>
                 </article>
                 {% endblock articles %}
+                {% endif %}
             </div>
         </div>
     </div>
