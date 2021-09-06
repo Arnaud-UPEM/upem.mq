@@ -1,0 +1,41 @@
+<div class="top h-12 flex flex-row no-wrap justify-end">
+    {% with phone=place.phone_home|default:place.phone_cell|default:place.phone_fax %}
+    {% if phone %}
+    <a class="item h-full flex items-center px-4 border-r" href="tel:{{ phone }}"><i class="icon phone"></i> {{ phone }}</a>
+    {% endif %}
+    {% endwith %}
+
+    {% if place.address_1 %}
+    <a class="item h-full flex items-center px-4 border-r" target="_blank" href="{{ place.maps }}"><i class="icon map marker alternate"></i> {{ place.address_1 }}</a>
+    {% endif %}
+
+    {% if place.email %}
+    <a class="item h-full flex items-center px-4 border-r" href="mailto:{{ place.email }}"><i class="icon envelope"></i> {{ place.email }}</a>
+    {% endif %}
+    
+    <!-- Blank space -->
+    <a class="item blank w-16 h-full"></a>
+    
+    {% if place.facebook %}
+    <a class="item w-12 h- flex items-center px-4 border-l" target="_blank" href="{{ place.facebook }}"><i class="icon facebook f"></i></a>
+    {% endif %}
+
+    {% if place.instagram %}
+    <a class="item w-12 h- flex items-center px-4 border-l" target="_blank" href="{{ place.instagram }}"><i class="icon instagram"></i></a>
+    {% endif %}
+
+    {% if place.twitter %}
+    <a class="item w-12 h- flex items-center px-4 border-l" target="_blank" href="{{ place.twitter }}"><i class="icon twitter"></i></a>
+    {% endif %}
+
+    {% if place.youtube %}
+    <a class="item w-12 h- flex items-center px-4 border-l" target="_blank" href="{{ place.youtube }}"><i class="icon youtube"></i></a>
+    {% endif %}
+
+    <!-- <a class="item w-12 h-full flex items-center px-4 border-l" target="_blank"><i class="icon instagram"></i></a>
+    <a class="item w-12 h-full flex items-center px-4 border-l" target="_blank"><i class="icon twitter"></i></a>
+    <a class="item w-12 h-full flex items-center px-4 border-l" target="_blank"><i class="icon youtube"></i></a> -->
+
+    <!-- <div class="submenu flex flex-row no-wrap items-center">
+    </div> -->
+</div>

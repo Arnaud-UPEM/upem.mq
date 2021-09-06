@@ -1,20 +1,33 @@
 import re
 
+from datetime import datetime
+from io import BytesIO
 from logging import error
 
 from django import forms
+from django.conf import settings
 from django.contrib.auth import logout
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Q, F
 from django.forms import fields
+from django.http import FileResponse
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect
+from django.template.loader import get_template
 from django.utils.timezone import now
 from django.utils.translation import templatize
 
+from modelcluster.fields import ParentalKey
+from modelcluster.models import ClusterableModel
+
 from wagtail.admin.edit_handlers import MultiFieldPanel, FieldPanel, InlinePanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
-from wagtail.core.models import Page
+from wagtail.core.models import Page, Orderable
+from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.models import register_snippet
+
+# from xhtml2pdf import pisa
+from weasyprint import HTML
 
 from .data import ZIPS
 
@@ -34,6 +47,10 @@ from education.models import GradeEnum, School
 
 
 PHONE_REGEX = r"^(?:0|\+\d{1,3}?)\s?(?:\d\s?){9}$"
+
+# ContributionPlan.objects.annotate(member=F('members__member__id'), price=F('members__price'), date_bought=F('members__date_bought')).values('id', 'member', 'price', 'date_bought')
+
+# ContributionPlan.objects.filter(contribution=1).annotate(member=F('members__member__id'), price=F('members__price')).values('id', 'name', 'description', 'mod', 'member', 'price').filter(Q(member=2) | Q(member__isnull=True))
 
 
 @register_snippet
@@ -55,15 +72,50 @@ class SchoolYear (models.Model):
 
 
 @register_snippet
-class Contribution (models.Model):
+class Contribution (ClusterableModel):
+    banner = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.DO_NOTHING,
+        related_name='banner'
+    )
+
     name = models.CharField(max_length=128, default='', verbose_name='Intitulé')
     description = models.TextField(default='', verbose_name='Description')
 
     date_end = models.DateField(verbose_name='Date fin')
     date_start = models.DateField(verbose_name='Date début')
 
+    base_price = models.FloatField(default=0.0, verbose_name='Prix de base')
+
     is_active = models.BooleanField(default=False, verbose_name='Est actif ?')
     is_payable = models.BooleanField(default=False, verbose_name='Disponible à l\'achat ?')
+
+    MEMBER = 0
+
+    panels = [
+        ImageChooserPanel('banner'),
+        MultiFieldPanel([
+            FieldPanel('name'),
+            FieldPanel('description')
+        ], heading='Informations'),
+        MultiFieldPanel([
+            FieldPanel('date_start'),
+            FieldPanel('date_end')
+        ], heading='Dates'),
+        MultiFieldPanel([
+            FieldPanel('base_price'),
+            FieldPanel('is_active'),
+            FieldPanel('is_payable')
+        ], heading='Paramètres'),
+        # MultiFieldPanel([
+        #     InlinePanel('plans', heading='Tarifs', label='tarif')
+        # ], heading='Tarifs'),
+    ]
+
+    class Meta:
+        verbose_name = 'Cotisation'
 
     def activate (self):
         _ = SchoolYear.objects.filter(is_active=True).exclude(id=self.id).update(is_active=False)
@@ -73,22 +125,69 @@ class Contribution (models.Model):
             self.is_payable = True
             self.save()
 
+    @property
+    def price (self):
+        return self.base_price
+
+    @property
+    def cheapest (self):
+        return self.plans.order_by('mod').first()
+
+    @property
+    def years (self):
+        start = datetime.strftime(self.date_start, '%Y')
+        end = datetime.strftime(self.date_end, '%Y')
+        return f'{start} - {end}'
+
+    @property
+    def plans_for_member (self):
+        if self.MEMBER:
+            return self.plans.annotate(price=F('members__price'), date_bought=F('members__date_bought')).values('id', 'name', 'description', 'mod', 'price', 'date_bought').filter(Q(member=self.MEMBER) | Q(member__isnull=True))
+        
+        return self.plans.all()
+
+    def buy (self, member):
+        pass
+
     def __str__(self):
         return f'#{self.id} - {self.name} - {self.date_start} {self.date_end}'
 
 
-@register_snippet
-class ContributionPlan (models.Model):
+class ContributionPlanManager (models.Manager):
+
+    def all_for_member (self, member):
+        pass            
+
+
+# @register_snippet
+""" 
+Not used anymore bcz we only want 1 plan 
+Refer directly to Contribution
+"""
+class ContributionPlan (Orderable):
     name = models.CharField(max_length=128, default='', verbose_name='Intitulé')
     description = models.TextField(default='', verbose_name='Description')
 
-    price = models.FloatField(default=0.0, verbose_name='Prix')
+    mod = models.FloatField(default=0.0, verbose_name='Modificateur de prix')
 
-    contribution = models.ForeignKey(
+    contribution = ParentalKey(
         Contribution,
         on_delete=models.CASCADE,
         related_name='plans'
     )
+
+    panels = [
+        FieldPanel('name'),
+        FieldPanel('description'),
+        FieldPanel('mod'),
+    ]
+
+    class Meta:
+        verbose_name = 'Cotisation Tarif'
+
+    @property
+    def price (self):
+        return self.contribution.base_price + self.mod
 
     def __str__(self):
         return f'{self.name} - (Cotisation: {self.contribution})'
@@ -147,6 +246,9 @@ class Member (models.Model):
         ], heading='Téléphones'),
     ]
 
+    class Meta:
+        verbose_name = 'Membre'
+
     def __str__ (self):
         return f'#{self.id} - {self.first_name} {self.last_name}'
 
@@ -178,6 +280,9 @@ class MemberChild (models.Model):
         related_name='children'
     )
 
+    class Meta:
+        verbose_name = 'Membre: Enfant'
+
     def __str__(self):
         return f'#{self.id} - {self.first_name} {self.last_name} - {self.dob}'
 
@@ -192,16 +297,25 @@ class MemberContribution (models.Model):
         on_delete=models.CASCADE,
         related_name='contributions'
     )
-    
-    contribution_plan = models.ForeignKey(
-        ContributionPlan,
+
+    contribution = models.ForeignKey(
+        Contribution,
         on_delete=models.CASCADE,
-        related_name='contribution_plan'
+        related_name='members'
     )
+    
+    # contribution_plan = models.ForeignKey(
+    #     ContributionPlan,
+    #     on_delete=models.CASCADE,
+    #     related_name='_members'
+    # )
 
     panels = [
 
     ]
+
+    class Meta:
+        verbose_name = 'Membre: Cotisation'
 
 
 ####################################################################################
@@ -664,6 +778,25 @@ class ProfilePage (Page):
 
     @login_required_view ('/unauthorized')
     def serve(self, request, *args, **kwargs):
+        context = self.get_context (request)
+        context['errors'] = []
+        context['criticals'] = []
+
+        try:
+            member = Member.objects.get(auth__email=request.user)
+
+            context['member'] = member
+
+        except Member.DoesNotExist:
+            context['criticals'].append(
+                'Impossible de récupérer les données du profil.'
+            )
+
+        return render (
+            request,
+            self.template,
+            context
+        )
         return super().serve(request, *args, **kwargs)
 
 
@@ -677,7 +810,9 @@ class ProfileAccountPage (Page):
     @login_required_view ('/unauthorized')
     def serve (self, request, *args, **kwargs):
         form = None
-        errors = []
+        context = self.get_context (request)
+        context['errors'] = []
+        context['criticals'] = []
 
         try:
             member = Member.objects.get(auth__email=request.user)
@@ -698,13 +833,11 @@ class ProfileAccountPage (Page):
                     print (form.errors)
 
         except Member.DoesNotExist:
-            errors.append(
+            context['criticals'].append(
                 'Impossible de récupérer les données du profil.'
             )
 
-        context = self.get_context (request)
         context['form'] = form
-        context['errors'] = errors
 
         return render (
             request,
@@ -722,10 +855,15 @@ class ProfileChildrenIndexPage (RoutablePageMixin, Page):
     class Meta:
         verbose_name = 'Profile: Children Index Page'
 
-    @route (r'^/$')
+    @route (r'^$')
     @login_required_view ('/unauthorized')
     def list (self, request, *args, **kwargs):
-        if request.user.is_authenticated:
+        form = None
+        context = self.get_context (request)
+        context['errors'] = []
+        context['criticals'] = []
+
+        try:
             member = Member.objects.get(auth__email=request.user)
             form = MemberForm(request.POST or None, instance=member)
 
@@ -742,18 +880,19 @@ class ProfileChildrenIndexPage (RoutablePageMixin, Page):
                 else:
                     print (request.POST['zip_code'])
                     print (form.errors)
-
-            context = self.get_context (request)
-            context['form'] = form
-
-            return render (
-                request,
-                self.template,
-                context
+        
+        except Member.DoesNotExist:
+            context['criticals'].append(
+                'Impossible de récupérer les données du profil.'
             )
 
-        else:
-            return HttpResponse('Accès interdit', status=401)
+        context['form'] = form
+
+        return render (
+            request,
+            self.template,
+            context
+            )
 
     """ Create, Read, Update """
     @route(r'^add/$')
@@ -849,23 +988,173 @@ class ProfileChildrenIndexPage (RoutablePageMixin, Page):
         )
 
 
-# Profil
+# Profil: Contributions and Plans
 class ProfileContribution (RoutablePageMixin, Page):
     template = 'memberships/profile_contribution.html'
+    template_bill = 'memberships/profile_contribution_bill.html'
 
     class Meta:
         verbose_name = 'Profil: Cotisations'
 
-    @route (r'^/$')
+    # def serve(self, request, *args, **kwargs):
+    #     print ('Serve')
+    #     return render(
+    #         request,
+    #         self.template,
+    #         self.get_context(request, *args, **kwargs)
+    #     )
+
+    @route (r'^$')
     @login_required_view ('/unauthorized')
-    def list (self, request):
-        context = self.get_context(request)
+    def list (self, request, *args, **kwargs):
+        context = self.get_context(request, *args, **kwargs)
+        context['errors'] = []
+        context['criticals'] = []
+
+        try:
+            member = Member.objects.get(auth__email=request.user)
+            member_contribs = MemberContribution.objects.filter(member=member)
+            if member_contribs:
+                context['contribution'] = None
+                context['contributions'] = []
+
+                for contribution in Contribution.objects.all():
+                    _ = member_contribs.filter(contribution=contribution).first()
+                    if _:
+                        # setattr(plan, 'contribution', plan.contribution.id)
+
+                        setattr(contribution, 'ticket_id', _.id)
+                        setattr(contribution, 'price_bought', _.price)
+                        setattr(contribution, 'date_bought', _.date_bought)
+
+                    if contribution.is_active:
+                        context['contribution'] = contribution
+                    else:
+                        context['contributions'].append(contribution)
+
+            else:
+                context['contribution'] = Contribution.objects.filter(is_active=True).first()
+                context['contributions'] = Contribution.objects.all().exclude(is_active=True).order_by('id')
+
+        except Exception as e:
+            print (str(e))
+            context['criticals'].append(
+                'Impossible de récupérer les données du profil.'
+            )
+
         return render (
             request,
             self.template,
             context
         )
 
+    # Using VADS instead
+    @route (r'^pay/(\d+)/$', name='pk')
+    @login_required_view ('/unauthorized')
+    def pay (self, request, pk):
+        return 
+
+    def _facture (self, request, pk=0, *args, **kwargs):
+        context = self.get_context(request, *args, **kwargs)
+
+        try:
+            mc = MemberContribution.objects.get(pk=pk)
+            context['member_contribution'] = mc
+
+            MONTHS = [
+                'janvier',
+                'février',
+                'mars',
+                'avril',
+                'mai',
+                'juin',
+                'juillet',
+                'août',
+                'septembre',
+                'octobre',
+                'novembre',
+                'décembre',
+            ]
+
+            context['date_literal'] = f'{mc.date_bought.day} {MONTHS[mc.date_bought.month]} {mc.date_bought.year}'
+        except MemberContribution.DoesNotExist:
+            if settings.DEBUG:
+                pass
+
+            else:
+                context['critical'] = 'Reçu introuvable. Veuillez recommencer.'
+
+        return context
+
+    @route (r'^facture/(\d+)/$', name='pk')
+    @login_required_view ('/unauthorized')
+    def facture (self, request, pk=0, *args, **kwargs):
+        context = self._facture (request, pk, *args, **kwargs)
+
+        return render (
+            request,
+            self.template_bill,
+            context
+        )
+
+    @route (r'^facture/pdf/(\d+)/$', name='pk')
+    @login_required_view ('/unauthorized')
+    def facture_pdf (self, request, pk=0, *args, **kwargs):
+        template = get_template (self.template_bill)
+        html = template.render(self._facture(request, pk, *args, **kwargs))
+
+        # result = BytesIO()
+
+        # pdf = pisa.pisaDocument(BytesIO(html.encode('utf8')), result)
+
+        pdf = HTML(string=html, base_url=request.build_absolute_uri()).write_pdf()
+        filename = 'bill-2021.pdf'
+
+        response = HttpResponse(pdf, content_type='application/pdf')
+        response['Content-Disposition'] = 'inline; filename="' + filename + '"'
+        return response
+
+        if not pdf.err:
+            # return FileResponse (result, as_attachment=True, filename='bill.pdf')
+            return HttpResponse (result.getvalue(), content_type='application/pdf')
+
+        return None
+
+        context = self.get_context(request, *args, **kwargs)
+
+        try:
+            mc = MemberContribution.objects.get(pk=pk)
+            context['member_contribution'] = mc
+
+            MONTHS = [
+                'janvier',
+                'février',
+                'mars',
+                'avril',
+                'mai',
+                'juin',
+                'juillet',
+                'août',
+                'septembre',
+                'octobre',
+                'novembre',
+                'décembre',
+            ]
+
+            context['date_literal'] = f'{mc.date_bought.day} {MONTHS[mc.date_bought.month]} {mc.date_bought.year}'
+        except MemberContribution.DoesNotExist:
+            if settings.DEBUG:
+                pass
+
+            else:
+                context['critical'] = 'Reçu introuvable. Veuillez recommencer.'
+            
+
+        return render (
+            request,
+            self.template_bill,
+            context
+        )
 
 
 # ???

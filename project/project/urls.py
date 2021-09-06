@@ -1,5 +1,6 @@
+from django.urls import include, re_path
 from django.conf import settings
-from django.conf.urls import include, url, re_path
+from django.conf.urls import url
 from django.contrib import admin
 
 from wagtail.admin import urls as wagtailadmin_urls
@@ -19,6 +20,8 @@ urlpatterns = [
     # re_path(r'^document/view/(\d+)/(.*)$', view_document),
 
     url(r'^search/$', search_views.search, name='search'),
+
+    re_path('', include('payment.urls')),
 
     re_path(r'^images/([^/]*)/(\d*)/([^/]*)/[^/]*$', ServeView.as_view(), name='wagtailimages_serve'),
 

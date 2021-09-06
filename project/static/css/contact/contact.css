@@ -1,3 +1,35 @@
+body.contact .pusher {
+  display: flex;
+  flex-direction: column; }
+
+#Place {
+  height: 100%;
+  background-color: beige;
+  background-color: gainsboro; }
+  #Place section.beige {
+    padding-top: 1rem; }
+  #Place .card {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    overflow: hidden;
+    border-radius: 10px;
+    background-color: white; }
+    #Place .card.map {
+      padding: 0; }
+    #Place .card h2 {
+      padding-bottom: 1rem;
+      color: #065f46;
+      font-size: 1.5rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-transform: uppercase; }
+    #Place .card h3 {
+      padding-top: 0; }
+    #Place .card h4 {
+      margin: .5rem 0;
+      font-size: 1.25rem;
+      font-weight: bold; }
+
 #WhoAreWe .right .icon {
   opacity: .75;
   margin-bottom: 7px; }

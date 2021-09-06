@@ -71,7 +71,7 @@ nav {
                     &:visited { color: inherit; }
                 }
             }
-
+ 
             i.icon {
                 line-height: 100%;
     
@@ -116,9 +116,15 @@ nav {
                 }
             }
 
+            .item {
+                &.hidden { display: none; }
+            }
+
             .menu {
                 .item {
                     cursor: pointer;
+
+                    &.hidden { display: none; }
 
                     &:hover {
                         color: #006141;
@@ -142,13 +148,13 @@ nav {
         
                     .menu {
                         border-radius: 0;
-
+    
                         .item {
                             color: rgba(16,185,129,1);
                             color: #006141;
                             font-weight: bold;
                             text-transform: uppercase;
-
+    
                             &:hover {
                                 color: white;
                                 background: rgba(16,185,129,1);
@@ -166,6 +172,10 @@ nav {
         background-color: white;
         
         .menu {
+            .item {
+                &.hidden { display: none; }
+            }
+
             i.icon {
                 &.bars {
                     margin: 0 1rem;
@@ -291,7 +301,9 @@ section {
     // display: inline-block;
 }
 
-/////// WIDGETS
+/*  //////
+    WIDGETS 
+    ////// */
 
 .home.front {
     min-height: calc(100vh - 5rem);
@@ -478,7 +490,7 @@ section {
         }
     }
 
-    @media (min-width: 1536px) {
+    @media (min-width: 159936px) {
         height: calc(100vh - 8rem);
         padding: 3rem;
 

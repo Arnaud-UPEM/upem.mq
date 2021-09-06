@@ -1,0 +1,207 @@
+{% load static %}
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- <link rel="stylesheet" type="text/css" href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet"> -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap" rel="stylesheet">
+</head>
+
+<style>
+    @page {
+                size: A6;
+                margin: 0cm;
+            }
+body {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+}
+
+#bill {
+    width: 105mm;
+    height: 148.5mm;
+
+    display: flex;
+    /* grid-gap: 2rem; */
+    flex-direction: column;
+
+    background-color: beige;
+}
+
+#bill > div {
+    padding: 0 1rem;
+    margin-bottom: 1rem;
+}
+#bill > div:last-child { margin-bottom: 0; }
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* COMMON */
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.flex { display: flex; }
+.justify-center { justify-content: center; }
+.justify-evenly { justify-content: space-evenly; }
+
+.font-bold { font-weight: 700; }
+
+.title {
+    font-size: 1.5rem;
+    text-align: center;
+    line-height: 2rem;
+    font-weight: 700;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+}
+
+.xspan {
+    font-size: .875rem;
+    text-align: center;
+    line-height: 1.25rem;
+}
+
+
+/* SPECIFIC */
+
+.critical {
+    margin: 1rem;
+    padding: 1rem;
+
+    border: 1px solid #DC2626;
+    border-radius: 5px;
+    
+    color: #F87171;
+    background-color: #FECACA;
+}
+.critical .header {
+    color: #B91C1C;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    font-weight: 700;
+}
+
+#head .top {
+    height: 6rem;
+    margin-bottom: 1rem;
+    
+    display: flex;
+    flex-flow: row nowrap;
+    /* justify-content: space-evenly; */
+}
+#head .top .logo {
+    padding: .5rem;
+}
+#head .top .logo img { height: 100%; }
+#head .top .name {
+    padding: .5rem 0;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+
+    text-transform: uppercase;
+}
+#head .top .name > span:first-child {
+    margin-bottom: .5rem;
+
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+}
+
+.contribution {
+    font-style: italic;
+}
+.contribution > span {
+    text-align: center;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    margin-bottom: .5rem;
+}
+.contribution > div {
+    display: flex;
+    justify-content: space-evenly;
+}
+.contribution > div span {
+    text-align: center;
+}
+</style>
+
+<body>
+    <div id="bill">
+        {% if critical %}
+        <div class="critical">
+            <div class="header">Une erreur est survenue.</div>
+            <p>{{ critical }}</p>
+        </div>
+    
+        {% else %}
+        {% with member_contribution as mc %}
+        <div id="head">
+            
+            <div class="top">
+                <a class="logo" href="/">
+                    <img class="" src="/media/demo/android-chrome-256x256.png">
+                </a>
+                <a class="name" href="/">
+                    <span>UPEM</span>
+                    <span>Affaires scolaires</span>
+                </a>
+            </div>
+
+            <div class="list">
+                <span class="xspan">28 Boulevard Allègre</span>
+                <span class="xspan">97200, Fort-de-France</span>
+                <span class="xspan">0596 60 95 95</span>
+                <span class="xspan">affaires.scolaires@upem.mq</span>
+            </div>
+        </div>
+
+        <div id="core">
+            <div><h1 class="title">Reçu de paiement #{{ mc.id }}</h1></div>
+
+            <div class="list contribution">
+                <span>{{ mc.contribution.name }}</span>
+                <div>
+                    <span>Le {{ date_literal }}</span>
+                    <span class="font-bold">{{ mc.price }} €</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="foot">
+            {% with mc.member as m %}
+            <div><h1 class="title">{{ m.first_name }} {{ m.last_name }}</h1></div>
+
+            <div class="list">
+                <span class="xspan">{{ m.address1 }}</span>
+                <span class="xspan">{{ m.address2 }}</span>
+                <span class="xspan">{{ m.zip_code }}, {{ m.city }}</span>
+                <span class="xspan">{{ m.phone_cell|default:m.phone_home|default:m.phone_pro }}</span>
+                <span class="xspan">{{ m.auth.email }}</span>
+            </div>
+            {% endwith %}
+        </div>
+    </div>
+    {% endwith %}
+    {% endif %}
+</body>
+</html>

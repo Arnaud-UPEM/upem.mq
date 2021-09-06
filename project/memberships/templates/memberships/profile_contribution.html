@@ -9,67 +9,97 @@
         </h2>
 
         <div class="ui link cards">
-            <div class="ui fluid card">
+            {% if contribution %}
+            <div id="cotisation_{{ contribution.id }}" class="ui fluid card">
                 <div class="image">
                     <img src="https://semantic-ui.com/images/avatar2/large/matthew.png">
                 </div>
                 <div class="content">
-                    <div class="header">Cotisation 2021 - 2022</div>
+                    <div class="header">{{ contribution.name }}</div>
                     <div class="meta">
-                        <a>01/01/2021 - 31/08/2022</a>
+                        <a>
+                            {{ contribution.date_start|date:'d/m/Y'|default:'' }}
+                            -
+                            {{ contribution.date_end|date:'d/m/Y'|default:'' }}
+                        </a>
                     </div>
                     <div class="description">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ac feugiat eros, ut vehicula leo. Donec eu condimentum odio. Fusce accumsan nunc vulputate tincidunt ultricies.
+                        {{ contribution.description }}
                     </div>
                 </div>
-                <div class="plans ui cards">
-                    <div class="card">
-                        <div class="content">
-                            <div class="header">Tarif de base</div>
-                            <div class="description">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+
+                {% comment %}
+                <div class="plans ui cards hidden">
+                    {% for plan in contributions_plans %}
+                        {% if plan.contribution.id == contribution.id %}
+                        <div data-id="{{ plan.id }}" class="card {% if plan.price_bought %}bought{% endif %}">
+                            <div class="content">
+                                <div class="header centered">{{ plan.name }}</div>
+                                <div class="description">
+                                    {{ plan.description }}
+                                </div>
                             </div>
+                            <a class="ui bottom attached button">
+                                <i class="icon add"></i>
+                                <i class="icon check"></i>
+                                <b class="price">{{ contribution.base_price|add:plan.mod }} €</b>
+                                <b class="date">Acheté le <span>{{ plan.date_bought|date:'d/m/Y H:i'|default:'' }}</span></b>
+                            </a>
                         </div>
-                        <a class="ui bottom attached button">
-                            <i class="add icon"></i>
-                            <b>20 €</b>
-                        </a>
-                    </div>
-                    <div class="card">
-                        <div class="content">
-                            <div class="header">Veronika Ossi</div>
-                            <div class="description">
-                                Veronika Ossi is a set designer living in New York who enjoys kittens, music, and partying.
-                            </div>
-                        </div>
-                        <a class="ui bottom attached button">
-                            <i class="add icon"></i>
-                            Add Friend
-                        </a>
-                    </div>
-                    <div class="card">
-                        <div class="content">
-                            <div class="header">Jenny Hess</div>
-                            <div class="description">
-                                Jenny is a student studying Media Management at the New School
-                            </div>
-                        </div>
-                        <a class="ui bottom attached button">
-                            <i class="add icon"></i>
-                            Add Friend
-                        </a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {% endcomment %}
+
+                <div class="payment">
+                    <h3>Paiement BRED VADS</h3>
+                    <a class="ui button" href="#" target="_blank">
+                        Payer
+                    </a>
+                    <div class="icons">
+                        <i class="icon credit outline"></i>
+                        <i class="icon cc visa"></i>
+                        <i class="icon cc mastercard"></i>
                     </div>
                 </div>
-                <div class="extra content">
-                    <span class="right floated">
-                        1 tarif
+
+                <div class="footer">
+                    {% if contribution.date_bought %}
+                    <span class="bought">
+                        Acheté le <span>{{ contribution.date_bought|date:'d/m/Y H:i'|default:'' }}</span>
                     </span>
+
                     <span>
-                        <i class="icon credit card outline"></i>
-                        A partir de 20€
+                        <a href="facture/{{ contribution.ticket_id }}" 
+                           target="_blank"
+                           class="ui button bill">
+                            <i class="icon paperclip"></i>
+                            Facture
+                        </a>
                     </span>
+                    {% elif contribution.is_payable %}
+                    <span class="price">
+                        <i class="icon credit outline"></i>
+                        <b>{{ contribution.base_price  }} €</b>
+                    </span>
+                    <span class="">
+                        {% comment %}{{ contribution.plans.all|length }} tarif{{ contribution.plans.all|length|pluralize }}{% endcomment %}
+                        <a href="https://paiement.systempay.fr/vads-site/UNION_DES_PARENTS_D__ELEVES_ET?lck_vads_amount={{ contribution.price }}&lck_vads_cust_email={{ user.email }}&lck_vads_ext_info_Informations=contribution={{ contribution.id }}"
+                           target="_blank"
+                           class="ui button buy">
+                            Acheter
+                        </a>
+                    </span>
+                    {% endif %}
                 </div>
             </div>
+            {% else %}
+            <div class="ui fluid card">
+                <div class="content">
+                    Aucune cotisation en cours.
+                </div>
+            </div>
+            {% endif %}
         </div>
     </section>
 
@@ -78,116 +108,100 @@
             Cotisations passées
         </h2>
 
+        <div class="labels mb-4">
+            {% for contribution in contributions %}
+            <div class="ui label brown">
+                <a href="#cotisation_{{ contribution.id }}">{{ contribution.years }}</a>
+            </div>
+            {% endfor %}
+        </div>
+
         <div class="ui link cards">
-            <div class="ui fluid card">
+            {% for contribution in contributions %}
+            <div id="cotisation_{{ contribution.id }}" class="ui fluid card">
                 <div class="image">
                     <img src="https://semantic-ui.com/images/avatar2/large/matthew.png">
                 </div>
                 <div class="content">
-                    <div class="header">Cotisation 2020 - 2021</div>
+                    <div class="header">{{ contribution.name }}</div>
                     <div class="meta">
-                        <a>01/01/2020 - 31/08/2021</a>
-                    </div>
-                    <div class="description">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ac feugiat eros, ut vehicula leo. Donec eu condimentum odio. Fusce accumsan nunc vulputate tincidunt ultricies.
-                    </div>
-                </div>
-                <div class="plans ui cards">
-                    <div class="card">
-                        <div class="content">
-                            <div class="header">Tarif de base</div>
-                            <div class="description">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                            </div>
-                        </div>
-                        <a class="ui bottom attached button">
-                            <i class="add icon"></i>
-                            <i class="check icon"></i>
-                            <b class="price"><span>20</span> €</b>
-                            <b class="date">Acheté le <span>10/10/2021 15h59</span></b>
+                        <a>
+                            {{ contribution.date_start|date:'d/m/Y'|default:'' }}
+                            -
+                            {{ contribution.date_end|date:'d/m/Y'|default:'' }}
                         </a>
                     </div>
-                    <div class="card">
-                        <div class="content">
-                            <div class="header">Tarif Premium</div>
-                            <div class="description">
-                                Veronika Ossi is a set designer living in New York who enjoys kittens, music, and partying.
-                            </div>
-                        </div>
-                        <a class="ui bottom attached button">
-                            <i class="add icon"></i>
-                            40 €
-                        </a>
-                    </div>
-                    <div class="card">
-                        <div class="content">
-                            <div class="header">Tarif Premium +</div>
-                            <div class="description">
-                                Jenny is a student studying Media Management at the New School
-                            </div>
-                        </div>
-                        <a class="ui bottom attached button">
-                            <i class="add icon"></i>
-                            50 €
-                        </a>
-                    </div>
-                </div>
-                <div class="extra content">
-                    <span class="right floated">
-                        1 tarif
-                    </span>
-                    <span>
-                        <i class="user icon"></i>
-                        A partir de 20€
-                    </span>
-                </div>
-            </div>
-            <div class="ui fluid card">
-                <div class="image">
-                    <img src="https://semantic-ui.com/images/avatar2/large/molly.png">
-                </div>
-                <div class="content">
-                    <div class="header">Molly</div>
-                    <div class="meta">
-                        <span class="date">Coworker</span>
-                    </div>
                     <div class="description">
-                        Molly is a personal assistant living in Paris.
+                        {{ contribution.description }}
                     </div>
                 </div>
-                <div class="extra content">
-                    <span class="right floated">
-                        Joined in 2011
+
+                {% comment %}
+                <div class="plans ui cards hidden">
+                    {% for plan in contributions_plans %}
+                        {% if plan.contribution.id == contribution.id %}
+                        <div data-id="{{ plan.id }}" class="card {% if plan.price_bought %}bought{% endif %}">
+                            <div class="content">
+                                <div class="header centered">{{ plan.name }}</div>
+                                <div class="description">
+                                    {{ plan.description }}
+                                </div>
+                            </div>
+                            <a class="ui bottom attached button">
+                                <i class="icon add"></i>
+                                <i class="icon check"></i>
+                                <b class="price">{{ contribution.base_price|add:plan.mod }} €</b>
+                                <b class="date">Acheté le <span>{{ plan.date_bought|date:'d/m/Y H:i'|default:'' }}</span></b>
+                            </a>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {% endcomment %}
+
+                <div class="payment">
+                    <h3>Paiement BRED VADS</h3>
+                    <a class="ui button" href="#" target="_blank">
+                        Payer
+                    </a>
+                    <div class="icons">
+                        <i class="icon credit outline"></i>
+                        <i class="icon cc visa"></i>
+                        <i class="icon cc mastercard"></i>
+                    </div>
+                </div>
+
+                <div class="footer">
+                    {% if contribution.date_bought %}
+                    <span class="bought">
+                        Acheté le <span>{{ contribution.date_bought|date:'d/m/Y H:i'|default:'' }}</span>
                     </span>
+
                     <span>
-                        <i class="user icon"></i>
-                        35 Friends
+                        <a href="facture/{{ contribution.ticket_id }}/" 
+                           target="_blank"
+                           class="ui button bill">
+                            <i class="icon paperclip"></i>
+                            Facture
+                        </a>
                     </span>
+                    {% elif contribution.is_payable %}
+                    <span class="price">
+                        <i class="icon credit outline"></i>
+                        <b>{{ contribution.base_price  }} €</b>
+                    </span>
+                    <span class="">
+                        {% comment %}{{ contribution.plans.all|length }} tarif{{ contribution.plans.all|length|pluralize }}{% endcomment %}
+                        <a href="https://paiement.systempay.fr/vads-site/UNION_DES_PARENTS_D__ELEVES_ET?lck_vads_amount={{ contribution.price }}&lck_vads_cust_email={{ user.email }}&lck_vads_ext_info_Informations=contribution={{ contribution.id }}"
+                           target="_blank"
+                           class="ui button buy">
+                            Acheter
+                        </a>
+                    </span>
+                    {% endif %}
                 </div>
             </div>
-            <div class="ui fluid card">
-                <div class="image">
-                    <img src="https://semantic-ui.com/images/avatar2/large/elyse.png">
-                </div>
-                <div class="content">
-                    <div class="header">Elyse</div>
-                    <div class="meta">
-                        <a>Coworker</a>
-                    </div>
-                    <div class="description">
-                        Elyse is a copywriter working in New York.
-                    </div>
-                </div>
-                <div class="extra content">
-                    <span class="right floated">
-                        Joined in 2014
-                    </span>
-                    <span>
-                        <i class="user icon"></i>
-                        151 Friends
-                    </span>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </section>
 </article>
@@ -208,6 +222,15 @@
         //     item
         //     .querySelectorAll
         // });
+
+        document.querySelectorAll('.plans.ui.cards .card').forEach(item => {
+            item.addEventListener('click', (e) => {
+                item.classList.toggle('active');
+            });
+
+            item
+            .querySelectorAll
+        });
     });
 </script>
 {% endblock profile_js %}

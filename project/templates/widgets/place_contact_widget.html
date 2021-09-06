@@ -1,0 +1,55 @@
+<div id="target__details" class="w-full lg:w-1/2">
+    {% if place.name %}<h3 class="name mt-0 header">{{ place.name }}</h3>{% endif %}
+
+    {% if place.label %}<h4 class="label mt-0">{{ place.label }}</h4>{% endif %}
+    
+    {% if place.email %}
+    <p>
+        <i class="email icon envelope outline"></i>
+        <a href="">{{ place.email }}</a><br>
+    </p>
+    {% endif %}
+
+    {% if place.address_1 %}
+    <p>
+        <i class="icon map marker alternate"></i>
+        {{ place.address_1 }}
+        <br>
+    </p>
+    {% endif %}
+
+    {% if place.address_2 %}
+    <p>
+        <i class="icon map marker alternate"></i>
+        Address 2<br>
+    </p>
+    {% endif %}
+
+    {% if place.city %}
+    <p>
+        <i class="icon map marker alternate"></i>
+        {{ place.city }}, {{ place.zip_code }}<br>
+    </p>
+    {% endif %}
+
+    {% if place.phone_cell %}
+    <p>
+        <i class="icon mobile"></i>
+        {{ place.phone_cell }}<br>
+    </p>
+    {% endif %}
+
+    {% if place.phone_home %}
+    <p>
+        <i class="icon fax"></i>
+        {{ place.phone_home }} <br>
+    </p>
+    {% endif %}
+
+    {% if place.phone_fax %}
+    <p>
+        <i class="icon fax"></i>
+        {{ phone.fax }} <br>
+    </p>
+    {% endif %}
+</div>

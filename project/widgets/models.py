@@ -31,6 +31,88 @@ def T (datetime):
 
 # Create your models here.
 
+@register_snippet
+class Place (ClusterableModel):
+    name = models.TextField(default='', verbose_name='Nom')
+    label = models.TextField(default='', blank=True, verbose_name='Nom aternatif')
+
+    email = models.EmailField(blank=True, default='')
+
+    caption = RichTextField(blank=True, max_length=250, verbose_name='Court texte')
+
+    maps = models.URLField(default='', blank=True, verbose_name='URL Google Maps')
+    city = models.CharField(max_length=125, default='', blank=True, verbose_name='Ville')
+    zip_code = models.CharField(max_length=10, default='', blank=True, verbose_name='Code postal')
+    address_1 = models.CharField(max_length=255, default='', blank=True, verbose_name='Adresse ligne 1')
+    address_2 = models.CharField(max_length=255, default='', blank=True, verbose_name='Adresse ligne 2')
+
+    phone_fax = models.CharField(max_length=20, default='', blank=True,  verbose_name='Téléphone fax')
+    phone_cell = models.CharField(max_length=20, default='', blank=True,  verbose_name='Téléphone portable')
+    phone_home = models.CharField(max_length=20, default='', blank=True,  verbose_name='Téléphone fixe')
+
+    latitude = models.FloatField(blank=True, default=0)
+    longitude = models.FloatField(blank=True, default=0)
+
+    # Socials
+    google = models.URLField(default='', blank=True)
+    twitter = models.URLField(default='', blank=True)
+    youtube = models.URLField(default='', blank=True)
+    facebook = models.URLField(default='', blank=True)
+    instagram = models.URLField(default='', blank=True)
+
+
+    panels = [
+        MultiFieldPanel([
+            FieldPanel('name'),
+            FieldPanel('label'),
+        ], heading='Noms'),
+        FieldPanel('caption'),
+        FieldPanel('email'),
+        MultiFieldPanel([
+            FieldPanel('address_1'),
+            FieldPanel('address_2'),
+            FieldPanel('city'),
+            FieldPanel('zip_code'),
+            FieldPanel('maps'),
+        ], heading='Adresse'),
+        MultiFieldPanel([
+            FieldPanel('phone_cell'),
+            FieldPanel('phone_home'),
+            FieldPanel('phone_fax'),
+        ], heading='Téléphones'),
+        MultiFieldPanel([
+            FieldPanel('google'),
+            FieldPanel('twitter'),
+            FieldPanel('youtube'),
+            FieldPanel('facebook'),
+            FieldPanel('instagram'),
+        ], heading='Réseaux sociaux'),
+        MultiFieldPanel([
+            FieldPanel('latitude'),
+            FieldPanel('longitude'),
+        ], heading='Coordonées'),
+        # InlinePanel('gallery_images', label='Gallerie d\'images'),
+    ]
+
+    # @property
+    # def images_formated (self):
+    #     images = self.gallery_images.all()
+    #     return [
+    #         images[:6],
+    #         images[6:]
+    #     ]
+
+    def __str__ (self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = 'Lieu'
+
+
+
+
+#### UPEEM ####
+
 class Employee (models.Model):
     PREFIX_CHOICES = (
         ('', 'Aucun'),
@@ -88,7 +170,7 @@ class Employee (models.Model):
     def __str__ (self):
         return f'{self.prefix}{self.last_name} {self.first_name}'
 
-
+"""
 @register_snippet
 class Place (ClusterableModel):
     name = models.TextField(default='', verbose_name='Nom')
@@ -192,7 +274,7 @@ class PlaceGalleryImage (Orderable):
     class Meta:
         verbose_name = 'Lieu'
         verbose_name_plural = 'Lieux'
-
+"""
 
 @register_snippet
 class SchoolWidget (models.Model):

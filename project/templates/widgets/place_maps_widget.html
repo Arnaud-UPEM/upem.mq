@@ -1,0 +1,47 @@
+<div id="map" class="map openlayers w-full"></div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/css/ol.css" type="text/css">
+<script>
+    var map = undefined;
+
+    function drawMap () {
+        const lat = {{ place.latitude|floatformat:'10' }};
+        const lon = {{ place.longitude|floatformat:'10' }};
+
+        // console.log(lat);
+        // console.log(lon);
+
+        var marker = new ol.Feature({
+            geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
+        });
+
+        var layer = new ol.layer.Vector({
+            source: new ol.source.Vector({
+                features: [marker]
+            }),
+            style: new ol.style.Style({
+                image: new ol.style.Icon({
+                    anchor: [0.5, 46],
+                    anchorXUnits: 'fraction',
+                    anchorYUnits: 'pixels',
+                    src: 'https://upeem.org/media/marker_icon.png'
+                })
+            })
+        });
+        
+        map = new ol.Map({
+            target: 'map',
+            renderer: 'canvas',
+            layers: [
+                new ol.layer.Tile({
+                    source: new ol.source.OSM()
+                }),
+                layer
+            ],
+            view: new ol.View({
+                center: ol.proj.fromLonLat([lon, lat]),
+                zoom: 20
+            }) 
+        });
+    }
+</script>

@@ -57,8 +57,12 @@ nav {
         nav.computer .ui.container .brown:hover {
           color: white !important;
           background-color: #85540a; }
+      nav.computer .ui.container .item.hidden {
+        display: none; }
       nav.computer .ui.container .menu .item {
         cursor: pointer; }
+        nav.computer .ui.container .menu .item.hidden {
+          display: none; }
         nav.computer .ui.container .menu .item:hover {
           color: #006141; }
       nav.computer .ui.container .menu .submenu .item:hover {
@@ -78,6 +82,8 @@ nav {
   nav.responsive {
     display: none;
     background-color: white; }
+    nav.responsive .menu .item.hidden {
+      display: none; }
     nav.responsive .menu i.icon.bars {
       margin: 0 1rem;
       font-size: 2rem;
@@ -150,6 +156,9 @@ section {
   width: 100%;
   margin: 0rem 0; }
 
+/*  //////
+    WIDGETS 
+    ////// */
 .home.front {
   min-height: calc(100vh - 5rem);
   z-index: 100;
@@ -269,7 +278,7 @@ section {
           font-size: 3rem; }
       .home.front .bottom.banner .slogan {
         font-size: 4rem; } }
-  @media (min-width: 1536px) {
+  @media (min-width: 159936px) {
     .home.front {
       height: calc(100vh - 8rem);
       padding: 3rem; }

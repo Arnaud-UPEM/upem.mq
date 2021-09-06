@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load wagtailcore_tags wagtailimages_tags widgets_tags %}
 
 {% block body_class %}homepage{% endblock %}
 
@@ -8,6 +8,7 @@
 {% endblock extra_css %}
 
 {% block content %}
+<!-- UPEM BANNER -->
 <section>
     <div class="home page front">
         <div class="filter"></div>
@@ -31,6 +32,7 @@
     </div>
 </section>
 
+<!-- NEWSLETTER -->
 <section>
     <div class="page banner">
         <div class="bg darkgray"></div>

@@ -1,5 +1,6 @@
 from django import forms
 from django.db import models
+from django.shortcuts import render
 
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 
@@ -53,6 +54,16 @@ class HomePage(SEOPage):
 
     def foo (self):
         return ['Hello', 'World']
+
+    def serve (self, request, *args, **kwargs):
+        context = self.get_context(request, *args, **kwargs)
+        context['foo'] = 'bar'
+        
+        return render (
+            request,
+            self.get_template(request, *args, **kwargs),
+            context
+        )
 
 
 class HomeCarousel(Orderable):

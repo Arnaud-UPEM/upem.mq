@@ -73,6 +73,7 @@ INSTALLED_APPS = [
 
     'core',
     'education',
+    'payment',
     'memberships',
 
     # 'acm',
@@ -96,11 +97,15 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = os.environ.get('ROOT_URLCONF', 'project.urls')
 
-TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
+TEMPLATE_PROJECT = os.path.join(BASE_DIR, 'templates')
+TEMPLATE_DIRS = [
+    TEMPLATE_PROJECT,
+    
+]
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATE_DIR],
+        'DIRS': TEMPLATE_DIRS,
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
