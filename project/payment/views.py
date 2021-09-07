@@ -2,11 +2,15 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import render
 
+from rest_framework import status
+from rest_framework.decorators import api_view
+
 from .models import TransactionVADS, OrderStatusEnum as OSE
 from .parser import parse
 
 # Create your views here.
 
+@api_view(['POST'])
 def api_vads_ipn (request):
     # print (request.META['REMOTE_HOST'])
     # print (request.META['REMOTE_ADDR'])
@@ -114,5 +118,4 @@ def api_vads_ipn (request):
 
 
     return JsonResponse({'status': 'Success'}, status=200)
-
     

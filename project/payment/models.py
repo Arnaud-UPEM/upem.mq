@@ -3,6 +3,8 @@ import enum
 from django.db import models
 from django.utils.timezone import now
 
+from wagtail.snippets.models import register_snippet
+
 
 # Create your models here.
 
@@ -37,6 +39,7 @@ class TransactionVADSManager(models.Manager):
         return t
 
 
+@register_snippet
 class TransactionVADS (models.Model):
 
     amount = models.IntegerField()
@@ -57,4 +60,4 @@ class TransactionVADS (models.Model):
     objects = TransactionVADSManager()
 
     def __str__ (self):
-        return ''
+        return f'#{self.id} - Email ({self.cust_email}) - Amount ({self.amount}) Date ({self.trans_date}) Status ({self.order_status}) '
