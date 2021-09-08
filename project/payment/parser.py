@@ -3,7 +3,31 @@ from urllib.parse import urlparse, parse_qs
 # pid=69,p=1001[70],p=1002[70,71],p=1003[70,71],p=1004[70,71],p=1005[70,71],p=1006[70,71],
 # !v=1!pid=69!p=1002,70,71!p=1003,70,71!p=1004,70,71!p=1005,70,71!p=1001,70 
 
+class ParseException (Exception):
+    pass
+
 def parse (raw):
+    res = {
+        'status': False
+    }
+
+    raw = raw.replace('!', '&')
+    parsed = urlparse(raw)
+    qs = parse_qs(parsed.query)
+
+    if 'donation' in qs:
+        res['donation'] = True
+
+    if 'contribution' in qs:
+        res['contribution'] = int(qs['contribution'][0])
+
+    if ('donation' in qs) is not ('contribution' in qs):
+        res['status'] = True
+
+    return res
+
+
+def _parse (raw):
     res = {
         'status': False
     }
@@ -20,16 +44,16 @@ def parse (raw):
     res['version'] = int(qs['v'][0])
 
     if res['version'] == 1:
-        res.update(parse_v1(qs))
+        res.update(_parse_v1(qs))
         return res
+        
     elif res['version'] == 2:
-        res.update(parse_v2(qs))
+        res.update(_parse_v2(qs))
         return res
     else:
         return res
 
-
-def parse_v1 (qs):
+def _parse_v1 (qs):
     res = {
         'cart': [],
         'parent_id': 0
@@ -50,7 +74,7 @@ def parse_v1 (qs):
     res['status'] = True
     return res
 
-def parse_v2 (qs):
+def _parse_v2 (qs):
     res = {
         'order_id': 0
     }
@@ -62,7 +86,18 @@ def parse_v2 (qs):
 
 
 if __name__ == '__main__':
-    raw = '?v=1!pid=69!p=1002,70,71!p=1003,70,71!p=1004,70,71!p=1005,70,71!p=1001,70'
+    raw = '?contribution=234234'
     print (parse(raw))
-    raw = '?v=2!oid=1953'
+
+    raw = '?donation=1'
     print (parse(raw))
+
+    raw = '?contribution=234234!donation=1'
+    print (parse(raw))
+
+
+
+    # raw = '?v=1!pid=69!p=1002,70,71!p=1003,70,71!p=1004,70,71!p=1005,70,71!p=1001,70'
+    # print (_parse(raw))
+    # raw = '?v=2!oid=1953'
+    # print (_parse(raw))

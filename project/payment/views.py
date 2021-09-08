@@ -5,8 +5,10 @@ from django.shortcuts import render
 from rest_framework import status
 from rest_framework.decorators import api_view
 
+from memberships.models import Contribution
+
 from .models import TransactionVADS, OrderStatusEnum as OSE
-from .parser import parse
+from .parser import ParseException, parse
 
 # Create your views here.
 
@@ -22,13 +24,12 @@ def api_vads_ipn (request):
     data = request.data.dict()
     print (data)
 
-    if not settings.DEBUG:
-        if data['vads_ctx_mode'] != 'PRODUCTION':
-            return JsonResponse({'status': 'Failure', 'message': 'Transaction TEST refusée'}, status=400) 
-
     try:
-        # 1 - Save transaction
-        # print ('1')
+        # Create and save transaction
+        if not settings.DEBUG:
+            if data['vads_ctx_mode'] != 'PRODUCTION':
+                return JsonResponse({'status': 'Failure', 'message': 'Transaction TEST refusée'}, status=400) 
+
         transaction = TransactionVADS.objects.create_transaction(data)
 
         if transaction.trans_status != 'AUTHORIZED':
@@ -37,15 +38,75 @@ def api_vads_ipn (request):
                 'message': 'Paiement non authorisé.'
             }, status=400)
 
+
+        # Parse transaction request
+        parsed = parse(transaction.ext_info_1)
+
+        if not parsed['status']:
+            raise Exception('Impossible d\'analyser le contenu de la requête.')
+
+        if 'donation' in parsed:
+            pass
+
+        elif 'contribution' in parsed:
+            contribution = Contribution.objects.get(pk=parsed['contribution'])
+            contribution_id = contribution.buy(
+                id=transaction.id,
+                amount=transaction.amount / 100, 
+                email=transaction.cust_email
+            )
+
+            transaction.order_id = contribution_id
+            transaction.save()
+
+        else:
+            pass
+
+        return JsonResponse({'status': 'Success'}, status=200)
+
+    except ParseException:
+        transaction.status = OSE.PARSE_FAILED
+
+    except Contribution.DoesNotExist:
+        transaction.status = OSE.INCORRECT_INFORMATIONS
+
+    except IncorrectPayload:
+        transaction.status = OSE.INCORRECT_PAYLOAD
+
+    except IncorrectCustomer:
+        transaction.status = OSE.INCORRECT_CUSTOMER
+
+    except IncorrectAmount:
+        transaction.status = OSE.INCORRECT_AMOUNT
+
+    except IncorrectProduct:
+        transaction.status = OSE.INCORRECT_PRODUCT
+
+    except Exception as e:
+        transaction.status = OSE.UNKNOW_TRANSACTION
+
+    finally:
+        transaction.save()
+        return JsonResponse({
+            'status': 'Failure',
+            'message': str(e)
+        }, status=400)
+
+
+
+
+
+    try:
+        # 1 - Save transaction
+        # print ('1')
+
         # 2 - Parse received data with payment_vads
         # print ('2')
-        parsed = parse(transaction.ext_info_1)
 
         print (transaction.ext_info_1)
         print (parsed)
 
-        if not parsed['status']:
-            raise Exception('Impossible d\'analyser le contenu de la requête.')
+        
 
     except Exception as e:
         return JsonResponse({
@@ -56,16 +117,6 @@ def api_vads_ipn (request):
     # print (parsed)
 
     try:
-        # Gift
-        # ...
-
-        # Contribution
-        # ...
-
-        # Else - Error
-        # ...
-        raise Exception ('Objet du paiement inconnu.')
-
 
         if parsed['version'] == 1:
             # 3 - Query order

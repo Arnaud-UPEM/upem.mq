@@ -38,6 +38,8 @@ from user.models import Auth
 
 from education.models import GradeEnum, School
 
+from payment.models import IncorrectAmount, IncorrectCustomer, IncorrectProduct, IncorrectPayload
+
 
 # from .forms import MemberForm
 
@@ -117,14 +119,6 @@ class Contribution (ClusterableModel):
     class Meta:
         verbose_name = 'Cotisation'
 
-    def activate (self):
-        _ = SchoolYear.objects.filter(is_active=True).exclude(id=self.id).update(is_active=False)
-        
-        if not self.is_active:
-            self.is_active = True
-            self.is_payable = True
-            self.save()
-
     @property
     def price (self):
         return self.base_price
@@ -146,17 +140,43 @@ class Contribution (ClusterableModel):
         
         return self.plans.all()
 
-    def buy (self, member):
-        pass
+    def buy (self, id, amount, email):
+        try:
+            member = Member.objects.get(auth__email=email)
+
+            member_contribution = MemberContribution.objects.filter(member=member, contribution=self)
+            if member_contribution:
+                raise IncorrectProduct
+
+            if amount != self.base_price:
+                raise IncorrectAmount
+
+            member_contribution = MemberContribution.objects.create(
+                price=amount,
+                member=member,
+                contribution=self,
+                transaction_id=id
+            )
+
+            return member_contribution.id
+
+        except Member.DoesNotExist:
+            raise IncorrectCustomer
+
+        # except Exception as e:
+        #     raise IncorrectPayload
+
+
+    def activate (self):
+        _ = SchoolYear.objects.filter(is_active=True).exclude(id=self.id).update(is_active=False)
+        
+        if not self.is_active:
+            self.is_active = True
+            self.is_payable = True
+            self.save()
 
     def __str__(self):
         return f'#{self.id} - {self.name} - {self.date_start} {self.date_end}'
-
-
-class ContributionPlanManager (models.Manager):
-
-    def all_for_member (self, member):
-        pass            
 
 
 # @register_snippet
@@ -303,6 +323,8 @@ class MemberContribution (models.Model):
         on_delete=models.CASCADE,
         related_name='members'
     )
+
+    transaction_id = models.PositiveIntegerField(default=0, verbose_name='ID transaction')
     
     # contribution_plan = models.ForeignKey(
     #     ContributionPlan,
@@ -316,6 +338,10 @@ class MemberContribution (models.Model):
 
     class Meta:
         verbose_name = 'Membre: Cotisation'
+
+
+# class Donation (models.Model):
+#     pass
 
 
 ####################################################################################
@@ -1062,6 +1088,7 @@ class ProfileContribution (RoutablePageMixin, Page):
             context['member_contribution'] = mc
 
             MONTHS = [
+                '',
                 'janvier',
                 'février',
                 'mars',
