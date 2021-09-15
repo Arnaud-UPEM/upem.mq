@@ -1,0 +1,27 @@
+<div class="ui link cards">
+    {% for application in applications %}
+        <div id="application_{{ application.id }}" class="ui fluid card application">
+            <div class="content">
+                <div class="header">{{ application.name }} <button class="ui button">Candidater</button></div>
+                <div class="meta">
+                    <a>
+                        {{ application.date_start|date:'d/m/Y'|default:'' }}
+                        -
+                        {{ application.date_end|date:'d/m/Y'|default:'' }}
+                    </a>
+                </div>
+                <div class="description">
+                    {{ application.description }}
+                </div>
+                <div class="condition">
+                    {{ application.condition }}
+                </div>
+                <div class="extra content"></div>
+            </div>
+        </div>
+    {% empty %}
+    <div class="ui fluid card application empty">
+        <div class="extra content">Aucune candidature existante.</div>
+    </div>
+    {% endfor %}
+</div>

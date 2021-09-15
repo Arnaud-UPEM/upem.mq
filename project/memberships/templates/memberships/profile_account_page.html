@@ -1,12 +1,13 @@
 {% extends 'memberships/profile_base.html' %}
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load wagtailcore_tags memberships_tags %}
 
 {% block articles %}
 <article>
-    <section>
+    <h3 class="header">Mon profil</h3>
+
+    <section class="profil">
         <form class="ui form w-full" action="{% pageurl page %}" method="POST">
             {% csrf_token %}
-            <h3 class="header">Mon profil</h3>
     
             <div class="field">
                 <label class="ui dividing header">Noms</label>
@@ -163,6 +164,13 @@
             <input type="submit" class="ui button" value="Valider">
         </form>
     </section>
+
+    <h3 class="header">Espace candidature</h3>
+
+    <section class="applications">
+        {% applications_account %}
+    </section>
+
 </article>
 {% endblock articles %}
 

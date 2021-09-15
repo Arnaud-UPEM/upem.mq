@@ -91,6 +91,7 @@ class ContactPage(SEOAbstractEmailForm):
             self.subject, content, addresses, self.from_address)
 
 
+# Formulaire de signalement
 class ACMContactPage (AbstractEmailForm):
 
     template = 'contact/acm_contact_page.html'

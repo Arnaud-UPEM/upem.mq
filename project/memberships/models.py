@@ -10,6 +10,8 @@ from django.contrib.auth import logout
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q, F
+from django.db.models.fields import Field
+from django.db.models.fields.related import RelatedField
 from django.forms import fields
 from django.http import FileResponse
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect
@@ -22,9 +24,12 @@ from modelcluster.models import ClusterableModel
 
 from wagtail.admin.edit_handlers import MultiFieldPanel, FieldPanel, InlinePanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
+from wagtail.core.fields import RichTextField
 from wagtail.core.models import Page, Orderable
 from wagtail.images.edit_handlers import ImageChooserPanel
+from wagtail.search import index
 from wagtail.snippets.models import register_snippet
+from wagtail.snippets.edit_handlers import SnippetChooserPanel
 
 # from xhtml2pdf import pisa
 from weasyprint import HTML
@@ -55,7 +60,7 @@ PHONE_REGEX = r"^(?:0|\+\d{1,3}?)\s?(?:\d\s?){9}$"
 # ContributionPlan.objects.filter(contribution=1).annotate(member=F('members__member__id'), price=F('members__price')).values('id', 'name', 'description', 'mod', 'member', 'price').filter(Q(member=2) | Q(member__isnull=True))
 
 
-@register_snippet
+# @register_snippet
 class SchoolYear (models.Model):
     date_end = models.DateField(verbose_name='Date fin')
     date_start = models.DateField(verbose_name='Date début')
@@ -118,6 +123,7 @@ class Contribution (ClusterableModel):
 
     class Meta:
         verbose_name = 'Cotisation'
+        ordering = ['-date_end']
 
     @property
     def price (self):
@@ -139,6 +145,13 @@ class Contribution (ClusterableModel):
             return self.plans.annotate(price=F('members__price'), date_bought=F('members__date_bought')).values('id', 'name', 'description', 'mod', 'price', 'date_bought').filter(Q(member=self.MEMBER) | Q(member__isnull=True))
         
         return self.plans.all()
+
+    @property
+    def expired (self):
+        now = datetime.now()
+        if self.date_end < now.date():
+            return True
+        return False
 
     def buy (self, id, amount, email):
         try:
@@ -168,7 +181,7 @@ class Contribution (ClusterableModel):
 
 
     def activate (self):
-        _ = SchoolYear.objects.filter(is_active=True).exclude(id=self.id).update(is_active=False)
+        _ = Contribution.objects.filter(is_active=True).exclude(id=self.id).update(is_active=False)
         
         if not self.is_active:
             self.is_active = True
@@ -176,7 +189,86 @@ class Contribution (ClusterableModel):
             self.save()
 
     def __str__(self):
-        return f'#{self.id} - {self.name} - {self.date_start} {self.date_end}'
+        active = '(active)' if self.is_active else ''
+        return f'#{self.id} - {self.name} - {self.date_start} {self.date_end} {active}'
+
+
+@register_snippet
+class Application (ClusterableModel):
+    name = models.CharField(max_length=128, default='', verbose_name='Intitulé')
+    description = models.TextField(default='', verbose_name='Description')
+    condition = RichTextField(blank=True, verbose_name='Condition de candidature')
+
+    date_end = models.DateField(verbose_name='Date fin')
+    date_start = models.DateField(verbose_name='Date début')
+
+    is_active = models.BooleanField(default=False, verbose_name='Est actif ?')
+
+    panels = [
+        MultiFieldPanel([
+            FieldPanel('name'),
+            FieldPanel('description'),
+            FieldPanel('condition'),
+        ], heading='Informations'),
+        MultiFieldPanel([
+            FieldPanel('date_start'),
+            FieldPanel('date_end'),
+            FieldPanel('is_active'),
+        ], heading='Dates'),
+    ]
+
+    class Meta:
+        verbose_name = 'Candidature'
+        ordering = ['-is_active', '-date_end']
+
+    @property
+    def years (self):
+        start = datetime.strftime(self.date_start, '%Y')
+        end = datetime.strftime(self.date_end, '%Y')
+        return f'{start} - {end}'
+
+    @property
+    def expired (self):
+        now = datetime.now()
+        if self.date_end < now.date():
+            return True
+        return False
+
+    def apply (self, id, amount, email):
+        try:
+            member = Member.objects.get(auth__email=email)
+
+            member_contribution = MemberContribution.objects.filter(member=member, contribution=self)
+            if member_contribution:
+                raise IncorrectProduct
+
+            if amount != self.base_price:
+                raise IncorrectAmount
+
+            member_contribution = MemberContribution.objects.create(
+                price=amount,
+                member=member,
+                contribution=self,
+                transaction_id=id
+            )
+
+            return member_contribution.id
+
+        except Member.DoesNotExist:
+            raise IncorrectCustomer
+
+
+    def activate (self):
+        _ = Application.objects.filter(is_active=True).exclude(id=self.id).update(is_active=False)
+        
+        if not self.is_active:
+            self.is_active = True
+            self.is_payable = True
+            self.save()
+
+    def __str__(self):
+        active = '(active)' if self.is_active else ''
+        return f'#{self.id} - {self.name} - {self.date_start} {self.date_end} {active}'
 
 
 # @register_snippet
@@ -214,7 +306,7 @@ class ContributionPlan (Orderable):
         
 
 @register_snippet
-class Member (models.Model):
+class Member (index.Indexed, models.Model):
     auth = models.OneToOneField(
         Auth,
         null=True,
@@ -266,15 +358,32 @@ class Member (models.Model):
         ], heading='Téléphones'),
     ]
 
+    search_fields = [
+        index.SearchField('last_name', partial_match=True),
+        index.SearchField('first_name', partial_match=True),
+        # index.RelatedFields('children', [
+        #     index.SearchField('last_name', partial_match=True),
+        #     index.SearchField('first_name', partial_match=True),
+        # ])
+    ]
+
     class Meta:
         verbose_name = 'Membre'
+
+    # Apply to an application
+    def apply (self, application, child):
+        pass
+
+    # Pay a contribution
+    def pay (self):
+        pass
 
     def __str__ (self):
         return f'#{self.id} - {self.first_name} {self.last_name}'
 
 
 @register_snippet
-class MemberChild (models.Model):
+class MemberChild (index.Indexed, models.Model):
     last_name = models.CharField(
         max_length=100, default='', verbose_name='Nom')
     first_name = models.CharField(
@@ -300,8 +409,25 @@ class MemberChild (models.Model):
         related_name='children'
     )
 
+    panels = []
+
+    search_fields = [
+        index.SearchField('last_name', partial_match=True),
+        index.SearchField('first_name', partial_match=True),
+        # index.FilterField('dob'),
+        # index.SearchField('first_name', partial_match=True),
+        # index.RelatedFields('member', [
+        #     index.SearchField('country'),
+            # index.FilterField('first_name', partial_match=True),
+        # ])
+    ]
+
     class Meta:
         verbose_name = 'Membre: Enfant'
+        # description = 'Ajouter un enfant à un parent'
+
+    def school_str (self):
+        return f'{self.first_name} {self.last_name} - {self.school} - {self.grade}'
 
     def __str__(self):
         return f'#{self.id} - {self.first_name} {self.last_name} - {self.dob}'
@@ -310,7 +436,7 @@ class MemberChild (models.Model):
 @register_snippet
 class MemberContribution (models.Model):
     price = models.FloatField(default=0.0, verbose_name='Prix achat')
-    date_bought = models.DateTimeField(default=now, verbose_name='Date achat')
+    date_bought = models.DateTimeField(default=datetime.now, verbose_name='Date achat')
     
     member = models.ForeignKey(
         Member,
@@ -338,6 +464,75 @@ class MemberContribution (models.Model):
 
     class Meta:
         verbose_name = 'Membre: Cotisation'
+
+
+# Added child directly there
+@register_snippet
+class MemberApplication (ClusterableModel):  
+    member = models.ForeignKey(
+        Member,
+        on_delete=models.CASCADE,
+        related_name='applications',
+        verbose_name='Membre'
+    )
+
+    application = models.ForeignKey(
+        Application,
+        on_delete=models.CASCADE,
+        related_name='members_application',
+        verbose_name='Candidature'
+    )
+
+    child = models.ForeignKey(
+        MemberChild,
+        on_delete=models.CASCADE,
+        related_name='child_application',
+        verbose_name='Enfant'
+    )
+
+    panels = [
+        SnippetChooserPanel('member'),
+        SnippetChooserPanel('child'),
+        SnippetChooserPanel('application'),
+        # MultiFieldPanel([
+        #     InlinePanel('school_lists')
+        # ], heading='Listes candidature')
+    ]
+ 
+    class Meta:
+        verbose_name = 'Membre: Candidature'
+
+
+# Not used - See above
+class MemberApplicationChild (Orderable):
+    date_signed = models.DateTimeField(default=datetime.now, verbose_name='Date signature')
+
+    application = ParentalKey(
+        'memberships.MemberApplication',
+        related_name='school_lists'
+    )
+
+    child = models.ForeignKey(
+        MemberChild,
+        on_delete=models.CASCADE,
+        related_name='_child_application',
+        verbose_name='Enfant',
+        limit_choices_to={}
+    )
+
+    panels = [
+        FieldPanel('date_signed'),
+        SnippetChooserPanel('child')
+    ]
+
+    class Meta:
+        verbose_name = 'Membre: Candidature par Ecole'
+
+    def get_children_by_member (self, member=None):
+        if member:
+            return {'member': member}
+        return {}
+
 
 
 # class Donation (models.Model):
@@ -412,6 +607,7 @@ class MemberChildForm (forms.ModelForm):
     class Meta:
         model = MemberChild
         fields = '__all__'
+        exclude = ['member']
 
     def clean_last_name (self):
         return self.cleaned_data['last_name'].upper()
@@ -858,6 +1054,7 @@ class ProfileAccountPage (Page):
                     print (request.POST['zip_code'])
                     print (form.errors)
 
+
         except Member.DoesNotExist:
             context['criticals'].append(
                 'Impossible de récupérer les données du profil.'
@@ -925,83 +1122,90 @@ class ProfileChildrenIndexPage (RoutablePageMixin, Page):
     @route(r'^(\d+)/$', name='pk')
     @login_required_view ('/unauthorized')
     def cru (self, request, pk=0):
-        if request.user.is_authenticated:
-            errors = []
-            template = self.template_detail
+        context = self.get_context (request)
+        context['errors'] = []
+        context['criticals'] = []
+        
+        template = self.template_detail
+
+        try:
+            member = Member.objects.get(auth__email=request.user)
 
             # If child exist
             # Check he is related to parent
             if pk:
-                try:
-                    child = MemberChild.objects.get(
-                        pk=pk,
-                        member__auth__email=request.user
-                    )
-                    form = MemberChildForm(request.POST or None, instance=child)
-
-                except MemberChild.DoesNotExist:
-                    errors.append('Enfant introuvable.')
-                    return self._render(request, self.template_detail, {'errors': errors})
+                child = MemberChild.objects.get(
+                    pk=pk,
+                    member=member
+                )
+                form = MemberChildForm(request.POST or None, instance=child)
 
             else:
+                # data = request.POST
+                # data['member'] = member
                 form = MemberChildForm(request.POST or None)
 
             if request.method == 'POST':
                 print (request.POST)
                 if form.is_valid():
-                    form.save()
+                    print (child.id)
+                    child = form.save(commit=False)
+                    child.member = member
+                    child.save()
                     return HttpResponseRedirect(self.get_url())
 
                 else:
                     print (form.errors)
 
-            context = self.get_context (request)
-            context['pk'] = pk
-            context['form'] = form
-            context['grades'] = GradeEnum.choices()[1:]
-            context['schools'] = School.objects.all()
-
-            return render (
-                request,
-                template,
-                context
+        except Member.DoesNotExist:
+            context['criticals'].append(
+                'Impossible de récupérer les données du profil.'
             )
 
-        else:
-            return HttpResponse('Accès interdit', status=401)
+        except MemberChild.DoesNotExist:
+            context['criticals'].append(
+                'Impossible de récupérer les données de l\'enfant.'
+            )
 
-    @route(r'^delete/(\d+)/$', name='pk')
-    @login_required_view ('/unauthorized')
-    def delete (self, request, pk):
-        template = self.template_delete
-        context = self.get_context (request)
-        context['errors'] = []
-
-        if request.user.is_authenticated:
-            try:
-                child = MemberChild.objects.get(pk=pk)
-
-                if child.member.id != request.user.member.id:
-                    context['errors'].append('Vous n\'êtes pas autorisé a accéder à cette ressource.')
-                    return self._render(request, self.template_detail)
-
-                if request.method == 'POST':
-                    child.delete()
-                    return HttpResponseRedirect(self.get_url())
-
-                context['child'] = child
-
-            except MemberChild.DoesNotExist:
-                context['errors'].append('Enfant introuvable.')
-
-        else:
-            context['errors'].append('Veuillez vous connecter pour accéder à ce contenu.')
+        context['pk'] = pk
+        context['form'] = form
+        context['grades'] = GradeEnum.choices()[1:]
+        context['schools'] = School.objects.all()
 
         return render (
             request,
             template,
             context
         )
+
+    @route(r'^delete/(\d+)/$', name='pk')
+    @login_required_view ('/unauthorized')
+    def delete (self, request, pk):
+        template = self.template_delete
+        context = self.get_context (request)
+        context['criticals'] = []
+
+        try:
+            child = MemberChild.objects.get(pk=pk)
+
+            if child.member.id != request.user.member.id:
+                context['criticals'].append('Vous n\'êtes pas autorisé a accéder à cette ressource.')
+                return self._render(request, self.template_detail)
+
+            if request.method == 'POST':
+                child.delete()
+                return HttpResponseRedirect(self.get_url())
+
+            context['child'] = child
+
+        except MemberChild.DoesNotExist:
+            context['criticals'].append('Enfant introuvable.')
+
+        return render (
+            request,
+            template,
+            context
+            )
 
     @login_required_view ('/unauthorized')
     def _render (self, request, template, context_udt = {}):

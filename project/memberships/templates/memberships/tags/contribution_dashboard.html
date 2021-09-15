@@ -1,27 +1,27 @@
 {% if contribution %}
     {% if member_contribution %}
-    <section class="ui icon message lightgreen">
+    <article class="ui icon message lightgreen">
         <i class="check icon"></i>
         <div class="content">
             <p>Vous êtes à jour sur vos cotisations.</p>
         </div>
-    </section>
+    </article>
 
     {% else %}
-    <section class="ui icon message lightgreen">
+    <article class="ui icon message lightgreen">
         <i class="times icon"></i>
         <div class="content">
             <p>Le paiement des cotisations pour la période 2021-2022 est désormais cloturé.</p>
         </div>
-    </section>
+    </article>
     {% endif %}
 
 {% else %} 
-    <section class="ui icon message lightbrown">
+    <article class="ui icon message lightbrown">
         <i class="check icon"></i>
         <div class="content">
             <!-- <p>Le paiement des cotisations pour la période 2021-2022 est désormais ouvert.</p> -->
             <p>Aucune cotisation disponible pour cette période.</p>
         </div>
-    </section>
+    </article>
 {% endif %}

@@ -54,23 +54,24 @@ class TransactionVADSManager(models.Manager):
             t.save()
             return t
 
-        except:
+        except Exception as e:
+            print (str(e))
             raise Exception
 
 
 @register_snippet
 class TransactionVADS (models.Model):
 
-    amount = models.IntegerField()
+    amount = models.IntegerField(default=0)
 
     # VADS Payload data
-    trans_id = models.CharField(max_length=20)
-    trans_date = models.CharField(max_length=20, default= '')
-    trans_status = models.CharField(max_length=50)
+    trans_id = models.CharField(max_length=20, default='')
+    trans_date = models.CharField(max_length=20, default='')
+    trans_status = models.CharField(max_length=50, default='')
 
-    cust_email = models.EmailField()
+    cust_email = models.EmailField(default='')
 
-    ext_info_1 = models.TextField()
+    ext_info_1 = models.TextField(default='')
 
     order_id = models.PositiveIntegerField(default=0)
     order_message = models.TextField(default='')

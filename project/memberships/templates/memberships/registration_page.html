@@ -117,7 +117,7 @@ Inscription
                         type="password" 
                         name="password1" 
                         placeholder="Mot de passe" 
-                        value="password">
+                        value="">
                     {{ auth_form.password1.errors }}
                 </div>
                 <div class="field {% if auth_form.password2.errors %}error{% endif %}">
@@ -125,7 +125,7 @@ Inscription
                         type="password" 
                         name="password2" 
                         placeholder="Confirmer mot de passe" 
-                        value="password">
+                        value="">
                     {{ auth_form.password2.errors }}
                 </div>
             </div>
@@ -143,7 +143,7 @@ Inscription
                 {{ member_form.address1.errors }}
             </div>
             <div class="three fields">
-                <div class="field {% if member_form.city.errors %}error{% endif %}">
+                <div class="field {% if member_form.zip_code.errors %}error{% endif %}">
                     <select class="ui fluid dropdown" name="zip_code">
                         <option value="0"><i>Commune</i></option>
                         <option value="97216">Ajoupa-Bouillon</option>
@@ -181,7 +181,7 @@ Inscription
                         <option value="97229">Trois-Îlets</option>
                         <option value="97280">Vauclin</option>
                     </select>
-                    {{ member_form.city.errors }}
+                    {{ member_form.zip_code.errors }}
             </div>
             </div>
         </div>
@@ -236,5 +236,23 @@ Inscription
 {% endblock %}
 
 {% block extra_js %}
+<script>
+    $(function () {
+        const city = '{{ form.zip_code.value|default:"" }}';
+        if (city) {
+            const select = document.querySelector('select[name="zip_code"]');
+            const option = select.querySelector(`option[value="${city}"]`);
 
+            if (option) {
+                select.value = city;
+
+                const dropdown = select.parentElement;
+
+                dropdown.querySelector('.text').innerHTML = option.innerHTML;
+                dropdown.querySelector('.menu .item.active').classList.remove('active default');
+                dropdown.querySelector(`.menu .item[data-value="${city}"]`).classList.add('active default');
+            }
+        }
+    })
+</script>
 {% endblock %}

@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.contrib.routable_page',
+    'wagtail.contrib.postgres_search',
     'wagtail.embeds',
     'wagtail.sites',
     'wagtail.users',
@@ -163,7 +164,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'fr'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Martinique'
 
 USE_I18N = True
 
@@ -257,3 +258,9 @@ ADMINS = [
     ('Arnaud', 'arnaud.angely@upeem.org'),
 ]
 WAGTAILADMIN_NOTIFICATION_FROM_EMAIL = 'arnaud.angely@upeem.org'
+
+# WAGTAILSEARCH_BACKENDS = {
+#     'default': {
+#         'BACKEND': 'wagtail.contrib.postgres_search.backend',
+#     },
+# }

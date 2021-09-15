@@ -1,0 +1,12 @@
+{
+	"version": 3,
+	"file": "tailwind.css",
+	"sources": [
+		"src/tailwind.scss"
+	],
+	"sourcesContent": [
+		"@tailwind base;\r\n@tailwind components;\r\n@tailwind utilities;"
+	],
+	"names": [],
+	"mappings": "AAAA,SAAS,CAAT,IAAS;AACT,SAAS,CAAT,UAAS;AACT,SAAS,CAAT,SAAS"
+}

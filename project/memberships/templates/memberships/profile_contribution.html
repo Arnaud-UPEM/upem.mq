@@ -84,7 +84,7 @@
                     </span>
                     <span class="">
                         {% comment %}{{ contribution.plans.all|length }} tarif{{ contribution.plans.all|length|pluralize }}{% endcomment %}
-                        <a href="https://paiement.systempay.fr/vads-site/UNION_DES_PARENTS_D__ELEVES_ET?lck_vads_amount={{ contribution.price }}&lck_vads_cust_email={{ user.email }}&lck_vads_ext_info_Informations=contribution={{ contribution.id }}"
+                        <a href="https://paiement.systempay.fr/vads-site/UNION_DES_PARENTS_D__ELEVES_ET?ctx_mode=TEST&lck_vads_amount={{ contribution.price }}&lck_vads_cust_email={{ user.email }}&lck_vads_ext_info_Informations=?contribution={{ contribution.id }}"
                            target="_blank"
                            class="ui button buy">
                             Acheter
@@ -192,7 +192,7 @@
                     </span>
                     <span class="">
                         {% comment %}{{ contribution.plans.all|length }} tarif{{ contribution.plans.all|length|pluralize }}{% endcomment %}
-                        <a href="https://paiement.systempay.fr/vads-site/UNION_DES_PARENTS_D__ELEVES_ET?lck_vads_amount={{ contribution.price }}&lck_vads_cust_email={{ user.email }}&lck_vads_ext_info_Informations=contribution={{ contribution.id }}"
+                        <a href="https://paiement.systempay.fr/vads-site/UNION_DES_PARENTS_D__ELEVES_ET?ctx_mode=TEST&lck_vads_amount={{ contribution.price }}&lck_vads_cust_email={{ user.email }}&lck_vads_ext_info_Informations=?contribution={{ contribution.id }}"
                            target="_blank"
                            class="ui button buy">
                             Acheter

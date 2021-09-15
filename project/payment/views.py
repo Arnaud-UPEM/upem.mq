@@ -7,7 +7,7 @@ from rest_framework.decorators import api_view
 
 from memberships.models import Contribution
 
-from .models import TransactionVADS, OrderStatusEnum as OSE
+from .models import TransactionVADS, OrderStatusEnum as OSE, IncorrectAmount, IncorrectCustomer, IncorrectPayload, IncorrectProduct
 from .parser import ParseException, parse
 
 # Create your views here.
@@ -19,11 +19,13 @@ def api_vads_ipn (request):
 
     if not request.data:
         # response_object['message'] = 'Payload vide.'
-        return JsonResponse({'status': 'Failure'}, status=400)
+        return JsonResponse({'status': 'Failure', 'message': 'Aucune donnée reçue.'}, status=400)
 
     data = request.data.dict()
     print (data)
 
+    message = 'Foo'
+        
     try:
         # Create and save transaction
         if not settings.DEBUG:
@@ -32,7 +34,9 @@ def api_vads_ipn (request):
 
         transaction = TransactionVADS.objects.create_transaction(data)
 
-        if transaction.trans_status != 'AUTHORIZED':
+        print ('A')
+        if transaction.trans_status != 'AUTHORISED':
+            print ('Aa')
             return JsonResponse({
                 'status': 'Failure',
                 'message': 'Paiement non authorisé.'
@@ -40,10 +44,12 @@ def api_vads_ipn (request):
 
 
         # Parse transaction request
+        print ('B')
         parsed = parse(transaction.ext_info_1)
-
+        print (parsed)
         if not parsed['status']:
-            raise Exception('Impossible d\'analyser le contenu de la requête.')
+            raise ParseException()
+            raise ParseException('Impossible d\'analyser le contenu de la requête.')
 
         if 'donation' in parsed:
             pass
@@ -65,32 +71,48 @@ def api_vads_ipn (request):
         return JsonResponse({'status': 'Success'}, status=200)
 
     except ParseException:
+        print ('1')
         transaction.status = OSE.PARSE_FAILED
+        message = 'La lecture du payload a échoué.'
 
     except Contribution.DoesNotExist:
+        print ('2')
         transaction.status = OSE.INCORRECT_INFORMATIONS
+        message = 'Cotisation introuvable.'
 
     except IncorrectPayload:
+        print ('3')
         transaction.status = OSE.INCORRECT_PAYLOAD
+        message = 'Payload incorrect.'
 
     except IncorrectCustomer:
+        print ('4')
         transaction.status = OSE.INCORRECT_CUSTOMER
+        message = 'Client inconnu.'
 
     except IncorrectAmount:
+        print ('5')
         transaction.status = OSE.INCORRECT_AMOUNT
+        message = 'Montant incorrect.'
 
     except IncorrectProduct:
+        print ('6')
         transaction.status = OSE.INCORRECT_PRODUCT
+        message = 'La prestation è déjà été payée.'
 
     except Exception as e:
-        transaction.status = OSE.UNKNOW_TRANSACTION
+        print ('7')
+        transaction = TransactionVADS.objects.create(
+            status = OSE.UNKNOW_TRANSACTION
+        )
+        message = 'Transaction inconnue.'
 
-    finally:
-        transaction.save()
-        return JsonResponse({
-            'status': 'Failure',
-            'message': str(e)
-        }, status=400)
+    print (f'message: {message}')
+    transaction.save()
+    return JsonResponse({
+        'status': 'Failure',
+        'message': message
+    }, status=400)
 
 
 
