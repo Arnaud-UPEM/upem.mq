@@ -5,7 +5,7 @@
 <article>
     <form class="ui form w-full" action="{% pageurl page %}{{ pk|default:'add' }}/" method="POST">
         {% csrf_token %}
-        <h3 class="header">{{ pk | yesno:'Modification,Nouvel enfant' }}</h3>
+        <h3 class="uix header">{{ pk | yesno:'Modification,Nouvel enfant' }}</h3>
 
         <div class="field">
             <label class="ui dividing header">Noms</label>

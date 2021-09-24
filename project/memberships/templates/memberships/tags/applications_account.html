@@ -35,7 +35,7 @@
                                 <div class="ui checkbox">
                                     <input type="checkbox" tabindex="0" class="hidden" name="{{ child.id }}" checked>
                                     <label class="signed">
-                                        {{ child.first_name }} {{ child.last_name }} - {{ child.grade }}/{{ child.school }}
+                                        <b>{{ child.school }}/{{ child.grade }}</b> - {{ child.first_name }} {{ child.last_name }}
                                         <b>({{ child.date_signed|date:'d/m/Y H:i'|default:'' }})</b>
                                     </label>
                                 </div>
@@ -55,7 +55,7 @@
                         
                         <div class="field">
                             <input type="text" name="application" value="{{ application.id }}" hidden>
-                            <input type="submit" value="Valider" class="ui button" />
+                            <!-- <input type="submit" value="Valider" class="ui button" /> -->
                         </div>
                     </form>
                     
