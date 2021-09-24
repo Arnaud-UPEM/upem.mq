@@ -257,6 +257,8 @@ LOGGING = {
 ADMINS = [
     ('Arnaud', 'arnaud.angely@upeem.org'),
 ]
+
+WAGTAILDOCS_DOCUMENT_MODEL = 'memberships.CustomDocument'
 WAGTAILADMIN_NOTIFICATION_FROM_EMAIL = 'arnaud.angely@upeem.org'
 
 # WAGTAILSEARCH_BACKENDS = {

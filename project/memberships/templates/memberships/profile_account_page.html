@@ -3,7 +3,7 @@
 
 {% block articles %}
 <article>
-    <h3 class="header">Mon profil</h3>
+    <h3 class="uix header">Mon profil</h3>
 
     <section class="profil">
         <form class="ui form w-full" action="{% pageurl page %}" method="POST">
@@ -164,13 +164,6 @@
             <input type="submit" class="ui button" value="Valider">
         </form>
     </section>
-
-    <h3 class="header">Espace candidature</h3>
-
-    <section class="applications">
-        {% applications_account %}
-    </section>
-
 </article>
 {% endblock articles %}
 

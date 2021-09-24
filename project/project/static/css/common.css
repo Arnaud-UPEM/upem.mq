@@ -386,52 +386,52 @@ section {
     position: relative;
     background-color: transparent; }
 
-.header {
+.uix.header {
   padding: 1rem 0;
   color: #065f46;
   font-size: 1rem;
   font-weight: bold;
   letter-spacing: 2px;
   text-transform: uppercase; }
-  .header .subheader {
+  .uix.header .subheader {
     color: rgba(0, 0, 0, 0.87);
     margin-top: 1rem;
     font-size: 1.5rem;
     font-family: 'Montserrat', sans-serif;
     text-transform: none; }
-  .header.white {
+  .uix.header.white {
     color: white; }
-  .header.lightgray {
+  .uix.header.lightgray {
     color: #b3b3b3; }
-    .header.lightgray .subheader {
+    .uix.header.lightgray .subheader {
       color: #b3b3b3; }
-  .header.centered {
+  .uix.header.centered {
     text-align: center; }
-    .header.centered .subheader {
+    .uix.header.centered .subheader {
       text-align: center; }
 
-h1.header {
+h1.uix.header {
   padding: 1.5rem 0;
   font-size: 3rem; }
-  h1.header .subheader {
+  h1.uix.header .subheader {
     font-size: 2.5rem; }
 
-h2.header {
+h2.uix.header {
   padding: 1.5rem 0;
   font-size: 2rem; }
-  h2.header .subheader {
+  h2.uix.header .subheader {
     font-size: 2.5rem; }
 
-h3.header {
+h3.uix.header {
   padding: 1rem 0;
   font-size: 1.5rem; }
-  h3.header .subheader {
+  h3.uix.header .subheader {
     font-size: 2rem; }
 
-h4.header {
+h4.uix.header {
   padding: 1rem 0;
   font-size: 1rem; }
-  h4.header .subheader {
+  h4.uix.header .subheader {
     font-size: 1.5rem; }
 
 .highlights.four {

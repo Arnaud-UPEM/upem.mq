@@ -1,0 +1,72 @@
+<div class="application dashboard">
+    <div class="ui card fluid">
+        {% if application %}
+        <div class="content">
+            <div class="header">{{ application.name }}</div>
+        </div>
+        <div class="content">
+            <!-- <h4 class="ui sub header">Listes suivies</h4> -->
+            <div class="ui small feed">
+                <h4 class="ui sub header">Liste(s) inscrite(s)</h4>
+
+                {% for child in application.children %}
+                        {% if child.date_signed %}
+                        <div class="event">
+                            <div class="content">
+                                <div class="summary">
+                                    <a>{{ child.school }}</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                {% empty %}
+                <div class="event">
+                    <div class="content">
+                        <div class="summary">
+                            <i>Aucune liste inscrite.</i>
+                        </div>
+                    </div>
+                </div>
+
+                {% endfor %}
+                <!-- <div class="event">
+                    <div class="content">
+                        <div class="summary">
+                            <a>Elliot Fu</a> added <a>Jenny Hess</a> to the project
+                        </div>
+                    </div>
+                </div>
+                <div class="event">
+                    <div class="content">
+                        <div class="summary">
+                            <a>Stevie Feliciano</a> was added as an <a>Administrator</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="event">
+                    <div class="content">
+                        <div class="summary">
+                            <a>Helen Troy</a> added two pictures
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+        <div class="extra content">
+            <a class="ui button basic green" href="/mon-profil/candidatures/">Candidater</a>
+        </div>
+        
+        {% else %}
+        <div class="content">
+            <div class="header">Candidature</div>
+        </div>
+        <div class="content">
+            <div class="meta">
+                Aucune liste disponible.
+            </div>
+        </div>
+
+        {% endif %}
+    </div>
+</div>

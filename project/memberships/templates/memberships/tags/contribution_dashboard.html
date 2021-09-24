@@ -1,27 +1,27 @@
 {% if contribution %}
     {% if member_contribution %}
-    <article class="ui icon message lightgreen">
+    <article class="ui icon message positive">
         <i class="check icon"></i>
         <div class="content">
-            <p>Vous êtes à jour sur vos cotisations.</p>
+            <div class="header">Vous êtes à jour sur vos cotisations.</div>
         </div>
     </article>
 
     {% else %}
-    <article class="ui icon message lightgreen">
+    <article class="ui icon message yellow">
         <i class="times icon"></i>
         <div class="content">
-            <p>Le paiement des cotisations pour la période 2021-2022 est désormais cloturé.</p>
+            <div class="header">Vous n'êtes pas à jour sur vos cotisations.</div>
         </div>
     </article>
     {% endif %}
 
 {% else %} 
-    <article class="ui icon message lightbrown">
+    <article class="ui icon message">
         <i class="check icon"></i>
         <div class="content">
-            <!-- <p>Le paiement des cotisations pour la période 2021-2022 est désormais ouvert.</p> -->
-            <p>Aucune cotisation disponible pour cette période.</p>
+            <!-- <div class="header">Le paiement des cotisations pour la période 2021-2022 est désormais ouvert.</div> -->
+            <div class="header">Aucune cotisation disponible pour cette période.</div>
         </div>
     </article>
 {% endif %}

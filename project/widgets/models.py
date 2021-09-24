@@ -276,7 +276,6 @@ class PlaceGalleryImage (Orderable):
         verbose_name_plural = 'Lieux'
 """
 
-@register_snippet
 class SchoolWidget (models.Model):
     """ School """
     school_director = models.CharField(max_length=240, default='', blank=True, verbose_name='Directeur Ecole (Nom Complet)')
@@ -375,7 +374,6 @@ class SchoolWidget (models.Model):
 
 """ ICON BOX """
 
-@register_snippet
 class IconBox (Orderable):
     title = models.CharField(max_length=120, default='', verbose_name='Titre')
     content = RichTextField(max_length=250, default='', verbose_name='Contenu')
@@ -436,7 +434,7 @@ class AlertManager (models.Manager):
         )
         return q[:truncate] if truncate else q
 
-@register_snippet
+
 class Alert (Orderable):
     title = models.CharField(max_length=120, default='')
     content = RichTextField(max_length=250, default='')

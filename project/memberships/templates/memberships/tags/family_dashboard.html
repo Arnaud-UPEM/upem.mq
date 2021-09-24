@@ -1,0 +1,41 @@
+<div class="family dashboard">
+    <div class="ui card fluid">
+        <div class="content">
+            <div class="header">
+                {{ member.first_name }} {{ member.last_name }}
+            </div>
+            <div class="meta">
+                {{ member.auth.email }}
+            </div>
+        </div>
+        <div class="content">
+            <!-- <img class="right floated mini ui image" src="/images/avatar/large/elliot.jpg"> -->
+            <!-- <div class="description">
+                Votre profil est à jour
+            </div> -->
+            <div class="description children">
+                {% if children %}
+                    <h4 class="ui sub header">
+                        {{ children|length }} Enfant{{ children|length|pluralize }}
+                    </h4>
+
+                    <ul class="list">
+                    {% for child in children %}
+                        <li>{{ child.first_name }} {{ child.last_name }}</li>
+                    {% endfor %}
+                    </ul>
+
+                {% else %}
+                    <div class="meta">Vous n'avez aucun enfant inscrit.</div>
+                        
+                {% endif %}
+            </div>
+        </div>
+        <div class="extra content">
+            <div class="ui two buttons">
+                <a class="ui basic green button" href="/mon-profil/compte/">Mon profil</a>
+                <a class="ui basic olive button" href="/mon-profil/mes-enfants">Mes enfants</a>
+            </div>
+        </div>
+    </div>
+</div>

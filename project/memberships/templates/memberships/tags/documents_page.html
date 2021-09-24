@@ -1,0 +1,42 @@
+<div class="ui stackable cards">
+    <!-- Sample -->
+    <!-- <div class="ui link card">
+        <div class="content">
+            <div class="header">Elliot Fu</div>
+            <div class="meta">Il y a 2 jours</div>
+            <div class="description">
+                Elliot Fu is a film-maker from New York.
+            </div>
+            <div class="tags">
+                <a class="ui red label">Red</a>
+                <a class="ui orange label">Orange</a>
+                <a class="ui yellow label">Yellow</a>
+                <a class="ui olive label">Olive</a>
+                <a class="ui green label">Green</a>
+            </div>
+        </div>
+        <div class="ui bottom attached button">
+            <i class="download icon"></i>
+            Télécharger
+        </div>
+    </div> -->
+
+    {% for doc in documents %}
+    <div class="ui link card active">
+        <div class="content">
+            <div class="header">{{ doc.title }}</div>
+            <div class="meta">Il y a 2 jours</div>
+            <div class="description">{{ doc.description }}</div>
+            <div class="tags">
+                {% for tag in doc.tags.all %}
+                <a class="ui label" data-name="{{ tag.name }}">{{ tag.name }}</a>
+                {% endfor %}
+            </div>
+        </div>
+        <a class="ui bottom attached button" href="{{ doc.url }}" target="_blank">
+            <i class="download icon"></i>
+            Télécharger
+        </a>
+    </div>
+    {% endfor %}
+</div>

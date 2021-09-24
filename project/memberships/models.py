@@ -1,8 +1,8 @@
+from logging import critical
 import re
 
 from datetime import datetime
 from io import BytesIO
-from logging import error
 
 from django import forms
 from django.conf import settings
@@ -13,7 +13,7 @@ from django.db.models import Q, F
 from django.db.models.fields import Field
 from django.db.models.fields.related import RelatedField
 from django.forms import fields
-from django.http import FileResponse
+from django.http import JsonResponse
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect
 from django.template.loader import get_template
 from django.utils.timezone import now
@@ -26,6 +26,7 @@ from wagtail.admin.edit_handlers import MultiFieldPanel, FieldPanel, InlinePanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.core.fields import RichTextField
 from wagtail.core.models import Page, Orderable
+from wagtail.documents.models import AbstractDocument, Document
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 from wagtail.snippets.models import register_snippet
@@ -189,7 +190,8 @@ class Contribution (ClusterableModel):
             self.save()
 
     def __str__(self):
-        active = '(active)' if self.is_active else ''
+        active = '- (active)' if self.is_active else ''
+        return f'#{self.id} - {self.name} {active}'
         return f'#{self.id} - {self.name} - {self.date_start} {self.date_end} {active}'
 
 
@@ -234,40 +236,76 @@ class Application (ClusterableModel):
             return True
         return False
 
-    def apply (self, id, amount, email):
-        try:
-            member = Member.objects.get(auth__email=email)
-
-            member_contribution = MemberContribution.objects.filter(member=member, contribution=self)
-            if member_contribution:
-                raise IncorrectProduct
-
-            if amount != self.base_price:
-                raise IncorrectAmount
-
-            member_contribution = MemberContribution.objects.create(
-                price=amount,
-                member=member,
-                contribution=self,
-                transaction_id=id
-            )
-
-            return member_contribution.id
-
-        except Member.DoesNotExist:
-            raise IncorrectCustomer
-
-
+    # Set an application to active
+    # Deactivate other applications
     def activate (self):
         _ = Application.objects.filter(is_active=True).exclude(id=self.id).update(is_active=False)
         
         if not self.is_active:
             self.is_active = True
-            self.is_payable = True
             self.save()
 
+    # Apply to an application
+    def apply (self, member, children_list):
+        if not self.is_active:
+            raise Exception ('Cette candidature est désactivé.')
+
+        children = MemberChild.objects.filter(pk__in=children_list)
+        member_applications = MemberApplication.objects.filter(member=member, application=self)
+
+        if len(children) != len(children_list):
+            raise Exception ('Liste enfant incorrecte.')
+
+        for child in children:
+            # Check if children belongs to member
+            if child.member.pk != member.pk:
+                raise Exception ('L\'enfant n\'est pas lié au compte')
+
+            # Check
+            if not member_applications.filter(child=child):
+                MemberApplication.objects.create(
+                    child=child,
+                    member=member,
+                    application=self
+                )
+
+        return True
+
+    # Add children and MemberApplication to self Application
+    def prepare (self, member):
+        try:
+            _ = []
+            children = MemberChild.objects.filter(member=member)
+            member_applications = MemberApplication.objects.filter(member=member, application=self)
+
+            for child in children:
+                _child = {
+                    'id': child.id,
+                    'last_name': child.last_name,
+                    'first_name': child.first_name,
+                    'grade': child.grade,
+                    'school': child.school.__str__(),
+                    # 'date_signed': datetime.now()
+                }
+
+                child_application = member_applications.filter(child=child)
+
+                if child_application:
+                    _child['date_signed'] = child_application.first().date_signed
+
+                _.append(_child)
+
+            setattr(self, 'children', _)
+            
+        except Exception as e:
+            print (e)
+            pass
+
+        return self
+
     def __str__(self):
-        active = '(active)' if self.is_active else ''
+        active = '- (active)' if self.is_active else ''
+        return f'#{self.id} - {self.name} {active}'
         return f'#{self.id} - {self.name} - {self.date_start} {self.date_end} {active}'
 
 
@@ -434,9 +472,25 @@ class MemberChild (index.Indexed, models.Model):
 
 
 @register_snippet
-class MemberContribution (models.Model):
+class MemberContribution (models.Model, index.Indexed):
     price = models.FloatField(default=0.0, verbose_name='Prix achat')
     date_bought = models.DateTimeField(default=datetime.now, verbose_name='Date achat')
+
+    ONLINE  = 'ON'
+    CASH    = 'SO'
+    CHECK   = 'JR'
+    CREDIT  = 'SR'
+    METHODS = [
+        (ONLINE, 'En ligne'),
+        (CASH, 'Espèce'),
+        (CHECK, 'Chèque'),
+        (CREDIT, 'Crédit'),
+    ]
+    method = models.CharField(
+        max_length=2,
+        choices=METHODS,
+        default=ONLINE,
+    )
     
     member = models.ForeignKey(
         Member,
@@ -459,16 +513,32 @@ class MemberContribution (models.Model):
     # )
 
     panels = [
-
+        MultiFieldPanel([
+            FieldPanel('price'),
+            FieldPanel('date_bought'),
+            FieldPanel('method'),
+            SnippetChooserPanel('member'),
+            SnippetChooserPanel('contribution'),
+        ], heading='Informations'),
+        MultiFieldPanel([
+            FieldPanel('transaction_id')
+        ], heading='Paiement en ligne')
     ]
 
     class Meta:
-        verbose_name = 'Membre: Cotisation'
+        ordering = ['-date_bought']
+        verbose_name = 'Membre: Cotisation - Gérez les cotisations parents'
+        verbose_name_plural = 'Membre: Cotisation - Gérez les cotisations parents'
+
+    def __str__ (self):
+        return f'#{self.id} - {self.contribution} - {self.member}'
 
 
 # Added child directly there
 @register_snippet
 class MemberApplication (ClusterableModel):  
+    date_signed = models.DateTimeField(default=datetime.now, verbose_name='Date signature')
+
     member = models.ForeignKey(
         Member,
         on_delete=models.CASCADE,
@@ -500,7 +570,12 @@ class MemberApplication (ClusterableModel):
     ]
  
     class Meta:
-        verbose_name = 'Membre: Candidature'
+        verbose_name = 'Membre: Candidature - Gérez les candidatures parents'
+        verbose_name_plural = 'Membre: Candidature - Gérez les candidatures parents'
+        ordering = ['member', 'application', 'child']
+
+    def __str__ (self):
+        return f'#{self.id} - {self.application} - {self.member} - {self.child}'
 
 
 # Not used - See above
@@ -533,6 +608,21 @@ class MemberApplicationChild (Orderable):
             return {'member': member}
         return {}
 
+
+# 
+class CustomDocument (AbstractDocument):
+    description = models.TextField(default='', blank=True, null=True, verbose_name='Description')
+    # last_update = models.DateTimeField(default=datetime.now, verbose_name='Dernière modification')
+
+    admin_form_fields = Document.admin_form_fields + (
+        'description',
+    )
+
+    class Meta:
+        ordering = ['-created_at']
+
+    # def save (self, *args, **kwargs):
+    #     super(AbstractDocument, self).save(*args, **kwargs)
 
 
 # class Donation (models.Model):
@@ -1023,18 +1113,24 @@ class ProfilePage (Page):
 
 
 # Profil Page User Account 
-class ProfileAccountPage (Page):
+class ProfileAccountPage (RoutablePageMixin, Page):
     template = 'memberships/profile_account_page.html'
 
     class Meta:
-        verbose_name = 'Profile: Account Page'
+        verbose_name = 'Profile: Compte Parent'
 
+    @route (r'^$')
     @login_required_view ('/unauthorized')
-    def serve (self, request, *args, **kwargs):
+    def root (self, request, *args, **kwargs):
         form = None
         context = self.get_context (request)
         context['errors'] = []
         context['criticals'] = []
+
+        # Check self.apply returns
+        print (kwargs)
+        if 'criticals' in kwargs:
+            context['criticals'].extend(kwargs['criticals'])
 
         try:
             member = Member.objects.get(auth__email=request.user)
@@ -1060,8 +1156,135 @@ class ProfileAccountPage (Page):
                 'Impossible de récupérer les données du profil.'
             )
 
+        context['url'] = self.get_url()
         context['form'] = form
+        context['member'] = member
+        
+        return render (
+            request,
+            self.template,
+            context
+        )
 
+    @route (r'^apply/$')
+    @login_required_view ('/unauthorized')
+    def apply (self, request):
+        context = self.get_context(request)
+        context['url'] = self.get_url()
+        context['criticals'] = []
+
+        response = {'status': 'Failure'}
+
+        if request.method == 'POST':
+            if not request.data or 'children' not in request.POST:
+                response['message'] = 'Aucune donnée fournie.'
+                return JsonResponse(response, status=400)
+
+            try:
+                member = Member.objects.get(auth__email=request.user)
+
+                print (request.POST)
+
+                response['status'] = 'Success'
+                return JsonResponse(response, status=200)
+
+            except Member.DoesNotExist:
+                response['message'] = 'Impossible de récupérer les données du profil.'
+                return JsonResponse(response, status=400)
+
+        else:
+            response['message'] = 'Méthode non autorisée.'
+            return JsonResponse(response, status=405)
+
+        return render (
+            request,
+            self.template,
+            context
+        )  
+
+        context = self.get_context(request)
+        context['url'] = self.get_url()
+        context['criticals'] = []
+
+        if request.method == 'POST':
+            try:
+                member = Member.objects.get(auth__email=request.user)
+
+                print (request.POST)
+
+                return HttpResponseRedirect(self.get_url())
+
+            except Member.DoesNotExist:
+                context['criticals'].append(
+                    'Impossible de récupérer les données du profil.'
+                )
+
+        else:
+            context['criticals'].append(
+                'Méthode non autorisée.'
+            )
+
+        return self.root(request, kwargs={'criticals': context['criticals']})
+
+        return render (
+            request,
+            self.template,
+            context
+        )        
+
+
+# Profil Page User Account 
+class ProfileApplicationPage (RoutablePageMixin, Page):
+    template = 'memberships/profile_applications_page.html'
+
+    class Meta:
+        verbose_name = 'Profile: Candidatures Parent'
+
+    @route (r'^$')
+    @login_required_view ('/unauthorized')
+    def root (self, request, *args, **kwargs):
+        context = self.get_context (request)
+        context['errors'] = []
+        context['criticals'] = []
+
+        try:
+            member = Member.objects.get(auth__email=request.user)
+
+            if request.method == 'POST':
+                if request.POST:
+                    # print (request.POST)
+
+                    children = []
+
+                    for x in request.POST:
+                        # print (x)
+                        try:
+                            id = int(x)
+                            if request.POST[x] == 'on':
+                                children.append (id)
+                        except ValueError:
+                            pass
+
+                    # print (children)
+
+                    app = Application.objects.filter(is_active=True).first()
+                    app.apply(member, children)
+
+                else:
+                    context['errors'].append('Aucune donnée fournie.')
+
+            context['member'] = member
+
+        except Member.DoesNotExist:
+            context['criticals'].append(
+                'Impossible de récupérer les données du profil.'
+            )
+
+        except Exception as e:
+            context['errors'].append(str(e))
+
+        context['url'] = self.get_url() 
+        
         return render (
             request,
             self.template,
@@ -1480,3 +1703,20 @@ class ProfileChildrenPage (RoutablePageMixin, Page):
         else:
             return HttpResponse('Accès interdit', status=401)
 
+
+class ProfileDocumentsPage (RoutablePageMixin, Page):
+    template = 'memberships/profile_documents_page.html'
+
+    class Meta:
+        verbose_name = 'Profil: Documents'
+
+    @route (r'^$')
+    @login_required_view ('/unauthorized')
+    def root (self, request, *args, **kwargs):
+        context = self.get_context(request, *args, **kwargs)
+
+        return render (
+            request,
+            self.template,
+            context
+        )

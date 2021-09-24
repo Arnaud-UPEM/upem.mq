@@ -1,8 +1,13 @@
+{% load wagtailcore_tags %}
+
 <div class="ui link cards">
     {% for application in applications %}
-        <div id="application_{{ application.id }}" class="ui fluid card application">
+        <div id="application_{{ application.id }}" class="ui fluid card application {% if application.is_active %}active{% endif %}">
             <div class="content">
-                <div class="header">{{ application.name }} <button class="ui button">Candidater</button></div>
+                <div class="header">
+                    <span class="name">{{ application.name }}</span>
+                    {% if application.is_active %}<button class="ui button" onclick="open_application()">Candidater</button>{% endif %}
+                </div>
                 <div class="meta">
                     <a>
                         {{ application.date_start|date:'d/m/Y'|default:'' }}
@@ -13,9 +18,50 @@
                 <div class="description">
                     {{ application.description }}
                 </div>
+
+                {% if application.is_active %}
                 <div class="condition">
-                    {{ application.condition }}
+                    {{ application.condition|richtext }}
                 </div>
+                <div class="children">
+                    <!-- <b>Liste :</b> -->
+                    <form id="application_form" action="{{ url }}" method="POST" class="ui form">
+                        {% csrf_token %}
+
+                        {% for child in application.children %}
+                            {% if child.date_signed %}
+
+                            <div class="inline field disabled">
+                                <div class="ui checkbox">
+                                    <input type="checkbox" tabindex="0" class="hidden" name="{{ child.id }}" checked>
+                                    <label class="signed">
+                                        {{ child.first_name }} {{ child.last_name }} - {{ child.grade }}/{{ child.school }}
+                                        <b>({{ child.date_signed|date:'d/m/Y H:i'|default:'' }})</b>
+                                    </label>
+                                </div>
+                            </div>
+                            {% else %}
+
+                            <div class="inline field">
+                                <div class="ui checkbox">
+                                    <input type="checkbox" tabindex="0" class="hidden" name="{{ child.id }}">
+                                    <label>
+                                        {{ child.first_name }} {{ child.last_name }} - {{ child.grade }}/{{ child.school }}
+                                    </label>
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        <div class="field">
+                            <input type="text" name="application" value="{{ application.id }}" hidden>
+                            <input type="submit" value="Valider" class="ui button" />
+                        </div>
+                    </form>
+                    
+                </div>
+                {% endif %}
+
                 <div class="extra content"></div>
             </div>
         </div>
@@ -25,3 +71,30 @@
     </div>
     {% endfor %}
 </div>
+
+<div class="ui modal application">
+    <div class="header">Header</div>
+    <div class="content">
+        <p class="condition"></p>
+    </div>
+    <div class="actions">
+        <div class="ui green button" onclick="apply()">Candidater</div>
+    </div>
+</div>
+
+<script>
+    function open_application () {
+        const card = document.querySelector('.ui.card.application.active');
+        const modal = document.querySelector('.ui.modal.application');
+
+        modal.querySelector('.header').innerHTML = card.querySelector('.header .name').innerHTML;
+
+        modal.querySelector('.condition').innerHTML = card.querySelector('.condition').innerHTML;
+
+        $('.ui.modal').modal('show');
+    }
+
+    function apply () {
+        document.getElementById('application_form').submit();
+    }
+</script>

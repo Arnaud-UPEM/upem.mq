@@ -17,9 +17,9 @@ from core.models import SEOPage
 class Auth (AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True)
 
-    is_staff = models.BooleanField(_('active'), default=True)
+    is_staff = models.BooleanField(_('active'), default=False)
     is_active = models.BooleanField(_('active'), default=True)
-    is_superuser = models.BooleanField(_('active'), default=True)
+    is_superuser = models.BooleanField(_('active'), default=False)
 
     objects = AuthManager()
 

@@ -3,11 +3,22 @@
 
 {% block articles %}
 <article>
-    <h3 class="header">Bonjour, {{ user.member.first_name }} {{ user.member.last_name }}</h3>
+    <h3 class="uix header">Bonjour, {{ user.member.first_name }} {{ user.member.last_name }}</h3>
 
-    <section class="contribution">
-        {% contribution_dashboard %}
-    </section>
+    <div class="ui grid">
+        <div class="sixteen wide column">
+            {% contribution_dashboard %}
+        </div>
+    </div>
     
+    <div class="ui grid two columns">
+        <div class="column">
+            {% family_dashboard %}
+        </div>
+
+        <div class="column">
+            {% application_dashboard %}
+        </div>
+    </div>
 </article>
 {% endblock articles %}

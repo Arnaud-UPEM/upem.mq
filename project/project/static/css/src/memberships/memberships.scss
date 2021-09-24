@@ -118,6 +118,14 @@
     min-height: calc(100vh - 5rem);
     background-color: rgba(0, 0, 0, 0.1);
     
+    /*
+        COMPONENTS
+    */
+
+    .ui.header {
+        padding: 0;
+    }
+    
     .menu {
         margin-top: 1rem;
         background-color: white;
@@ -161,6 +169,45 @@
         }
     }
 
+    article {
+        & > .header {
+            padding: 1rem 0;
+        }
+    }
+
+    .message {
+        .header {
+            padding-top: 0;
+            padding-bottom: .5rem;
+
+            
+        }
+    }
+
+    .ui.card {
+        .header {
+            padding: 0;
+        }
+    }
+
+    /*
+        PAGES
+    */
+
+    .dashboard {
+        &.family {
+            .ui.sub.header {
+                font-size: 1.2rem;
+            }
+        }
+
+        &.application {
+            .ui.sub.header {
+                font-size: 1.2rem;
+            }
+        }
+    }
+
     .profil {
         // margin-top: 1rem;
         // padding-top: 0;
@@ -179,6 +226,18 @@
                 float: right;
                 background-color: #e0e1e2;
             }
+        }
+
+        .description {
+            margin-bottom: 1rem;
+        }
+
+        .condition {
+            display: none;
+        }
+
+        .children {
+            label.signed { color: #389900; }
         }
     }
 
@@ -311,6 +370,42 @@
         }
     }
 
+    .documents {
+        .search {
+            .searchtags {
+                .ui.label {
+                    opacity: .6;
+                    margin-bottom: .25rem;
+                    
+                    &.active {
+                        opacity: .8;
+                    }
+                }
+            }
+        }
+
+        .ui.stackable.cards {
+            // justify-content: space-between;
+
+            .ui.card {
+                width: 260px;
+                display: none;
+
+                .ui.label {
+                    opacity: .8;
+                    margin-bottom: .25rem;
+                }
+
+                &.hidden {
+                    display: none;
+                }
+                &.active {
+                    display: flex;
+                }
+            }
+        }
+    }
+
 
     @media (min-width: 1024px) {
         min-height: calc(100vh - 8rem);
@@ -323,5 +418,18 @@
         line-height: 1.21428571em;
         z-index: 2;
         position: absolute;
+    }
+}
+
+.ui.modal.application {
+    .condition {
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            line-height: 25px;
+        }
     }
 }

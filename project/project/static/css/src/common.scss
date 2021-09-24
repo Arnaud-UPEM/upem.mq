@@ -649,7 +649,7 @@ section {
     }
 }
 
-.header {
+.uix.header {
     padding: 1rem 0;
     
     color: #065f46;
@@ -678,22 +678,22 @@ section {
         .subheader { text-align: center; }
     }
 }
-h1.header {
+h1.uix.header {
     padding: 1.5rem 0;
     font-size: 3rem;
     .subheader { font-size: 2.5rem; }
 }
-h2.header {
+h2.uix.header {
     padding: 1.5rem 0;
     font-size: 2rem;
     .subheader { font-size: 2.5rem; }
 }
-h3.header {
+h3.uix.header {
     padding: 1rem 0;
     font-size: 1.5rem;
     .subheader { font-size: 2rem; }
 }
-h4.header {
+h4.uix.header {
     padding: 1rem 0;
     font-size: 1rem;
     .subheader { font-size: 1.5rem; }

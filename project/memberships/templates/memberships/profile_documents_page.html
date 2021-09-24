@@ -1,0 +1,158 @@
+{% extends 'memberships/profile_base.html' %}
+{% load wagtailcore_tags memberships_tags %}
+
+{% block articles %}
+<article class="documents">
+    <h3 class="uix header">Documents</h3>
+    
+    <section class="search mb-4">
+        <div class="searchbar mb-4">
+            <form class="ui form">
+                <div class="field">
+                    <input type="text" name="searchbar" id="searchbar" placeholder="Recherche" oninput="searchEvent(this.value)">
+                </div>
+            </form>
+        </div>
+        <div class="searchtags">
+            
+        </div>
+    </section>
+    
+    <section class="documents_list">
+        {% documents_page %}
+    </section>
+</article>
+{% endblock articles %}
+
+{% block profile_js %}
+<script>
+    const tags = {};
+    
+    let previous_color = 0;
+    const label_colors = [
+    'red',
+    'orange',
+    'yellow',
+    'olive',
+    'green',
+    'teal',
+    'blue',
+    'violet',
+    'purple',
+    'pink',
+    'brown',
+    'grey',
+    'black',
+    ];
+    
+    function  getRandomColor() {
+        let int = 0;
+        const max = label_colors.length;
+        do {
+            int = Math.floor(Math.random() * max);
+        } while (int == previous_color);
+        previous_color = int;
+        return label_colors[int];
+    }
+    
+    function getTags () {
+        document.querySelectorAll('.documents_list .tags .ui.label').forEach(label => {
+            const name = label.innerHTML;            
+            
+            if (!tags.hasOwnProperty(name)) {
+                tags[name] = {
+                    len: 0,
+                    color: getRandomColor()
+                };
+            }
+            ++tags[name].len;
+            label.classList.add(tags[name].color);
+        });
+        
+        console.log(tags)
+        
+        const searchtags = document.querySelector('.searchtags');
+        for (const tag in tags) {
+            searchtags.innerHTML += `<a class="ui label ${tags[tag].color}" data-name="${tag}">${tag} (${tags[tag].len})</a>`
+        }
+    }
+    
+    function setEvents () {
+        // Input
+        
+        // Tags
+        document.querySelectorAll('.searchtags .ui.label').forEach(label => {
+            label.addEventListener('click', () => {
+                toggleLabels();
+
+                const tag = label.getAttribute('data-name');
+                const toggle = label.classList.toggle('active');
+                
+                toggleLabel(tag, toggle);
+
+                toggleLabels(true)
+            });
+        });
+    }
+
+    function searchEvent (value) {
+        console.log(value);
+
+        
+        if (value.length == 0) {
+            document.querySelectorAll('.searchtags .ui.label.active').forEach(label => label.classList.remove('active'));
+            toggleLabels(true);
+        }
+        else if (value.length >= 3) {
+            document.querySelectorAll('.searchtags .ui.label.active').forEach(label => label.classList.remove('active'));
+            toggleLabels(true);
+
+            document.querySelectorAll('.documents_list .ui.card').forEach(card => {
+                const name = card.querySelector('.header').innerHTML.toLowerCase();
+                if (name.indexOf(value.toLowerCase()) != -1) {
+                    card.classList.add('active');
+                }
+                else {
+                    card.classList.remove('active');
+                }
+            });
+        }
+        else {
+
+        }
+    }
+
+    /**
+     * If no labels are active
+     * true => display cards
+     * false => hide cards
+     */
+    function toggleLabels (toggle=false) {
+        if (!document.querySelector('.searchtags .ui.label.active')) {
+            if (toggle) document.querySelectorAll('.documents_list .ui.card').forEach(card => card.classList.add('active'));
+            else document.querySelectorAll('.documents_list .ui.card').forEach(card => card.classList.remove('active'));
+        }
+    }
+
+    function toggleLabel (tag, toggle) {
+        document.querySelectorAll('.documents_list .ui.card').forEach(card => {
+            if (card.querySelector(`.ui.label[data-name="${tag}"]`)) {
+
+                if (toggle) card.classList.add('active')
+                else card.classList.remove('active');
+            }
+        });
+    }
+
+
+    
+    $(function () {
+        
+        
+        
+        
+        getTags();
+        setEvents();
+    });
+</script>
+{% endblock profile_js %}
