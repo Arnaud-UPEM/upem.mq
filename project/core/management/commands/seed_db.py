@@ -31,7 +31,7 @@ class Command (BaseCommand):
         self.member1 = Member.objects.create(
             id=2,
             auth=auth1,
-            last_name='Test',
+            last_name='TEST',
             first_name='Member 1',
             job='Tester',
         )
@@ -39,7 +39,7 @@ class Command (BaseCommand):
         self.member2 = Member.objects.create(
             id=3,
             auth=auth2,
-            last_name='Test',
+            last_name='TEST',
             first_name='Member 2',
             job='Tester',
         )

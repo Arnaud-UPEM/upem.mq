@@ -1830,6 +1830,7 @@ class ProfileSchoolList (RoutablePageMixin, Page):
             context
         )
 
+    @route (r'^dl/$', name='id')
     @route (r'^dl/(\d+)/$', name='id')
     @login_required_view ('/unauthorized')
     def download (self, request, id=0, *args, **kwargs):
@@ -1863,7 +1864,7 @@ class ProfileSchoolList (RoutablePageMixin, Page):
 
             print (data)
             
-            response = HttpResponse(data, content_type='application/json')
+            response = HttpResponse(json.dumps(data), content_type='application/json')
             response['Content-Disposition'] = 'attachment; filename=export.json'
             return response
 
