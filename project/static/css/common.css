@@ -557,6 +557,54 @@ h4.uix.header {
       border-radius: 5px;
       vertical-align: middle; }
 
+.history.richtext h1, .history.richtext h2, .history.richtext h3, .history.richtext h4 {
+  padding: 1rem 0;
+  color: #065f46;
+  font-size: 1rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-transform: uppercase; }
+  .history.richtext h1 .subheader, .history.richtext h2 .subheader, .history.richtext h3 .subheader, .history.richtext h4 .subheader {
+    color: rgba(0, 0, 0, 0.87);
+    margin-top: 1rem;
+    font-size: 1.5rem;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: none; }
+  .history.richtext h1.white, .history.richtext h2.white, .history.richtext h3.white, .history.richtext h4.white {
+    color: white; }
+  .history.richtext h1.lightgray, .history.richtext h2.lightgray, .history.richtext h3.lightgray, .history.richtext h4.lightgray {
+    color: #b3b3b3; }
+    .history.richtext h1.lightgray .subheader, .history.richtext h2.lightgray .subheader, .history.richtext h3.lightgray .subheader, .history.richtext h4.lightgray .subheader {
+      color: #b3b3b3; }
+  .history.richtext h1.centered, .history.richtext h2.centered, .history.richtext h3.centered, .history.richtext h4.centered {
+    text-align: center; }
+    .history.richtext h1.centered .subheader, .history.richtext h2.centered .subheader, .history.richtext h3.centered .subheader, .history.richtext h4.centered .subheader {
+      text-align: center; }
+
+.history.richtext h1 {
+  padding: 1.5rem 0;
+  font-size: 3rem; }
+  .history.richtext h1 .subheader {
+    font-size: 2.5rem; }
+
+.history.richtext h2 {
+  padding: 1.5rem 0;
+  font-size: 2rem; }
+  .history.richtext h2 .subheader {
+    font-size: 2.5rem; }
+
+.history.richtext h3 {
+  padding: 1rem 0;
+  font-size: 1.5rem; }
+  .history.richtext h3 .subheader {
+    font-size: 2rem; }
+
+.history.richtext h4 {
+  padding: 1rem 0;
+  font-size: 1rem; }
+  .history.richtext h4 .subheader {
+    font-size: 1.5rem; }
+
 .newsletter.columns {
   z-index: 100;
   position: relative; }

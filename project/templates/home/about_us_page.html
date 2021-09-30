@@ -20,31 +20,8 @@
 <section>
     <div class="ui container py-4">
         <div class="ui grid two column">
-            <div class="column">
-                <h2 class="uix header">Notre Historique</h2>
-
-                Née de la fédération de plusieurs associations et groupements indépendants de parents
-                d’élèves, constituée solennellement le 23 mai 1992, l’UPEM (<b>U</b>nion des <b>P</b>arents d’<b>E</b>lèves de
-                <b>M</b>artinique), est une association à but non lucratif régie par la loi du 1 er juillet 1901.
-                <br>
-                <br>
-
-                Depuis sa création l’UPEM est la principale association de parents d’élèves de Martinique.
-                Force de proposition et de progrès, représentée dans la majeure partie des établissements
-                scolaires du secondaire et des écoles du primaire.
-                L’UPEM fait valoir ses points de vue auprès des différentes institutions, instances et autres
-                organismes où elle siège.
-
-                <br>
-                <br>
-                Depuis 29 années, les bénévoles, avec l’appui des salariés impliqués, militent pour que tous
-                nos enfants bénéficient, dans le système éducatif public, de tous les moyens, outils et
-                techniques nécessaires à leur meilleure réussite et total épanouissement.
-                
-                <br>
-                <br>
-                Alors, ils seront en mesure de réaliser leurs souhaits tant en Martinique que dans le monde et
-                ainsi donner une forte réalité à notre devise : <b>DIVINI YICH NOU SE DIVINI PEYI-A</b>.
+            <div class="column history richtext">
+                {{ page.history|richtext }}
             </div>
             <div class="column">
                 <img class="rounded" src="https://source.unsplash.com/random/500x500" alt="">
@@ -65,15 +42,10 @@
                 <div class="left"><i class="icon quote left"></i></div>
                 <blockquote>
                     <div class="text">
-                        Face à cette société qui est en perte de repères, il est nécessaire de leur instiller des valeurs
-                        de vie, tels que l’esprit de solidarité, le goût de l’effort et de l’excellence.
-                        <br>
-                        Il est tout aussi important que la curiosité et l’ouverture soient des éléments moteurs pour qu’ils
-                        découvrent le monde tout autant que leur patrimoine culturel qui feront d’eux des Hommes et
-                        des Femmes avisés et conséquents.
+                        {{ page.quote|richtext }}
                     </div>
                     <div class="author">
-                        - <span><i>Auteur</i></span>
+                        - <span><i>{{ page.quote_author }}</i></span>
                     </div>
                 </blockquote>
             </div>
@@ -94,6 +66,7 @@
     <div class="highlights four py-4">
         <div class="ui container">
             <div class="ui grid">
+                {% if page.tile_schoo_council %}
                 <div class="four wide column">
                     <div class="tile">
                         <div class="image">
@@ -101,13 +74,12 @@
                             <i class="icon child"></i>
                         </div>
                         <h1 class="title">Conseil d'école</h1>
-                        <div class="content">
-                            consectetur adipiscing elit. 
-                            Quisque tempus justo vel velit porttitor posuere. 
-                            Curabitur sed turpis sit amet sem pellentesque tincidunt.
-                        </div>
+                        <div class="content">{{ page.tile_schoo_council }}</div>
                     </div>
                 </div>
+                {% endif %}
+
+                {% if page.tile_class_council %}
                 <div class="four wide column">
                     <div class="tile">
                         <div class="image">
@@ -115,13 +87,12 @@
                             <i class="graduation cap icon"></i>
                         </div>
                         <h1 class="title">Conseil de classe</h1>
-                        <div class="content">
-                            consectetur adipiscing elit. 
-                            Quisque tempus justo vel velit porttitor posuere. 
-                            Curabitur sed turpis sit amet sem pellentesque tincidunt.
-                        </div>
+                        <div class="content">{{ page.tile_class_council }}</div>
                     </div>
                 </div>
+                {% endif %}
+
+                {% if page.tile_admin_council %}
                 <div class="four wide column">
                     <div class="tile">
                         <div class="image">
@@ -129,13 +100,12 @@
                             <i class="icon university"></i>
                         </div>
                         <h1 class="title">Conseil d'administration</h1>
-                        <div class="content">
-                            consectetur adipiscing elit. 
-                            Quisque tempus justo vel velit porttitor posuere. 
-                            Curabitur sed turpis sit amet sem pellentesque tincidunt.
-                        </div>
+                        <div class="content">{{ page.tile_admin_council }}</div>
                     </div>
                 </div>
+                {% endif %}
+
+                {% if page.tile_disci_council %}
                 <div class="four wide column">
                     <div class="tile">
                         <div class="image">
@@ -143,13 +113,10 @@
                             <i class="balance scale icon"></i>
                         </div>
                         <h1 class="title">Conseil de discipline</h1>
-                        <div class="content">
-                            consectetur adipiscing elit. 
-                            Quisque tempus justo vel velit porttitor posuere. 
-                            Curabitur sed turpis sit amet sem pellentesque tincidunt.
-                        </div>
+                        <div class="content">{{ page.tile_disci_council }}</div>
                     </div>
                 </div>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -159,6 +126,7 @@
     <div class="highlights list bg-green-800">
         <div class="ui container">
             <div class="ui two column grid">
+                {% if page.tile_education %}
                 <div class="column">
                     <div class="tile">
                         <div class="image">
@@ -167,14 +135,13 @@
                         </div>
                         <div class="right">
                             <h1 class="title">Comité éducation santé citoyenneté</h1>
-                            <div class="content">
-                                consectetur adipiscing elit. 
-                                Quisque tempus justo vel velit porttitor posuere. 
-                                Curabitur sed turpis sit amet sem pellentesque tincidunt.
-                            </div>
+                            <div class="content">{{ page.tile_education }}</div>
                         </div>
                     </div>
                 </div>
+                {% endif %}
+
+                {% if page.tile_cen %}
                 <div class="column">
                     <div class="tile">
                         <div class="image">
@@ -183,14 +150,13 @@
                         </div>
                         <div class="right">
                             <h1 class="title">Conseil de l’éducation nationale (CEN)</h1>
-                            <div class="content">
-                                consectetur adipiscing elit. 
-                                Quisque tempus justo vel velit porttitor posuere. 
-                                Curabitur sed turpis sit amet sem pellentesque tincidunt.
-                            </div>
+                            <div class="content">{{ page.tile_cen }}</div>
                         </div>
                     </div>
                 </div>
+                {% endif %}
+
+                {% if page.tile_languages %}
                 <div class="column">
                     <div class="tile">
                         <div class="image">
@@ -199,14 +165,13 @@
                         </div>
                         <div class="right">
                             <h1 class="title">Commission des langues régionales</h1>
-                            <div class="content">
-                                consectetur adipiscing elit. 
-                                Quisque tempus justo vel velit porttitor posuere. 
-                                Curabitur sed turpis sit amet sem pellentesque tincidunt.
-                            </div>
+                            <div class="content">{{ page.tile_languages }}</div>
                         </div>
                     </div>
                 </div>
+                {% endif %}
+
+                {% if page.tile_scholarships %}
                 <div class="column">
                     <div class="tile">
                         <div class="image">
@@ -215,14 +180,12 @@
                         </div>
                         <div class="right">
                             <h1 class="title">Commission des bourses de l’EN ou autre Ministère</h1>
-                            <div class="content">
-                                consectetur adipiscing elit. 
-                                Quisque tempus justo vel velit porttitor posuere. 
-                                Curabitur sed turpis sit amet sem pellentesque tincidunt.
-                            </div>
+                            <div class="content">{{ page.tile_scholarships }}</div>
                         </div>
                     </div>
                 </div>
+                {% endif %}
+
             </div>
         </div>
     </div>

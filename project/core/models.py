@@ -22,11 +22,11 @@ def login_required (redirect):
     return inner
 
 
-def login_required_view (redirect):
+def login_required_view (redirect, superuser=False):
     def inner (func):
         def wrapper (self, request, *args, **kwargs):
-            if request.user.is_authenticated:
-                return func (self, request, *args, **kwargs)
+            if request.user.is_authenticated or (superuser and request.user.is_superuser):
+                    return func (self, request, *args, **kwargs)
 
             else:
                 return HttpResponseRedirect(redirect)

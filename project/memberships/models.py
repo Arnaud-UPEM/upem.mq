@@ -1,3 +1,4 @@
+import json
 from logging import critical
 import re
 
@@ -8,11 +9,12 @@ from django import forms
 from django.conf import settings
 from django.contrib.auth import logout
 from django.core.exceptions import ValidationError
+from django.core.paginator import Paginator
 from django.db import models
-from django.db.models import Q, F
+from django.db.models import Q, F, Count
 from django.db.models.fields import Field
 from django.db.models.fields.related import RelatedField
-from django.forms import fields
+from django.forms import fields, widgets
 from django.http import JsonResponse
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect
 from django.template.loader import get_template
@@ -376,6 +378,9 @@ class Member (index.Indexed, models.Model):
 
     newsletter_sub = models.BooleanField(default=True, verbose_name='Abonné newsletter')
 
+    # email = ''
+    # is_superuser = ''
+
     panels = [
         MultiFieldPanel([
             FieldPanel('first_name'),
@@ -394,6 +399,11 @@ class Member (index.Indexed, models.Model):
             FieldPanel('phone_cell'),
             FieldPanel('phone_pro'),
         ], heading='Téléphones'),
+        MultiFieldPanel([
+            # FieldPanel('email', widget=forms.EmailField),
+            # FieldPanel('is_superuser', widget=forms.BooleanField),
+            SnippetChooserPanel('auth')
+        ], heading='Authentification'),
     ]
 
     search_fields = [
@@ -1150,6 +1160,7 @@ class ProfileAccountPage (RoutablePageMixin, Page):
                     print (request.POST['zip_code'])
                     print (form.errors)
 
+            context['member'] = member
 
         except Member.DoesNotExist:
             context['criticals'].append(
@@ -1158,7 +1169,6 @@ class ProfileAccountPage (RoutablePageMixin, Page):
 
         context['url'] = self.get_url()
         context['form'] = form
-        context['member'] = member
         
         return render (
             request,
@@ -1369,9 +1379,9 @@ class ProfileChildrenIndexPage (RoutablePageMixin, Page):
                 form = MemberChildForm(request.POST or None)
 
             if request.method == 'POST':
-                print (request.POST)
+                # print (request.POST)
                 if form.is_valid():
-                    print (child.id)
+                    # print (child.id)
                     child = form.save(commit=False)
                     child.member = member
                     child.save()
@@ -1720,3 +1730,153 @@ class ProfileDocumentsPage (RoutablePageMixin, Page):
             self.template,
             context
         )
+
+
+class ProfileSchoolList (RoutablePageMixin, Page):
+    template = 'memberships/profile_schools_list.html'
+    template_detail = 'memberships/profile_schools_details.html'
+    
+    class Meta:
+        verbose_name = 'Profil: Candidatures par ecoles'
+
+    @route (r'^$')
+    @login_required_view ('/unauthorized')
+    def root (self, request, *args, **kwargs):
+        context = self.get_context(request, *args, **kwargs)
+
+        try:
+            app = Application.objects.get(is_active=True)
+
+            schools = School.objects.filter(students__child_application__application=app).annotate(count=Count('nom_etablissement')).order_by('-count')
+
+            page = request.GET.get('page', 1)
+            print (page)
+
+            paginator = Paginator(schools, 1)
+            page_obj = paginator.get_page(page)
+
+            context['page_obj'] = page_obj
+        
+        except Application.DoesNotExist:
+            context['criticals'] = ['Aucune candidature active']
+
+        return render (
+            request,
+            self.template,
+            context
+        )
+
+    @route (r'^(\d+)/$', name='id')
+    @login_required_view ('/unauthorized')
+    def details (self, request, id, *args, **kwargs):
+        context = self.get_context(request, *args, **kwargs)
+
+        try:
+            app = Application.objects.get(is_active=True)
+
+            schools = School.objects.filter(id=id, students__child_application__application=app).annotate(count=Count('nom_etablissement')).order_by('-count')
+            school = schools.first()
+            print (schools)
+
+            members = Member.objects.filter(applications__application=app, applications__child__school=school).order_by('last_name')
+
+            context['school'] = school
+            context['members'] = members
+        
+        except Application.DoesNotExist:
+            context['criticals'] = ['Aucune candidature active.']
+
+        except School.DoesNotExist:
+            context['criticals'] = ['Ecole introuvable.']
+
+        except Exception as e:
+            print (e)
+
+        return render (
+            request,
+            self.template_detail,
+            context
+        )
+
+    @route (r'^azerty/(\d+)/$', name='pk')
+    @login_required_view ('/unauthorized')
+    def aze (self, request, pk, *args, **kwargs):
+        context = self.get_context(request, *args, **kwargs)
+
+        try:
+            app = Application.objects.get(is_active=True)
+
+            schools = School.objects.filter(id=pk, students__child_application__application=app).annotate(count=Count('nom_etablissement')).order_by('-count')
+            school = schools.first()
+            print (schools)
+
+            members = Member.objects.filter(applications__application=app, applications__child__school=school).order_by('last_name')
+
+            context['school'] = school
+            context['members'] = members
+        
+        except Application.DoesNotExist:
+            context['criticals'] = ['Aucune candidature active.']
+
+        except School.DoesNotExist:
+            context['criticals'] = ['Ecole introuvable.']
+
+        except Exception as e:
+            print (e)
+
+        return render (
+            request,
+            self.template_detail,
+            context
+        )
+
+    @route (r'^dl/(\d+)/$', name='id')
+    @login_required_view ('/unauthorized')
+    def download (self, request, id=0, *args, **kwargs):
+        data = []
+        response_obj = {'status': 'Failure'}
+
+        try:
+            app = Application.objects.get(is_active=True)
+
+            schools = School.objects.filter(students__child_application__application=app).annotate(count=Count('nom_etablissement')).order_by('-count')
+
+            def do (school):
+                # school = schools.filter(id=id).first()
+                members = Member.objects.filter(applications__application=app, applications__child__school=school).order_by('last_name')
+                
+                return {
+                    'ecole': school.nom_etablissement,
+                    'membres': [f'{member.last_name} {member.first_name}' for member in members]
+                }
+
+            if id:
+                data.append(
+                    do(schools.filter(id=id).first())
+                )
+
+            else:
+                for school in schools:
+                    data.append(
+                        do(school)
+                    )
+
+            print (data)
+            
+            response = HttpResponse(data, content_type='application/json')
+            response['Content-Disposition'] = 'attachment; filename=export.json'
+            return response
+
+            # return JsonResponse(data, status=200)
+        
+        except Application.DoesNotExist:
+            response_obj['message'] = 'Aucune candidature active.'
+
+        except School.DoesNotExist:
+            response_obj['message'] = 'Ecole introuvable.'
+
+        except Exception as e:
+            response_obj['message'] = str(e)
+
+        return JsonResponse(response_obj, status=400)
+

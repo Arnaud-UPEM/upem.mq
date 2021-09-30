@@ -6,7 +6,7 @@ from modelcluster.fields import ParentalKey, ParentalManyToManyField
 
 from wagtail.core.models import Page, Orderable
 from wagtail.core.fields import RichTextField
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
+from wagtail.admin.edit_handlers import MultiFieldPanel, FieldPanel, InlinePanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 
@@ -91,6 +91,47 @@ class HomeCarousel(Orderable):
 
 
 class WhoAreWePage (SEOPage):
+    template = 'home/about_us_page.html'
+
+    history = RichTextField(blank=True, verbose_name='Historique')
+
+    quote = RichTextField(blank=True, verbose_name='Citation')
+    quote_author = models.CharField(max_length=255, default='', blank=True, verbose_name='Auteur citation')
+
+    tile_schoo_council = models.CharField(max_length=255, default='', blank=True, verbose_name='Conseil d\'école')
+    tile_class_council = models.CharField(max_length=255, default='', blank=True, verbose_name='Conseil de classe')
+    tile_admin_council = models.CharField(max_length=255, default='', blank=True, verbose_name='Conseil d\'adminstration')
+    tile_disci_council = models.CharField(max_length=255, default='', blank=True, verbose_name='Conseil de discipline')
+
+    tile_cen = models.CharField(max_length=255, default='', blank=True, verbose_name='Conseil éducation nationale')
+    tile_education = models.CharField(max_length=255, default='', blank=True, verbose_name='Comité éducation santé citoyenneté')
+    tile_languages = models.CharField(max_length=255, default='', blank=True, verbose_name='Commission des langues régionales')
+    tile_scholarships = models.CharField(max_length=255, default='', blank=True, verbose_name='Commission des bourses')
+
+    content_panels = [
+        MultiFieldPanel([
+            FieldPanel('history')
+        ], heading='Historique'),
+        MultiFieldPanel([
+            FieldPanel('quote'),
+            FieldPanel('quote_author')
+        ], heading='Citation'),
+        MultiFieldPanel([
+            FieldPanel('tile_schoo_council'),
+            FieldPanel('tile_class_council'),
+            FieldPanel('tile_admin_council'),
+            FieldPanel('tile_disci_council'),
+            FieldPanel('tile_education'),
+            FieldPanel('tile_cen'),
+            FieldPanel('tile_languages'),
+            FieldPanel('tile_scholarships'),
+        ], heading='Tuiles'),
+    ]
 
     class Meta:
         verbose_name = 'Qui sommes-nous ?'
+
+
+# consectetur adipiscing elit. 
+# Quisque tempus justo vel velit porttitor posuere. 
+# Curabitur sed turpis sit amet sem pellentesque tincidunt.

@@ -8,23 +8,33 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import render
 
+from wagtail.admin.edit_handlers import MultiFieldPanel, FieldPanel, InlinePanel
 from wagtail.core.models import Page
+from wagtail.snippets.models import register_snippet
 
 from .managers import AuthManager
 from core.models import SEOPage
 
 
+@register_snippet
 class Auth (AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True)
 
     is_staff = models.BooleanField(_('active'), default=False)
     is_active = models.BooleanField(_('active'), default=True)
-    is_superuser = models.BooleanField(_('active'), default=False)
+    is_superuser = models.BooleanField(default=False, verbose_name='Est administrateur ?')
 
     objects = AuthManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
+
+    panels = [
+        MultiFieldPanel([
+            FieldPanel('email'),
+            FieldPanel('is_superuser')
+        ], heading='Authentification')
+    ]
 
     class Meta:
         verbose_name = _('auth')
@@ -32,6 +42,39 @@ class Auth (AbstractBaseUser, PermissionsMixin):
 
 
 class LoginPage (SEOPage):
+    template = 'user/login_page.html'
+    landing_page_template = 'user/login_page_landing.html'
+
+    class Meta:
+        verbose_name = 'Auth: Connexion'
+
+    def serve (self, request, *args, **kwargs):
+        template = self.template
+        context = self.get_context (request)
+
+        if request.method == 'POST':
+            email = request.POST['email']
+            password = request.POST['password']
+            
+            logout (request)
+            auth = authenticate(email=email, password=password)
+
+            if auth is not None:
+                login (request, auth)
+                template = self.landing_page_template
+
+            else:
+                context['email'] = email
+                context['message'] = 'Les identifiants sont invalides.'
+
+        return render (
+            request,
+            template,
+            context
+        )
+
+
+class ForgotPage (Page):
     template = 'user/login_page.html'
     landing_page_template = 'user/login_page_landing.html'
 

@@ -26,6 +26,9 @@
                         <a href="/mon-profil/mes-cotisations">Mes cotisations</a>
                         <!-- <a href="">Mes dons</a> -->
                         <a href="/mon-profil/documents">Documents</a>
+                        {% if user.is_superuser %}
+                        <a href="/mon-profil/listes-electorales">Listes électorales</a>
+                        {% endif %}
                         <a href="/deconnexion">Déconnexion</a>
                     </div>
                 </div>

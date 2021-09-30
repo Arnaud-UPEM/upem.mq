@@ -21,6 +21,7 @@ urlpatterns = [
 
     url(r'^search/$', search_views.search, name='search'),
 
+    re_path('', include('user.urls')),
     re_path('', include('payment.urls')),
 
     re_path(r'^images/([^/]*)/(\d*)/([^/]*)/[^/]*$', ServeView.as_view(), name='wagtailimages_serve'),

@@ -1,0 +1,48 @@
+{% extends 'memberships/profile_base.html' %}
+{% load static wagtailcore_tags memberships_tags %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/memberships/memberships.css' %}">
+<link rel="stylesheet" href="{% static 'vendor/simplePagination/simplePagination.css' %}">
+{% endblock extra_css %}
+
+{% block articles %}
+<article class="schools_list">
+    <h3 class="uix header">Listes Electorales</h3>
+
+    {% if page_obj %}    
+    <div class="ui segment" id="list">
+        <div class="ui relaxed divided list">
+            {% for school in page_obj %}
+            <a class="item" href="{{ school.id }}/" target="_blank">
+                <div class="content">
+                    <div class="header">{{ school.nom_etablissement }} ({{ school.count }})</div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="ui basic segment" id="pagination">
+    </div>
+    {% endif %}
+</article>
+{% endblock articles %}
+
+{% block profile_js %}
+<script src="/static/vendor/simplePagination/simplePagination.js"></script>
+<script>
+    $(function () {
+        $('#pagination').pagination({
+            pages: {{ page_obj.paginator.num_pages }},
+            prevText: 'Préc',
+            nextText: 'Suiv',
+            currentPage: {{ page_obj.number }},
+            onPageClick: function(page, event) {
+                console.log(page);
+                window.location.href = `?page=${page}`;
+            }
+        });
+    });
+</script>
+{% endblock %}

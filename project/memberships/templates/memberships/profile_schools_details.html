@@ -1,0 +1,29 @@
+{% extends 'memberships/profile_base.html' %}
+{% load static wagtailcore_tags memberships_tags %}
+
+{% block articles %}
+<article class="schools_list">
+    <h3 class="uix header">{{ school.nom_etablissement }} ({{ school.count }})</h3>
+
+    {% if members %}    
+    <div class="ui segment" id="list">
+        <div class="ui relaxed divided list">
+            {% for member in members %}
+            <a class="item" href="/admin/snippets/memberships/member/edit/{{ member.id }}/" target="_blank">
+                <div class="content">
+                    <div class="header">{{ member.last_name }} {{ member.first_name }}</div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</article>
+{% endblock articles %}
+
+{% block profile_js %}
+<script>
+    $(function () {
+    });
+</script>
+{% endblock %}

@@ -946,6 +946,58 @@ h4.uix.header {
     // }
 }
 
+.history.richtext {
+    h1, h2, h3, h4 {
+        padding: 1rem 0;
+        
+        color: #065f46;
+        font-size: 1rem;
+        font-weight: bold;
+        letter-spacing: 2px;
+        text-transform: uppercase;    
+        
+        .subheader {
+            color: rgba(0, 0, 0, .87);
+            margin-top: 1rem;
+            
+            font-size: 1.5rem;
+            font-family: 'Montserrat', sans-serif;
+            text-transform: none; 
+        }
+    
+        &.white { color: white; } 
+        &.lightgray {
+            color: rgb(179, 179, 179);
+            .subheader { color: rgb(179, 179, 179); }
+        }
+        
+        &.centered {
+            text-align: center;
+            .subheader { text-align: center; }
+        }
+    }
+    h1 {
+        padding: 1.5rem 0;
+        font-size: 3rem;
+        .subheader { font-size: 2.5rem; }
+    }
+    h2 {
+        padding: 1.5rem 0;
+        font-size: 2rem;
+        .subheader { font-size: 2.5rem; }
+    }
+    h3 {
+        padding: 1rem 0;
+        font-size: 1.5rem;
+        .subheader { font-size: 2rem; }
+    }
+    h4 {
+        padding: 1rem 0;
+        font-size: 1rem;
+        .subheader { font-size: 1.5rem; }
+    }
+}
+
 // Homepage newsletter form
 .newsletter {
     &.columns {
