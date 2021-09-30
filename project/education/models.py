@@ -189,6 +189,9 @@ class School (models.Model):
     # code_zone_animation_pedagogique       =
     # libelle_zone_animation_pedagogique    =
 
+    class Meta:
+        verbose_name = 'Education: Ecole'
+
     def __str__(self) -> str:
         return self.nom_etablissement
 

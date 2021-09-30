@@ -3,7 +3,8 @@
   margin: 0;
   padding: 0;
   z-index: 0;
-  position: relative; }
+  position: relative;
+  overflow: auto; }
   .Memberships .bg {
     width: 100vw;
     height: 100vh;
@@ -23,13 +24,16 @@
     z-index: 2;
     position: absolute;
     display: flex;
-    flex-flow: row wrap; }
+    flex-direction: column-reverse; }
     .Memberships .layout .top {
       top: 0;
       left: 0;
       z-index: 3;
       position: absolute; }
+      .Memberships .layout .top div {
+        color: #065f46; }
     .Memberships .layout .left {
+      padding: 1rem;
       flex: 1;
       display: flex;
       align-items: center;
@@ -55,7 +59,8 @@
       background-color: rgba(148, 148, 148, 0.8);
       background-color: rgba(255, 255, 255, 0.8); }
     .Memberships .layout .right {
-      width: 35%;
+      width: 100%;
+      padding-top: 6rem;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -74,6 +79,25 @@
     .Memberships .congratulations h2 {
       color: #065f46;
       font-size: 2.5rem; }
+  @media (min-width: 1024px) {
+    .Memberships .layout {
+      flex-flow: row wrap; }
+      .Memberships .layout .top div {
+        color: white; }
+      .Memberships .layout .right {
+        width: 35%;
+        padding-top: 0; }
+        .Memberships .layout .right .fields {
+          grid-gap: .5rem;
+          flex-direction: column; }
+          .Memberships .layout .right .fields .field {
+            width: 100%; } }
+  @media (min-width: 1280px) {
+    .Memberships .layout .right .fields {
+      flex-direction: row; }
+      .Memberships .layout .right .fields .field {
+        width: fit-content;
+        width: -webkit-fill-available; } }
 
 .Profil {
   min-height: calc(100vh - 5rem);

@@ -5,6 +5,8 @@
 Inscription
 {% endblock %}
 
+{% block layout_class %}registration{% endblock %}
+
 {% block layout %}
 <div class="top">
     <a href="/" class="p-4 flex flex-nowrap">
@@ -229,7 +231,7 @@ Inscription
                 </div>
             </div>
         </div>
-        <input type="submit" class="ui button" value="Valider">
+        <input type="submit" class="ui button inverted green" value="Valider">
     </form>
 </div>
 {% endblock %}

@@ -82,5 +82,8 @@ class TransactionVADS (models.Model):
 
     objects = TransactionVADSManager()
 
+    class Meta:
+        verbose_name = 'Paiement: Transactions VADS'
+
     def __str__ (self):
         return f'#{self.id} - Email ({self.cust_email}) - Amount ({self.amount}) Date ({self.date}) Status ({self.status}) '

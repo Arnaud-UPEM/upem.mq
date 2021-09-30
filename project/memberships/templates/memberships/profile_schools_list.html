@@ -10,9 +10,11 @@
 <article class="schools_list">
     <h3 class="uix header">Listes Electorales</h3>
 
+    <a class="ui button inverted green" href="{% pageurl page %}json/" target="_blank">Tout télécharger (JSON)</a>
+
     {% if page_obj %}    
     <div class="ui segment" id="list">
-        <div class="ui relaxed divided list">
+        <div class="ui relaxed divided list big">
             {% for school in page_obj %}
             <a class="item" href="{{ school.id }}/" target="_blank">
                 <div class="content">

@@ -3,20 +3,28 @@
 
 {% block articles %}
 <article class="schools_list">
-    <h3 class="uix header">{{ school.nom_etablissement }} ({{ school.count }})</h3>
-
-    {% if members %}    
-    <div class="ui segment" id="list">
-        <div class="ui relaxed divided list">
-            {% for member in members %}
-            <a class="item" href="/admin/snippets/memberships/member/edit/{{ member.id }}/" target="_blank">
-                <div class="content">
-                    <div class="header">{{ member.last_name }} {{ member.first_name }}</div>
-                </div>
+    {% if  school %}
+        <h3 class="uix header">
+            <a href="/admin/snippets/education/school/edit/962/" target="_blank">
+                {{ school.nom_etablissement }} ({{ school.count }})
             </a>
-            {% endfor %}
+        </h3>
+
+        {% if members %}
+        <a class="ui button inverted green" href="{% pageurl page %}json/{{ school.id }}/" target="_blank">Télécharger (JSON)</a>
+
+        <div class="ui segment" id="list">
+            <div class="ui relaxed divided list big">
+                {% for member in members %}
+                <a class="item" href="/admin/snippets/memberships/member/edit/{{ member.id }}/" target="_blank">
+                    <div class="content">
+                        <div class="header">{{ member.last_name }} {{ member.first_name }}</div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
         </div>
-    </div>
+        {% endif %}
     {% endif %}
 </article>
 {% endblock articles %}

@@ -5,6 +5,7 @@
     
     z-index: 0;
     position: relative;
+    overflow: auto;
     
     .bg {
         width: 100vw;
@@ -32,7 +33,7 @@
         position: absolute;
         
         display: flex;
-        flex-flow: row wrap;
+        flex-direction: column-reverse;
         
         .top {
             top: 0;
@@ -40,13 +41,16 @@
             z-index: 3;
             position: absolute;
             
-            
+            div {
+                color: #065f46;
+            }
         }
         
         .left {
             // width: 75%;
-            flex: 1;
+            padding: 1rem;
             
+            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -85,7 +89,8 @@
         }
         
         .right {
-            width: 35%;
+            width: 100%;
+            padding-top: 6rem;
             
             display: flex;
             align-items: center;
@@ -110,6 +115,49 @@
         h2 {
             color: #065f46;
             font-size: 2.5rem;
+        }
+    }
+
+    @media (min-width: 640px) {
+    }
+    
+    @media (min-width: 768px) {}
+    
+    @media (min-width: 1024px) {
+        .layout {
+            flex-flow: row wrap;
+            
+            .top {
+                div { color: white; }
+            }
+        
+            .right {
+                width: 35%;
+                padding-top: 0;
+
+                .fields {
+                    grid-gap: .5rem;
+                    flex-direction: column;
+
+                    .field { width: 100%; }
+                }
+            }
+        }
+    }
+
+    @media (min-width: 1280px) {
+        .layout {
+            .right {
+                .fields {
+                    // grid-gap: .5rem;
+                    flex-direction: row;
+
+                    .field {
+                        width: fit-content;
+                        width: -webkit-fill-available;
+                    }
+                }
+            }
         }
     }
 }

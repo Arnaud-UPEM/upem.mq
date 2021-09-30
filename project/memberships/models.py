@@ -82,6 +82,120 @@ class SchoolYear (models.Model):
 
 
 @register_snippet
+class Application (ClusterableModel):
+    name = models.CharField(max_length=128, default='', verbose_name='Intitulé')
+    description = models.TextField(default='', verbose_name='Description')
+    condition = RichTextField(blank=True, verbose_name='Condition de candidature')
+
+    date_end = models.DateField(verbose_name='Date fin')
+    date_start = models.DateField(verbose_name='Date début')
+
+    is_active = models.BooleanField(default=False, verbose_name='Est actif ?')
+
+    panels = [
+        MultiFieldPanel([
+            FieldPanel('name'),
+            FieldPanel('description'),
+            FieldPanel('condition'),
+        ], heading='Informations'),
+        MultiFieldPanel([
+            FieldPanel('date_start'),
+            FieldPanel('date_end'),
+            FieldPanel('is_active'),
+        ], heading='Dates'),
+    ]
+
+    class Meta:
+        verbose_name = 'Candidature'
+        ordering = ['-is_active', '-date_end']
+
+    @property
+    def years (self):
+        start = datetime.strftime(self.date_start, '%Y')
+        end = datetime.strftime(self.date_end, '%Y')
+        return f'{start} - {end}'
+
+    @property
+    def expired (self):
+        now = datetime.now()
+        if self.date_end < now.date():
+            return True
+        return False
+
+    # Set an application to active
+    # Deactivate other applications
+    def activate (self):
+        _ = Application.objects.filter(is_active=True).exclude(id=self.id).update(is_active=False)
+        
+        if not self.is_active:
+            self.is_active = True
+            self.save()
+
+    # Apply to an application
+    def apply (self, member, children_list):
+        if not self.is_active:
+            raise Exception ('Cette candidature est désactivé.')
+
+        children = MemberChild.objects.filter(pk__in=children_list)
+        member_applications = MemberApplication.objects.filter(member=member, application=self)
+
+        if len(children) != len(children_list):
+            raise Exception ('Liste enfant incorrecte.')
+
+        for child in children:
+            # Check if children belongs to member
+            if child.member.pk != member.pk:
+                raise Exception ('L\'enfant n\'est pas lié au compte')
+
+            # Check
+            if not member_applications.filter(child=child):
+                MemberApplication.objects.create(
+                    child=child,
+                    member=member,
+                    application=self
+                )
+
+        return True
+
+    # Add children and MemberApplication to self Application
+    def prepare (self, member):
+        try:
+            _ = []
+            children = MemberChild.objects.filter(member=member)
+            member_applications = MemberApplication.objects.filter(member=member, application=self)
+
+            for child in children:
+                _child = {
+                    'id': child.id,
+                    'last_name': child.last_name,
+                    'first_name': child.first_name,
+                    'grade': child.grade,
+                    'school': child.school.__str__(),
+                    # 'date_signed': datetime.now()
+                }
+
+                child_application = member_applications.filter(child=child)
+
+                if child_application:
+                    _child['date_signed'] = child_application.first().date_signed
+
+                _.append(_child)
+
+            setattr(self, 'children', _)
+            
+        except Exception as e:
+            print (e)
+            pass
+
+        return self
+
+    def __str__(self):
+        active = '- (active)' if self.is_active else ''
+        return f'#{self.id} - {self.name} {active}'
+        return f'#{self.id} - {self.name} - {self.date_start} {self.date_end} {active}'
+
+
+@register_snippet
 class Contribution (ClusterableModel):
     banner = models.ForeignKey(
         'wagtailimages.Image',
@@ -197,121 +311,6 @@ class Contribution (ClusterableModel):
         return f'#{self.id} - {self.name} - {self.date_start} {self.date_end} {active}'
 
 
-@register_snippet
-class Application (ClusterableModel):
-    name = models.CharField(max_length=128, default='', verbose_name='Intitulé')
-    description = models.TextField(default='', verbose_name='Description')
-    condition = RichTextField(blank=True, verbose_name='Condition de candidature')
-
-    date_end = models.DateField(verbose_name='Date fin')
-    date_start = models.DateField(verbose_name='Date début')
-
-    is_active = models.BooleanField(default=False, verbose_name='Est actif ?')
-
-    panels = [
-        MultiFieldPanel([
-            FieldPanel('name'),
-            FieldPanel('description'),
-            FieldPanel('condition'),
-        ], heading='Informations'),
-        MultiFieldPanel([
-            FieldPanel('date_start'),
-            FieldPanel('date_end'),
-            FieldPanel('is_active'),
-        ], heading='Dates'),
-    ]
-
-    class Meta:
-        verbose_name = 'Candidature'
-        ordering = ['-is_active', '-date_end']
-
-    @property
-    def years (self):
-        start = datetime.strftime(self.date_start, '%Y')
-        end = datetime.strftime(self.date_end, '%Y')
-        return f'{start} - {end}'
-
-    @property
-    def expired (self):
-        now = datetime.now()
-        if self.date_end < now.date():
-            return True
-        return False
-
-    # Set an application to active
-    # Deactivate other applications
-    def activate (self):
-        _ = Application.objects.filter(is_active=True).exclude(id=self.id).update(is_active=False)
-        
-        if not self.is_active:
-            self.is_active = True
-            self.save()
-
-    # Apply to an application
-    def apply (self, member, children_list):
-        if not self.is_active:
-            raise Exception ('Cette candidature est désactivé.')
-
-        children = MemberChild.objects.filter(pk__in=children_list)
-        member_applications = MemberApplication.objects.filter(member=member, application=self)
-
-        if len(children) != len(children_list):
-            raise Exception ('Liste enfant incorrecte.')
-
-        for child in children:
-            # Check if children belongs to member
-            if child.member.pk != member.pk:
-                raise Exception ('L\'enfant n\'est pas lié au compte')
-
-            # Check
-            if not member_applications.filter(child=child):
-                MemberApplication.objects.create(
-                    child=child,
-                    member=member,
-                    application=self
-                )
-
-        return True
-
-    # Add children and MemberApplication to self Application
-    def prepare (self, member):
-        try:
-            _ = []
-            children = MemberChild.objects.filter(member=member)
-            member_applications = MemberApplication.objects.filter(member=member, application=self)
-
-            for child in children:
-                _child = {
-                    'id': child.id,
-                    'last_name': child.last_name,
-                    'first_name': child.first_name,
-                    'grade': child.grade,
-                    'school': child.school.__str__(),
-                    # 'date_signed': datetime.now()
-                }
-
-                child_application = member_applications.filter(child=child)
-
-                if child_application:
-                    _child['date_signed'] = child_application.first().date_signed
-
-                _.append(_child)
-
-            setattr(self, 'children', _)
-            
-        except Exception as e:
-            print (e)
-            pass
-
-        return self
-
-    def __str__(self):
-        active = '- (active)' if self.is_active else ''
-        return f'#{self.id} - {self.name} {active}'
-        return f'#{self.id} - {self.name} - {self.date_start} {self.date_end} {active}'
-
-
-# @register_snippet
 """ 
 Not used anymore bcz we only want 1 plan 
 Refer directly to Contribution
@@ -383,7 +382,7 @@ class Member (index.Indexed, models.Model):
 
     panels = [
         MultiFieldPanel([
-            FieldPanel('first_name'),
+            FieldPanel('last_name'),
             FieldPanel('first_name'),
             FieldPanel('job'),
             FieldPanel('newsletter_sub'),
@@ -416,7 +415,7 @@ class Member (index.Indexed, models.Model):
     ]
 
     class Meta:
-        verbose_name = 'Membre'
+        verbose_name = 'Membres: Parents'
 
     # Apply to an application
     def apply (self, application, child):
@@ -1752,7 +1751,7 @@ class ProfileSchoolList (RoutablePageMixin, Page):
             page = request.GET.get('page', 1)
             print (page)
 
-            paginator = Paginator(schools, 1)
+            paginator = Paginator(schools, 10)
             page_obj = paginator.get_page(page)
 
             context['page_obj'] = page_obj
@@ -1776,7 +1775,7 @@ class ProfileSchoolList (RoutablePageMixin, Page):
 
             schools = School.objects.filter(id=id, students__child_application__application=app).annotate(count=Count('nom_etablissement')).order_by('-count')
             school = schools.first()
-            print (schools)
+            # print (schools)
 
             members = Member.objects.filter(applications__application=app, applications__child__school=school).order_by('last_name')
 
@@ -1798,42 +1797,10 @@ class ProfileSchoolList (RoutablePageMixin, Page):
             context
         )
 
-    @route (r'^azerty/(\d+)/$', name='pk')
+    @route (r'^json/$', name='id')
+    @route (r'^json/(\d+)/$', name='id')
     @login_required_view ('/unauthorized')
-    def aze (self, request, pk, *args, **kwargs):
-        context = self.get_context(request, *args, **kwargs)
-
-        try:
-            app = Application.objects.get(is_active=True)
-
-            schools = School.objects.filter(id=pk, students__child_application__application=app).annotate(count=Count('nom_etablissement')).order_by('-count')
-            school = schools.first()
-            print (schools)
-
-            members = Member.objects.filter(applications__application=app, applications__child__school=school).order_by('last_name')
-
-            context['school'] = school
-            context['members'] = members
-        
-        except Application.DoesNotExist:
-            context['criticals'] = ['Aucune candidature active.']
-
-        except School.DoesNotExist:
-            context['criticals'] = ['Ecole introuvable.']
-
-        except Exception as e:
-            print (e)
-
-        return render (
-            request,
-            self.template_detail,
-            context
-        )
-
-    @route (r'^dl/$', name='id')
-    @route (r'^dl/(\d+)/$', name='id')
-    @login_required_view ('/unauthorized')
-    def download (self, request, id=0, *args, **kwargs):
+    def dl_json (self, request, id=0, *args, **kwargs):
         data = []
         response_obj = {'status': 'Failure'}
 
@@ -1862,7 +1829,7 @@ class ProfileSchoolList (RoutablePageMixin, Page):
                         do(school)
                     )
 
-            print (data)
+            # print (data)
             
             response = HttpResponse(json.dumps(data), content_type='application/json')
             response['Content-Disposition'] = 'attachment; filename=export.json'
