@@ -1,0 +1,180 @@
+{% extends 'memberships/profile_base.html' %}
+{% load static wagtailcore_tags memberships_tags %}
+
+{% block articles %}
+<article class="schools_list">
+    {% if member %}
+    <h3 class="uix header">
+        <a href="/admin/snippets/memberships/member/edit/{{ member.id }}" target="_blank">
+            #{{ member.id }} {{ member.first_name }} {{ member.last_name }}
+        </a>
+    </h3>
+    
+    <div class="ui two columns grid">
+        <div class="ui column">
+            <div class="ui card fluid">
+                <div class="content">
+                    <div class="header">
+                        #{{ member.id }} {{ member.first_name }} {{ member.last_name }}
+                    </div>
+                    <div class="meta">
+                        {{ member.email }}
+                    </div>
+                    <div class="description">
+                        {% if member.job %}
+                        <b>Travail :</b> {{ member.job }}
+                        <br>
+                        {% endif %}
+                        
+                        {% if member.address1 %}
+                        <b>Adresse ligne 1 :</b> {{ member.address1 }}
+                        <br>
+                        {% endif %}
+                        
+                        {% if member.address2 %}
+                        <b>Adresse ligne 2 :</b> {{ member.address2 }}
+                        <br>
+                        {% endif %}
+                        
+                        {% if member.zip_code %}
+                        <b>Code Postal :</b> {{ member.zip_code }}
+                        <br>
+                        {% endif %}
+                        
+                        {% if member.city %}
+                        <b>Ville :</b> {{ member.city }}
+                        <br>
+                        {% endif %}
+                        
+                        {% if member.phone_cell %}
+                        <b>Téléphone protable :</b> {{ member.phone_cell }}
+                        <br>
+                        {% endif %}
+                        
+                        {% if member.phone_pro %}
+                        <b>Téléphone professionnel :</b> {{ member.phone_pro }}
+                        <br>
+                        {% endif %}
+                        
+                        {% if member.phone_home %}
+                        <b>Téléphone domicile :</b> {{ member.phone_home }}
+                        <br>
+                        {% endif %}
+                        
+                        <b>Newsletter : </b>
+                        {% if member.newsletter_sub %}
+                        <div class="ui label green">Abonné</div>
+                        {% else %}
+                        <div class="ui label red">Non abonné</div>
+                        {% endif %}
+                        
+                    </div>
+                </div>
+                <div class="extra content">
+                    <div class="ui two buttons">
+                        <a class="ui basic blue button" href="/admin/snippets/memberships/member/edit/{{ member.id }}" target="_blank">Modifier</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui column">
+            <div class="ui cards">
+                <div class="card">
+                    <div class="content">
+                        <div class="header">
+                            Cotisations
+                        </div>
+                    </div>
+                    {% for mc in member_contributions %}
+                    <div class="extra content">
+                        <p>
+                            {{ mc.contribution.name }}
+                            {% if mc.contribution.is_active %}(<b>active</b>){% endif %}
+                        </p>
+                        <div class="ui two buttons">
+                            <a class="ui basic blue button" href="/admin/snippets/memberships/membercontribution/edit/{{ mc.id }}/" target="_blank">Modifier</a>
+                            <a class="ui basic green button" href="/mon-profil/mes-cotisations/facture/{{ mc.id }}/" target="_blank">Facture</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="ui grid">
+        <div class="ui column">
+            <h4 class="uix header">Enfants</h4>
+            <div class="ui three cards">
+                {% for child in member.children_ %}
+                <div class="ui card">
+                    <div class="content">
+                        <div class="header">
+                            #{{ child.id }} {{ child.first_name }} {{ child.last_name }}
+                        </div>
+                        <div class="meta">
+                            {{ child.dob }}
+                        </div>
+                        <div class="description">
+                            <b>Classe :</b> {{ child.grade }}
+                            <br>
+                            
+                            <b>Ecole :</b> <a href="/admin/snippets/education/school/edit/{{ school.id }}/" target="_blank">{{ child.school }}</a>
+                            <br>
+                            <br>
+                            
+                            {% if child.mapp %}
+                            <div class="ui label green">Candidat</div> 
+                            <a href="/admin/snippets/memberships/memberapplication/edit/{{ child.mapp.id }}" target="_blank">(plus d'informations)</a>
+                            {% else %}
+                            <div class="ui label red">Non candidat</div> 
+                            <a href="/admin/snippets/memberships/memberapplication/" target="_blank">(plus d'informations)</a>
+                            {% endif %}
+                            
+                        </div>
+                    </div>
+                    <div class="extra content">
+                        <div class="ui two buttons">
+                            <a class="ui basic blue button" href="/admin/snippets/memberships/memberchild/edit/{{ child.id }}" target="_blank">Modifier</a>
+                        </div>
+                    </div>
+                </div>
+                
+                {% empty %}
+                <div class="ui card">
+                    <div class="content">
+                        
+                        <p>Aucun enfant enregistré.</p>
+                    </div>
+                </div>
+                
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+    {% if members %}
+    <a class="ui button inverted green" href="{% pageurl page %}json/{{ school.id }}/" target="_blank">Télécharger (JSON)</a>
+    
+    <div class="ui segment" id="list">
+        <div class="ui relaxed divided list big">
+            {% for member in members %}
+            <a class="item" href="/admin/snippets/memberships/member/edit/{{ member.id }}/" target="_blank">
+                <div class="content">
+                    <div class="header">{{ member.last_name }} {{ member.first_name }}</div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    {% endif %}
+</article>
+{% endblock articles %}
+
+{% block profile_js %}
+<script>
+    $(function () {
+    });
+</script>
+{% endblock %}

@@ -192,11 +192,26 @@ a {
             <div><h1 class="title">{{ m.first_name }} {{ m.last_name }}</h1></div>
 
             <div class="list">
+                {% if m.address1 %}
                 <span class="xspan">{{ m.address1 }}</span>
+                {% endif %}
+
+                {% if m.address2 %}
                 <span class="xspan">{{ m.address2 }}</span>
+                {% endif %}
+
+                {% if m.zip_code %}
                 <span class="xspan">{{ m.zip_code }}, {{ m.city }}</span>
+                {% endif %}
+
+                {% if m.phone_cell %}
                 <span class="xspan">{{ m.phone_cell|default:m.phone_home|default:m.phone_pro }}</span>
+                {% endif %}
+
+                {% if m.auth.email %}
                 <span class="xspan">{{ m.auth.email }}</span>
+                {% endif %}
+
             </div>
             {% endwith %}
         </div>

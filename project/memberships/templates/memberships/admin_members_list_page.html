@@ -1,0 +1,247 @@
+{% extends 'memberships/profile_base.html' %}
+{% load static wagtailcore_tags memberships_tags %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/memberships/memberships.css' %}">
+<link rel="stylesheet" href="{% static 'vendor/simplePagination/simplePagination.css' %}">
+{% endblock extra_css %}
+
+{% block profil_class %}wide{% endblock %}
+
+{% block articles %}
+<article class="admin members">
+    <h3 class="uix header">Administration: Membres</h3>
+    
+    <section class="search mb-4">
+        <div class="searchbars mb-4">
+            <form class="ui form" action="#">
+                <div class="fields">
+                    <div class="field">
+                        <input type="text" name="names" id="s_names" placeholder="Parent: Nom, Prénom">
+                    </div>
+                    <div class="field">
+                        <input type="text" name="email" id="s_email" placeholder="Email">
+                    </div>
+                </div>
+                <div class="fields">
+                    <div class="field">
+                        <input type="text" name="children_names" id="s_children_names" placeholder="Enfant: Nom, Prénom">
+                    </div>
+                    <div class="field">
+                        <input type="text" name="school_name" id="s_school_name" placeholder="Enfant: Ecole">
+                    </div>
+                    <!-- <div class="field">
+                        <div class="ui selection dropdown">
+                            <input type="hidden" name="grade" id="s_grade">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">Classe</div>
+                            <div class="menu">
+                                {% for key, value in grades.items %}
+                                <div class="item" data-value="{{ value }}">{{ key }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+
+                <div class="field">
+                    <button class="ui button blue" id="s_submit">Rechercher</button>
+                </div>
+            </form>
+        </div>
+        <div class="searchtags">
+            
+        </div>
+    </section>    
+    
+    {% if page_obj %}    
+    <section class="list">
+        <table class="ui celled structured table">
+            <thead>
+                <tr>
+                    <th rowspan="2">Noms</th>
+                    <th rowspan="2">Adhérant</th>
+                    <th rowspan="2">Email</th>
+                    <th rowspan="2">Téléphones</th>
+                    <th colspan="4">Enfants</th>
+                </tr>
+                <tr>
+                    <th>Noms</th>
+                    <th>Ecoles</th>
+                    <th>Classe</th>
+                    <th>Candidat</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="hidden">
+                    <td>Alpha Team</td>
+                    <td class="center aligned"><div class="ui label green">Oui</div></td>
+                    
+                    <td class="right aligned">2</td>
+                    <td class="center aligned">
+                        <i class="large green checkmark icon"></i>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="hidden">
+                    <td rowspan="3">Beta Team</td>
+                    <td rowspan="3" class="center aligned"><div class="ui label red">Non</div></td>
+                    
+                    <td class="right aligned">52</td>
+                    <td class="center aligned">
+                        <i class="large green checkmark icon"></i>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="hidden">
+                    <td class="right aligned">12</td>
+                    <td></td>
+                    <td class="center aligned">
+                        <i class="large green checkmark icon"></i>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr class="hidden">
+                    <td class="right aligned">21</td>
+                    <td class="center aligned">
+                        <i class="large green checkmark icon"></i>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                {% for member in page_obj %}
+                {% for child in member.children.all %}
+                <tr>
+                    {% if forloop.counter == 1 %}
+                    {% with children_length=member.children.all|length %}
+                    <td rowspan="{{ children_length }}" class="center aligned">
+                        <a href="/mon-profil/listes-membres/membre/{{ member.id }}/" target="_blank">
+                            <i class="external alternate icon"></i>
+                            {{ member.first_name }} {{ member.last_name }}
+                        </a>
+                    </td>
+                    <td rowspan="{{ children_length }}" class="center aligned">
+                        {% if member.contribution %}
+                        <div class="ui label green">Oui</div>
+                        {% else %}
+                        <div class="ui label red">Non</div>
+                        {% endif %}
+                    </td>
+                    <td rowspan="{{ children_length }}" class="center aligned">
+                        {{ member.email }}
+                    </td>
+                    <td rowspan="{{ children_length }}" class="center aligned">
+                        {% if member.phone_cell %}<i class="phone icon"></i>{{ member.phone_cell }}<br/>{% endif %}
+                        {% if member.phone_home %}<i class="home icon"></i>{{ member.phone_home }}<br/>{% endif %}
+                        {% if member.phone_pro %}<i class="building outline icon"></i>{{ member.phone_pro }}{% endif %}
+                    </td>
+                    {% endwith %}
+                    {% endif %}
+                    
+                    
+                    <td>
+                        <a href="/mon-profil/listes-membres/enfant/{{ child.id }}/" target="_blank">
+                            {{ child.first_name }} {{ child.last_name }}</td>
+                        </a>
+                        <td class="center aligned">{{ child.school }}</td>
+                        <td class="center aligned">{{ child.grade }}</td>
+                        <td></td>
+                    </tr>
+                    {% empty %}
+                    
+                    <tr>
+                        <td>{{ member.first_name }} {{ member.last_name }}</td>
+                        <td class="center aligned"><div class="ui label red">Non</div></td>
+                        
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+        
+        {% comment %}
+        <div class="ui segment" id="list">
+            <div class="ui relaxed divided list big">
+                {% for school in page_obj %}
+                <a class="item" href="{{ school.id }}/" target="_blank">
+                    <div class="content">
+                        <div class="header">{{ school.nom_etablissement }} ({{ school.count }})</div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endcomment %}
+        
+        <div class="ui basic segment" id="pagination">
+        </div>
+        {% endif %}
+    </article>
+    {% endblock articles %}
+    
+    {% block profile_js %}
+    <script src="/static/vendor/simplePagination/simplePagination.js"></script>
+    <script>
+        $(function () {
+            $('#pagination').pagination({
+                pages: {{ page_obj.paginator.num_pages }},
+                prevText: 'Préc',
+                nextText: 'Suiv',
+                currentPage: {{ page_obj.number }},
+                onPageClick: function(page, event) {
+                    console.log(page);
+                    window.location.href = `?page=${page}`;
+                }
+            });
+        });
+
+        $(function () {
+            const urlParams = new URLSearchParams(window.location.search);
+
+            var parameters = {
+                page:          urlParams.get('page') || '',
+
+                names:          urlParams.get('names') || '',
+                email:          urlParams.get('email') || '',
+
+                children_names: urlParams.get('children_names') || '',
+
+                grade:          urlParams.get('grade') || '',
+                school:         urlParams.get('school') || '',
+            };
+            
+            function batchEvents () {
+                const inputs = [
+                    's_names',
+                    's_email',
+                    's_children_names',
+                    's_school_name',
+                    // 's_grade',
+                ];
+                
+                for (const id of inputs) {
+                    document.getElementById(id).addEventListener('input', (e) => {
+                        const target = e.target;
+                        console.log (target);
+                        
+                        const name = target.getAttribute('name');
+                        parameters[name] = target.value;
+                    });
+                }
+            }
+            
+            
+            console.log( parameters);
+
+            batchEvents();
+        });
+    </script>
+    {% endblock profile_js %}
+    

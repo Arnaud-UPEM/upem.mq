@@ -46,10 +46,11 @@ class Command (BaseCommand):
         for i in range (0, 5):
             child = self._create_child (member)
             
-            member.applications.create(
-                child=child,
-                application=app,
-            )
+            if randint (0, 1):
+                member.applications.create(
+                    child=child,
+                    application=app,
+                )
 
         return member
 

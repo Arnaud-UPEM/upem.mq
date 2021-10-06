@@ -271,7 +271,7 @@ section {
       min-height: calc(100vh - 8rem); } }
   @media (min-width: 1280px) {
     .home.front .bottom.banner {
-      padding: 3rem; }
+      padding: 1rem; }
       .home.front .bottom.banner .intro {
         font-size: 2.5rem; }
         .home.front .bottom.banner .intro .sy {

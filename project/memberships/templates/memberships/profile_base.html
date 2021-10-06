@@ -9,7 +9,7 @@
 {% endblock extra_css %}
 
 {% block content %}
-<section class="Profil">
+<section class="Profil {% block profil_class %}{% endblock %}">
     <div class="ui container transparent py-4">        
         {% block top_side %}
         {% endblock %}
@@ -27,6 +27,7 @@
                         <!-- <a href="">Mes dons</a> -->
                         <a href="/mon-profil/documents">Documents</a>
                         {% if user.is_superuser %}
+                        <a href="/mon-profil/listes-membres">Administration</a>
                         <a href="/mon-profil/listes-electorales">Listes électorales</a>
                         {% endif %}
                         <a class="logout" href="/deconnexion">Déconnexion</a>

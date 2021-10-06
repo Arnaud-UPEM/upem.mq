@@ -24,3 +24,13 @@ Inscription terminée
     <p>Vous allez bientôt être redirigé vers la page de connexion.</p>
 </div>
 {% endblock %}
+
+{% block extra_js %}
+<script>
+    window.onload = function () {
+        window.setTimeout (() => {
+            window.location.href = '/connexion';
+        }, 3000);
+    }
+</script>
+{% endblock extra_js %}

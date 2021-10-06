@@ -454,6 +454,26 @@
         }
     }
 
+    &.wide {
+        .ui.container {
+            padding: 1rem;
+            overflow: hidden;
+            width: 100%;
+        }
+    }
+
+    .admin {
+        &.members {
+            section.list {
+                overflow: auto;
+
+                table {
+                    width: max-content;
+                }
+            }
+        }
+    }
+
 
     @media (min-width: 1024px) {
         min-height: calc(100vh - 8rem);

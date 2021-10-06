@@ -11,9 +11,10 @@ from django.contrib.auth import logout
 from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from django.db import models
-from django.db.models import Q, F, Count
+from django.db.models import Q, F, Count, FilteredRelation, Case, Value, When
 from django.db.models.fields import Field
 from django.db.models.fields.related import RelatedField
+from django.db.models.functions import Concat
 from django.forms import fields, widgets
 from django.http import JsonResponse
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect
@@ -357,7 +358,7 @@ class Member (index.Indexed, models.Model):
     last_name = models.CharField(max_length=100, default='', verbose_name='Nom')
     first_name = models.CharField(max_length=100, default='', verbose_name='Prénom')
 
-    job = models.CharField(max_length=60, default='', verbose_name='Profession')
+    job = models.CharField(max_length=60, blank=True, null=True, default='', verbose_name='Profession')
 
     @property
     def email (self):
@@ -408,6 +409,7 @@ class Member (index.Indexed, models.Model):
     search_fields = [
         index.SearchField('last_name', partial_match=True),
         index.SearchField('first_name', partial_match=True),
+        index.SearchField('email', partial_match=True),
         # index.RelatedFields('children', [
         #     index.SearchField('last_name', partial_match=True),
         #     index.SearchField('first_name', partial_match=True),
@@ -438,7 +440,7 @@ class MemberChild (index.Indexed, models.Model):
 
     dob = models.DateField(verbose_name='Date de naissance')
 
-    grade = models.CharField(max_length=20, default=GradeEnum.DEFAUT, null=True, blank=True, verbose_name='Classe')
+    grade = models.CharField(max_length=20, default=GradeEnum.DEFAUT, choices=GradeEnum.choices(), null=True, blank=True, verbose_name='Classe')
     school = models.ForeignKey(
         School,
         null=True,
@@ -456,7 +458,20 @@ class MemberChild (index.Indexed, models.Model):
         related_name='children'
     )
 
-    panels = []
+    panels = [
+        MultiFieldPanel([
+            FieldPanel('last_name'),
+            FieldPanel('first_name'),
+            FieldPanel('dob'),
+        ], heading='Informations'),
+        MultiFieldPanel([
+            FieldPanel('grade'),
+            SnippetChooserPanel('school')
+        ], heading='Scolarité'),
+        MultiFieldPanel([
+            SnippetChooserPanel('member')
+        ], heading='Parenté'),
+    ]
 
     search_fields = [
         index.SearchField('last_name', partial_match=True),
@@ -470,6 +485,7 @@ class MemberChild (index.Indexed, models.Model):
     ]
 
     class Meta:
+        ordering = ['id']
         verbose_name = 'Membre: Enfant'
         # description = 'Ajouter un enfant à un parent'
 
@@ -535,7 +551,7 @@ class MemberContribution (models.Model, index.Indexed):
     ]
 
     class Meta:
-        ordering = ['-date_bought']
+        ordering = ['-contribution__is_active', '-date_bought']
         verbose_name = 'Membre: Cotisation - Gérez les cotisations parents'
         verbose_name_plural = 'Membre: Cotisation - Gérez les cotisations parents'
 
@@ -661,7 +677,9 @@ class MemberForm (forms.ModelForm):
         return self.cleaned_data['first_name'].capitalize()
 
     def clean_job (self):
-        return self.cleaned_data['job'].capitalize()
+        if self.cleaned_data['job']:
+            return self.cleaned_data['job'].capitalize()
+        return ''
 
     def clean_address1 (self):
         return self.cleaned_data['address1'].capitalize()
@@ -767,6 +785,9 @@ class RegistrationPage (SEOPage):
             # Re-check auth_form
             if all([auth_form.is_valid(), member_form.is_valid()]):
                 auth = auth_form.save()
+                auth.set_password(request.POST.get('password2'))
+                auth.save()
+
                 member = member_form.save()
                 member.auth = auth
                 member.city = ZIPS[member.zip_code]
@@ -1544,8 +1565,7 @@ class ProfileContribution (RoutablePageMixin, Page):
             if settings.DEBUG:
                 pass
 
-            else:
-                context['critical'] = 'Reçu introuvable. Veuillez recommencer.'
+            context['critical'] = 'Reçu introuvable. Veuillez recommencer.'
 
         return context
 
@@ -1733,7 +1753,7 @@ class ProfileDocumentsPage (RoutablePageMixin, Page):
 
 class ProfileSchoolList (RoutablePageMixin, Page):
     template = 'memberships/profile_schools_list.html'
-    template_detail = 'memberships/profile_schools_details.html'
+    template_details = 'memberships/profile_schools_details.html'
     
     class Meta:
         verbose_name = 'Profil: Candidatures par ecoles'
@@ -1793,7 +1813,7 @@ class ProfileSchoolList (RoutablePageMixin, Page):
 
         return render (
             request,
-            self.template_detail,
+            self.template_details,
             context
         )
 
@@ -1848,3 +1868,184 @@ class ProfileSchoolList (RoutablePageMixin, Page):
 
         return JsonResponse(response_obj, status=400)
 
+
+class AdminMembers (RoutablePageMixin, Page):
+    template = 'memberships/admin_members_list_page.html'
+    template_details = 'memberships/admin_members_details_page.html'
+
+    class Meta:
+        verbose_name = 'Profile Admin: Membres'
+
+    @route (r'^$')
+    @login_required_view ('/unauthorized')
+    def list (self, request, *args, **kwargs):
+        context = self.get_context(request, *args, **kwargs)
+
+        members = Member.objects.all()
+
+        try:
+            con = Contribution.objects.get(is_active=True)
+            # members = members.annotate(contribution=FilteredRelation('contributions', condition=Q(contributions__contribution=con)))
+            # members = members.annotate(contribution=F('contributions__contribution')).filter(Q(contribution=con.id) | Q(contribution__isnull=True))
+            # members = members.objects.annotate(contribution=FilteredRelation('contributions', condition=Q(contributions__contribution=con)))
+
+            members = members.annotate(
+                contribution=Case(
+                    When(contributions__contribution=con, then=Value(con.id)),
+                    default=Value(None)
+                )
+            ).distinct('id')
+
+        except:
+            con = None
+
+        try:
+            app = Application.objects.get(is_active=True)
+
+            children = MemberChild.objects.annotate(
+                application=Case(
+                    When(child_application__application=app, then=Value(app.id)),
+                    default=Value(None)
+                )
+            ).distinct('id')
+
+        except:
+            con = None
+
+        # for m in Member.objects.annotate(contribution=FilteredRelation('contributions', condition=Q(contributions__contribution=con))).order_by('id'):
+        #     print (m)
+
+        # for m in Member.objects.annotate(contribution=F('contributions__contribution')).filter(Q(contribution=con.id)).order_by('id'):
+        #     print (m)
+
+        # members = Member.objects.annotate(
+        #     contribution=Case(
+        #         When(contributions__contribution=con, then=Value(con.id)),
+        #         default=Value(None)
+        #     )
+        # ).distinct('id')
+
+
+
+        # members = Member.objects.annotate(children_f=FilteredRelation('children', condition=Q(children__first_name='Emerson'))).values('id', 'first_name', 'last_name', 'children_f__id', 'children_f__first_name').filter(Q(children_f__is_null=False))
+
+        # members = Member.objects.annotate(c_id=F('children__id'), c_first_name=F('children__first_name')).values('id', 'first_name', 'last_name', 'c_id', 'c_first_name').filter(Q(c_first_name='Emerson'))
+        # condition=)).filter(Q(children_f__is_null=False))
+
+        members = self._filtering (request, members)
+
+        page = request.GET.get('page', 1)
+
+        paginator = Paginator(members, 10)
+        page_obj = paginator.get_page(page)
+
+        context['page_obj'] = page_obj
+        context['grades'] = dict(GradeEnum.choices())
+
+        return render(
+            request,
+            self.template,
+            context
+        )
+
+
+    @route (r'^membre/(\d+)/$', name='id')
+    # @route (r'^enfant/(\d+)/$', name='child_id')
+    @login_required_view ('/unauthorized')
+    def details (self, request, id=0, *args, **kwargs):
+        context = self.get_context(request, *args, **kwargs)
+        context['criticals'] = []
+
+        try:
+            # if id:
+            #     member = Member.objects.get(pk=id)
+
+            # elif child_id:
+            #     member = Member.objects.get(children__pk=child_id)
+
+            # else:
+            #     raise Exception ('Aucun argument donné.')
+
+            member = Member.objects.get(pk=id)
+
+            # Base
+
+            try:
+                app = Application.objects.get(is_active=True)
+                children = member.children.all()
+                for child in children:
+                    mapp = MemberApplication.objects.filter(
+                        child=child,
+                        application=app
+                    ).first()
+                    setattr(child, 'mapp', mapp)
+
+                    mapp = MemberApplication.objects.filter(child=child, application=app).first()
+
+            except:
+                children = member.children.all()
+
+            setattr(member, 'children_', children)
+
+            context['member'] = member
+            context['member_contributions'] = MemberContribution.objects.filter(member=member)
+
+        except Member.DoesNotExist:
+            context['criticals'].append('Membre introuvable.')
+
+        except Exception as e:
+            context['criticals'].append(str(e))
+
+        return render (
+            request,
+            self.template_details,
+            context
+        )
+
+    """
+    Tags
+        names
+        email
+        enfant_id
+        children_names
+        school_name
+        grade
+    """
+    def _filtering (self, request, members):
+        # Member
+        names = request.GET.get('names', False)
+        if names:
+            members = members.annotate(
+                names=Concat('first_name', Value(' '), 'last_name')
+            ).filter(
+                names__icontains=names
+            )
+
+        email = request.GET.get('email', False)
+        if email:
+            members = members.filter(auth__email__icontains=email)
+
+        # Children
+        child_id = request.GET.get('child_id', False)
+        if child_id:
+            pass
+
+        child_names = request.GET.get('child_names', False)
+        if child_names:
+            members = members.annotate(
+                names=Concat('children__first_name', Value(' '), 'children__last_name')
+            ).filter(
+                names__icontains=child_names
+            )
+        
+        grade = request.GET.get('grade', False)
+        if grade:
+            members = members.filter(children__grade=getattr(GradeEnum, grade))
+
+        school_name = request.GET.get('school_name', False)
+        if school_name:
+            members = members.filter(children__school__nom_etablissement__icontains=school_name)
+
+        return members
+
+        
