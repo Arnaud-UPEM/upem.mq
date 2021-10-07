@@ -1891,26 +1891,26 @@ class AdminMembers (RoutablePageMixin, Page):
 
             members = members.annotate(
                 contribution=Case(
-                    When(contributions__contribution=con, then=Value(con.id)),
-                    default=Value(None)
+                    When(contributions__contribution=con, then=Value(con.id, output_field=models.TextField())),
+                    default=Value(None, output_field=models.TextField())
                 )
             ).distinct('id')
 
         except:
             con = None
 
-        try:
-            app = Application.objects.get(is_active=True)
+        # try:
+        #     app = Application.objects.get(is_active=True)
 
-            children = MemberChild.objects.annotate(
-                application=Case(
-                    When(child_application__application=app, then=Value(app.id)),
-                    default=Value(None)
-                )
-            ).distinct('id')
+        #     children = MemberChild.objects.annotate(
+        #         application=Case(
+        #             When(child_application__application=app, then=Value(app.id)),
+        #             default=Value(None)
+        #         )
+        #     ).distinct('id')
 
-        except:
-            con = None
+        # except:
+        #     con = None
 
         # for m in Member.objects.annotate(contribution=FilteredRelation('contributions', condition=Q(contributions__contribution=con))).order_by('id'):
         #     print (m)
