@@ -25,18 +25,18 @@
     
     <section class="beige">
         <div class="ui container transparent">
-            <div class="ui grid two column">
+            <div class="ui stackable two column grid">
                 <!-- LEFT SIDE -->
                 <div class="column">
+                    <!-- ANTENNE -->
+                    <div class="card place">
+                        {% place_contact %}
+                    </div>
+                    
+                    <div class="card map">
+                        {% place_maps %}
+                    </div>
                     <div class="flex flex-col">
-                        <!-- ANTENNE -->
-                        <div class="card place">
-                            {% place_contact %}
-                        </div>
-                        
-                        <div class="card map">
-                            {% place_maps %}
-                        </div>
                     </div>
                 </div>
     
@@ -47,7 +47,7 @@
                         <div class="card intro">
                             {{ self.intro|richtext }}
                         </div>
-
+    
                         <div class="card form">
                             <h3 class="w-full mx-auto uix header">Formulaire</h3>
                     
@@ -79,6 +79,17 @@
                             </form>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui container transparent">
+            <div class="ui grid two column">
+                <div class="column">
+                    
+                </div>
+    
+                <div class="column">
+                    
                 </div>
     
             </div>
@@ -116,14 +127,15 @@
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"></script>
 <script>
-    window.onload = function () {
-
+    $(function () {
         // render ();
+       
+       drawMap ();
 
-        drawMap ();
+       // gallery.init();
+    });
 
-        // gallery.init();
-    }
+
 
     /**
     Function moved to templates/widgets/place_maps_widgets.html

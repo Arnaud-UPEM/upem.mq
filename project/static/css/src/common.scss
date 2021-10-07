@@ -171,6 +171,10 @@ nav {
         display: none;
         background-color: white;
         
+        #mobile_item {
+            order: 3;
+        }
+
         .menu {
             .item {
                 &.hidden { display: none; }
@@ -699,17 +703,54 @@ h4.uix.header {
     .subheader { font-size: 1.5rem; }
 }
 
+.aboutpage {
+    @media (max-width: 1024px) {
+        .page.banner {
+            padding: 1rem;
+
+            .uix.header {
+                font-size: 2.25rem;
+            }
+        }
+
+        .container {
+            width: auto;
+            padding: 0 1rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .page.banner {
+            padding: 1rem;
+    
+            .uix.header {
+                font-size: 1.25rem;
+            }
+        }
+    }
+
+    .history.image {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
 .highlights {
+    padding: 2rem 0;
+
+    .tile {
+        padding: 0rem;
+        flex-direction: column;
+    }
+
     &.four {
-        padding: 3rem;
 
         .tile {
             height: 100%;
-            padding: 1rem;
 
             display: flex;
             grid-gap: 1rem;
-            flex-direction: column;
 
             * {
                 text-align: center;
@@ -749,7 +790,6 @@ h4.uix.header {
     }
 
     &.list {
-        padding: 3rem;
 
         .ui.container {
             background-color: transparent;
@@ -757,11 +797,9 @@ h4.uix.header {
 
         .tile {
             height: 100%;
-            padding: 1rem;
 
             display: flex;
             grid-gap: 1rem;
-            flex-flow: row nowrap;
             align-items: center;
             justify-content: center;
 
@@ -805,7 +843,6 @@ h4.uix.header {
     
                 .content {}
             }
-
         }
         
         // Variant
@@ -813,14 +850,34 @@ h4.uix.header {
             color: white;
         }
     }
+
+    @media (min-width: 768px) {
+        padding: 3rem;
+
+        .tile {
+            padding: 1rem;
+        }
+
+        &.list {
+            .tile {
+                flex-flow: row nowrap;
+            }
+        }
+    }
+
+    @media (min-width: 1024px) {
+    }
+
+    @media (min-width: 1280px) {
+    }
 }
 
 .quote {
-    padding: 1rem;
+    padding: 0rem;
 
     display: flex;
     grid-gap: 1rem;
-    flex-flow: row nowrap;
+    flex-flow: column nowrap;
     justify-content: center;
 
     .left {
@@ -848,6 +905,11 @@ h4.uix.header {
 
             span { color: $yellow-500; }
         }
+    }
+
+    @media (min-width: 768px) {
+        padding: 1rem;
+        flex-flow: row nowrap;
     }
 }
 

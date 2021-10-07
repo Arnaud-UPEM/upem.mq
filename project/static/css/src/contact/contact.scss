@@ -7,11 +7,44 @@ body.contact {
 
 #Place {
     height: 100%;
+    min-height: 100%;
+    overflow: auto;
     background-color: beige;
     background-color: gainsboro;
 
+    @media (max-width: 1024px) {
+        .page.banner {
+            padding: 1rem;
+
+            .uix.header {
+                font-size: 2.25rem;
+            }
+        }
+
+        .container {
+            width: auto;
+            padding: 0 1rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .page.banner {
+            padding: 1rem;
+    
+            .uix.header {
+                font-size: 1.25rem;
+            }
+        }
+    }
+
     section.beige {
         padding-top: 1rem;
+    }
+
+    .ui.column {
+        .column {
+            padding-bottom: 0 !important;
+        }
     }
 
     .card {

@@ -17,13 +17,13 @@
     </div>
 </section>
 
-<section>
+<section class="py-4">
     <div class="ui container py-4">
-        <div class="ui grid two column">
+        <div class="ui stackable two column grid">
             <div class="column history richtext">
                 {{ page.history|richtext }}
             </div>
-            <div class="column flex items-center">
+            <div class="column history image">
                 <img class="rounded" src="https://source.unsplash.com/random/500x500" alt="">
             </div>
         </div>
@@ -65,7 +65,7 @@
 <section>
     <div class="highlights four py-4">
         <div class="ui container">
-            <div class="ui grid">
+            <div class="ui stackable four column grid">
                 {% if page.tile_schoo_council %}
                 <div class="four wide column">
                     <div class="tile">
@@ -125,7 +125,7 @@
 <section>
     <div class="highlights list bg-green-800">
         <div class="ui container">
-            <div class="ui two column grid">
+            <div class="ui stackable two column grid">
                 {% if page.tile_education %}
                 <div class="column">
                     <div class="tile">
@@ -356,7 +356,7 @@
 
 {% block extra_js %}
 <script>
-    window.onload = function () {
+    $(function () {
         var splide__cards = new Splide('#splide__cards', {
             perPage: 4,
             type: 'loop',
@@ -368,6 +368,6 @@
         });
         
         splide__cards.mount();
-    }
+    });
 </script>
 {% endblock %}

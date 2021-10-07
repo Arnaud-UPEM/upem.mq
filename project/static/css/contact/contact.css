@@ -4,10 +4,27 @@ body.contact .pusher {
 
 #Place {
   height: 100%;
+  min-height: 100%;
+  overflow: auto;
   background-color: beige;
   background-color: gainsboro; }
+  @media (max-width: 1024px) {
+    #Place .page.banner {
+      padding: 1rem; }
+      #Place .page.banner .uix.header {
+        font-size: 2.25rem; }
+    #Place .container {
+      width: auto;
+      padding: 0 1rem; } }
+  @media (max-width: 768px) {
+    #Place .page.banner {
+      padding: 1rem; }
+      #Place .page.banner .uix.header {
+        font-size: 1.25rem; } }
   #Place section.beige {
     padding-top: 1rem; }
+  #Place .ui.column .column {
+    padding-bottom: 0 !important; }
   #Place .card {
     margin-bottom: 1rem;
     padding: 1rem;

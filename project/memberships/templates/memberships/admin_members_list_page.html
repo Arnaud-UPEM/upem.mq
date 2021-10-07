@@ -140,31 +140,31 @@
                     {% endwith %}
                     {% endif %}
                     
-                    
                     <td>
-                        <a href="/mon-profil/listes-membres/enfant/{{ child.id }}/" target="_blank">
-                            {{ child.first_name }} {{ child.last_name }}</td>
-                        </a>
-                        <td class="center aligned">{{ child.school }}</td>
-                        <td class="center aligned">{{ child.grade }}</td>
-                        <td></td>
-                    </tr>
-                    {% empty %}
+                        <!-- <a href="/mon-profil/listes-membres/enfant/{{ child.id }}/" target="_blank">
+                        </a> -->
+                            {{ child.first_name }} {{ child.last_name }}
+                    </td>
+                    <td class="center aligned">{{ child.school }}</td>
+                    <td class="center aligned">{{ child.grade }}</td>
+                    <td></td>
+                </tr>
+                {% empty %}
                     
-                    <tr>
-                        <td>{{ member.first_name }} {{ member.last_name }}</td>
-                        <td class="center aligned"><div class="ui label red">Non</div></td>
-                        
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    {% endfor %}
-                    {% endfor %}
-                </tbody>
-            </table>
-        </section>
+                <tr>
+                    <td>{{ member.first_name }} {{ member.last_name }}</td>
+                    <td class="center aligned"><div class="ui label red">Non</div></td>
+                    
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
         
         {% comment %}
         <div class="ui segment" id="list">

@@ -82,6 +82,8 @@ nav {
   nav.responsive {
     display: none;
     background-color: white; }
+    nav.responsive #mobile_item {
+      order: 3; }
     nav.responsive .menu .item.hidden {
       display: none; }
     nav.responsive .menu i.icon.bars {
@@ -434,14 +436,35 @@ h4.uix.header {
   h4.uix.header .subheader {
     font-size: 1.5rem; }
 
-.highlights.four {
-  padding: 3rem; }
+@media (max-width: 1024px) {
+  .aboutpage .page.banner {
+    padding: 1rem; }
+    .aboutpage .page.banner .uix.header {
+      font-size: 2.25rem; }
+  .aboutpage .container {
+    width: auto;
+    padding: 0 1rem; } }
+
+@media (max-width: 768px) {
+  .aboutpage .page.banner {
+    padding: 1rem; }
+    .aboutpage .page.banner .uix.header {
+      font-size: 1.25rem; } }
+
+.aboutpage .history.image {
+  display: flex !important;
+  align-items: center;
+  justify-content: center; }
+
+.highlights {
+  padding: 2rem 0; }
+  .highlights .tile {
+    padding: 0rem;
+    flex-direction: column; }
   .highlights.four .tile {
     height: 100%;
-    padding: 1rem;
     display: flex;
-    grid-gap: 1rem;
-    flex-direction: column; }
+    grid-gap: 1rem; }
     .highlights.four .tile * {
       text-align: center; }
     .highlights.four .tile .image img {
@@ -462,17 +485,12 @@ h4.uix.header {
       background-color: #098663; }
     .highlights.four .tile .title {
       font-size: 1.5rem; }
-
-.highlights.list {
-  padding: 3rem; }
   .highlights.list .ui.container {
     background-color: transparent; }
   .highlights.list .tile {
     height: 100%;
-    padding: 1rem;
     display: flex;
     grid-gap: 1rem;
-    flex-flow: row nowrap;
     align-items: center;
     justify-content: center;
     color: white; }
@@ -502,12 +520,19 @@ h4.uix.header {
         font-size: 1.5rem; }
   .highlights.list.light {
     color: white; }
+  @media (min-width: 768px) {
+    .highlights {
+      padding: 3rem; }
+      .highlights .tile {
+        padding: 1rem; }
+      .highlights.list .tile {
+        flex-flow: row nowrap; } }
 
 .quote {
-  padding: 1rem;
+  padding: 0rem;
   display: flex;
   grid-gap: 1rem;
-  flex-flow: row nowrap;
+  flex-flow: column nowrap;
   justify-content: center; }
   .quote .left .icon.left {
     color: #edee3b;
@@ -525,6 +550,10 @@ h4.uix.header {
       text-align: right; }
       .quote blockquote .author span {
         color: #edee3b; }
+  @media (min-width: 768px) {
+    .quote {
+      padding: 1rem;
+      flex-flow: row nowrap; } }
 
 .organization.splide {
   padding: 1rem 0; }

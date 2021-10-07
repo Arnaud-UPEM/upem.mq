@@ -440,7 +440,7 @@ class MemberChild (index.Indexed, models.Model):
 
     dob = models.DateField(verbose_name='Date de naissance')
 
-    grade = models.CharField(max_length=20, default=GradeEnum.DEFAUT, choices=GradeEnum.choices(), null=True, blank=True, verbose_name='Classe')
+    grade = models.CharField(max_length=20, default=GradeEnum.DEFAUT.value, choices=GradeEnum.choices(), null=True, blank=True, verbose_name='Classe')
     school = models.ForeignKey(
         School,
         null=True,
