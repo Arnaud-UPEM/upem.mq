@@ -1932,7 +1932,7 @@ class AdminMembers (RoutablePageMixin, Page):
         # members = Member.objects.annotate(c_id=F('children__id'), c_first_name=F('children__first_name')).values('id', 'first_name', 'last_name', 'c_id', 'c_first_name').filter(Q(c_first_name='Emerson'))
         # condition=)).filter(Q(children_f__is_null=False))
 
-        members = self._filtering (request, members)
+        # members = self._filtering (request, members)
 
         page = request.GET.get('page', 1)
 
