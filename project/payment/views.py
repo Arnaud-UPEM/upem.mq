@@ -5,7 +5,7 @@ from django.shortcuts import render
 from rest_framework import status
 from rest_framework.decorators import api_view
 
-from memberships.models import Contribution
+from memberships.models import Contribution, MemberContribution
 
 from .models import TransactionVADS, OrderStatusEnum as OSE, IncorrectAmount, IncorrectCustomer, IncorrectPayload, IncorrectProduct
 from .parser import ParseException, parse
@@ -57,9 +57,10 @@ def api_vads_ipn (request):
         elif 'contribution' in parsed:
             contribution = Contribution.objects.get(pk=parsed['contribution'])
             contribution_id = contribution.buy(
-                id=transaction.id,
                 amount=transaction.amount / 100, 
-                email=transaction.cust_email
+                email=transaction.cust_email,
+                id=transaction.id,
+                method=MemberContribution.ONLINE
             )
 
             transaction.order_id = contribution_id

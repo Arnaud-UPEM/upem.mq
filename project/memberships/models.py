@@ -272,7 +272,7 @@ class Contribution (ClusterableModel):
             return True
         return False
 
-    def buy (self, amount, email, transaction_id):
+    def buy (self, amount, email, transaction_id, method='ON'):
         try:
             member = Member.objects.get(auth__email=email)
 
@@ -287,7 +287,8 @@ class Contribution (ClusterableModel):
                 price=amount,
                 member=member,
                 contribution=self,
-                transaction_id=transaction_id
+                transaction_id=transaction_id,
+                method=method
             )
 
             # Send mail
