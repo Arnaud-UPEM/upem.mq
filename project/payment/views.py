@@ -59,7 +59,7 @@ def api_vads_ipn (request):
             contribution_id = contribution.buy(
                 amount=transaction.amount / 100, 
                 email=transaction.cust_email,
-                id=transaction.id,
+                transaction_id=transaction.id,
                 method=MemberContribution.ONLINE
             )
 
