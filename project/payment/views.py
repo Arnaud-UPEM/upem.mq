@@ -102,6 +102,7 @@ def api_vads_ipn (request):
 
     except Exception as e:
         print ('7')
+        print (e)
         transaction = TransactionVADS.objects.create(
             status = OSE.UNKNOW_TRANSACTION
         )
