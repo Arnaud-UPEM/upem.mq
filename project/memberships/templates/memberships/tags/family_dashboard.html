@@ -21,7 +21,9 @@
 
                     <ul class="list">
                     {% for child in children %}
-                        <li>{{ child.first_name }} {{ child.last_name }}</li>
+                        <li><a href="/mon-profil/mes-enfants/{{ child.id }}/">
+                            {{ child.first_name }} {{ child.last_name }}
+                        </a></li>
                     {% endfor %}
                     </ul>
 

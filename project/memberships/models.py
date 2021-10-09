@@ -9,6 +9,7 @@ from django import forms
 from django.conf import settings
 from django.contrib.auth import logout
 from django.core.exceptions import ValidationError
+from django.core.mail import EmailMessage
 from django.core.paginator import Paginator
 from django.db import models
 from django.db.models import Q, F, Count, FilteredRelation, Case, Value, When
@@ -43,7 +44,7 @@ from .data import ZIPS
 from core.models import SEOAbstractEmailForm, SEOPage, login_required_view
 
 from user.forms import AuthForm, SignupForm
-from user.models import Auth
+from user.models import Auth, EmailThread
 
 from education.models import GradeEnum, School
 
@@ -271,7 +272,7 @@ class Contribution (ClusterableModel):
             return True
         return False
 
-    def buy (self, id, amount, email):
+    def buy (self, amount, email, transaction_id):
         try:
             member = Member.objects.get(auth__email=email)
 
@@ -286,8 +287,24 @@ class Contribution (ClusterableModel):
                 price=amount,
                 member=member,
                 contribution=self,
-                transaction_id=id
+                transaction_id=transaction_id
             )
+
+            # Send mail
+            email = EmailMessage(
+                'Paiement cotisation',
+                f'Bonjour, {member.first_name}',
+                settings.EMAIL_FROM_ADDRESS,
+                [email]
+            )
+
+            email.attach(
+                'facture-cotisation-UPEM.pdf',
+                member_contribution.pdf(),
+                'application/pdf'
+            )
+
+            EmailThread (email).start()
 
             return member_contribution.id
 
@@ -502,17 +519,21 @@ class MemberContribution (models.Model, index.Indexed):
     date_bought = models.DateTimeField(default=datetime.now, verbose_name='Date achat')
 
     ONLINE  = 'ON'
-    CASH    = 'SO'
-    CHECK   = 'JR'
-    CREDIT  = 'SR'
+    CASH    = 'CASH'
+    CHECK   = 'CHCK'
+    CREDIT  = 'CRED'
+    VIREMENT  = 'VRMT'
+    OTHER   = 'AUTR'
     METHODS = [
         (ONLINE, 'En ligne'),
         (CASH, 'Espèce'),
         (CHECK, 'Chèque'),
         (CREDIT, 'Crédit'),
+        (VIREMENT, 'Virement'),
+        (OTHER, 'Autre'),
     ]
     method = models.CharField(
-        max_length=2,
+        max_length=10,
         choices=METHODS,
         default=ONLINE,
     )
@@ -537,6 +558,8 @@ class MemberContribution (models.Model, index.Indexed):
     #     related_name='_members'
     # )
 
+    template_bill = 'memberships/profile_contribution_bill.html'
+
     panels = [
         MultiFieldPanel([
             FieldPanel('price'),
@@ -558,6 +581,41 @@ class MemberContribution (models.Model, index.Indexed):
     def __str__ (self):
         return f'#{self.id} - {self.contribution} - {self.member}'
 
+    @property
+    def date_literal (self):
+        MONTHS = [
+            '',
+            'janvier',
+            'février',
+            'mars',
+            'avril',
+            'mai',
+            'juin',
+            'juillet',
+            'août',
+            'septembre',
+            'octobre',
+            'novembre',
+            'décembre',
+        ]
+
+        return f'{self.date_bought.day} {MONTHS[self.date_bought.month]} {self.date_bought.year}'
+
+    # Useless in fact
+    def bill (self):
+        return {
+            'date_literal': self.date_literal,
+            'member_contribution': self
+        }
+
+    def pdf (self, base_url=''):
+        template = get_template (self.template_bill)
+        html = template.render({
+            'date_literal': self.date_literal,
+            'member_contribution': self
+        })
+
+        return HTML(string=html, base_url=base_url).write_pdf()
 
 # Added child directly there
 @register_snippet
@@ -1572,7 +1630,21 @@ class ProfileContribution (RoutablePageMixin, Page):
     @route (r'^facture/(\d+)/$', name='pk')
     @login_required_view ('/unauthorized')
     def facture (self, request, pk=0, *args, **kwargs):
-        context = self._facture (request, pk, *args, **kwargs)
+        context = self.get_context (request, *args, **kwargs)
+
+        try:
+            mc = MemberContribution.objects.get(pk=pk)
+
+            context['date_literal'] = mc.date_literal
+            context['member_contribution'] = mc
+            
+        except MemberContribution.DoesNotExist:
+            if settings.DEBUG:
+                pass
+
+            context['critical'] = 'Reçu introuvable. Veuillez recommencer.'
+
+        # context = self._facture (request, pk, *args, **kwargs)
 
         return render (
             request,
@@ -1583,61 +1655,29 @@ class ProfileContribution (RoutablePageMixin, Page):
     @route (r'^facture/pdf/(\d+)/$', name='pk')
     @login_required_view ('/unauthorized')
     def facture_pdf (self, request, pk=0, *args, **kwargs):
-        template = get_template (self.template_bill)
-        html = template.render(self._facture(request, pk, *args, **kwargs))
+        # template = get_template (self.template_bill)
+        # html = template.render(self._facture(request, pk, *args, **kwargs))
 
         # result = BytesIO()
 
         # pdf = pisa.pisaDocument(BytesIO(html.encode('utf8')), result)
 
-        pdf = HTML(string=html, base_url=request.build_absolute_uri()).write_pdf()
-        filename = 'bill-2021.pdf'
-
-        response = HttpResponse(pdf, content_type='application/pdf')
-        response['Content-Disposition'] = 'inline; filename="' + filename + '"'
-        return response
-
-        if not pdf.err:
-            # return FileResponse (result, as_attachment=True, filename='bill.pdf')
-            return HttpResponse (result.getvalue(), content_type='application/pdf')
-
-        return None
-
-        context = self.get_context(request, *args, **kwargs)
+        # pdf = HTML(string=html, base_url=request.build_absolute_uri()).write_pdf()
 
         try:
-            mc = MemberContribution.objects.get(pk=pk)
-            context['member_contribution'] = mc
+            mc = MemberContribution.objects.get(pk=pk)            
 
-            MONTHS = [
-                'janvier',
-                'février',
-                'mars',
-                'avril',
-                'mai',
-                'juin',
-                'juillet',
-                'août',
-                'septembre',
-                'octobre',
-                'novembre',
-                'décembre',
-            ]
+            pdf = mc.pdf(request.build_absolute_uri())
+            filename = 'facture-cotisation-UPEM.pdf'
 
-            context['date_literal'] = f'{mc.date_bought.day} {MONTHS[mc.date_bought.month]} {mc.date_bought.year}'
+            response = HttpResponse(pdf, content_type='application/pdf')
+            response['Content-Disposition'] = 'inline; filename="' + filename + '"'
+            return response
+
         except MemberContribution.DoesNotExist:
-            if settings.DEBUG:
-                pass
+            pass
 
-            else:
-                context['critical'] = 'Reçu introuvable. Veuillez recommencer.'
-            
-
-        return render (
-            request,
-            self.template_bill,
-            context
-        )
+        return HttpResponse('Fichier introuvable.')
 
 
 # ???
@@ -1883,21 +1923,14 @@ class AdminMembers (RoutablePageMixin, Page):
 
         members = Member.objects.all()
 
-        try:
-            con = Contribution.objects.get(is_active=True)
-            # members = members.annotate(contribution=FilteredRelation('contributions', condition=Q(contributions__contribution=con)))
-            # members = members.annotate(contribution=F('contributions__contribution')).filter(Q(contribution=con.id) | Q(contribution__isnull=True))
-            # members = members.objects.annotate(contribution=FilteredRelation('contributions', condition=Q(contributions__contribution=con)))
+        
 
-            members = members.annotate(
-                contribution=Case(
-                    When(contributions__contribution=con, then=Value(con.id, output_field=models.TextField())),
-                    default=Value(None, output_field=models.TextField())
-                )
-            ).distinct('id')
-
-        except:
-            con = None
+        # members = Member.objects.annotate(
+        #     contribution=Case(
+        #         When(contributions__contribution=con, then=Value(con.id)),
+        #         default=Value(None)
+        #     )
+        # ).distinct('id').order_by('id')
 
         # try:
         #     app = Application.objects.get(is_active=True)
@@ -1932,13 +1965,57 @@ class AdminMembers (RoutablePageMixin, Page):
         # members = Member.objects.annotate(c_id=F('children__id'), c_first_name=F('children__first_name')).values('id', 'first_name', 'last_name', 'c_id', 'c_first_name').filter(Q(c_first_name='Emerson'))
         # condition=)).filter(Q(children_f__is_null=False))
 
-        # members = self._filtering (request, members)
+        members = self._filtering (request, members)
+
+        try:
+            con = Contribution.objects.get(is_active=True)
+            # members = members.annotate(contribution=FilteredRelation('contributions', condition=Q(contributions__contribution=con)))
+            # members = members.annotate(contribution=F('contributions__contribution')).filter(Q(contribution=con.id) | Q(contribution__isnull=True))
+            # members = members.objects.annotate(contribution=FilteredRelation('contributions', condition=Q(contributions__contribution=con)))
+
+            # members = Member.objects.all().annotate(
+            #     contribution=Case(
+            #         When(
+            #             contributions__contribution=Contribution.objects.get(is_active=True),
+            #             then=Value(con.id, output_field=models.IntegerField())
+            #         ),
+            #         default=Value(0, output_field=models.IntegerField())
+            #     )
+            # ).distinct('id')
+
+            # cons = MemberContribution.objects.filter(contribution=con)
+
+            # for member in members:
+            #     if cons.filter(member=member):
+            #         setattr(member, 'contribution', con.id)
+
+            # members = members.annotate(
+            #     num=Count('children')
+            # )
+
+            context['contribution'] = con
+
+        except:
+            con = None
+
+        # print (members.get(pk=34).contribution)
+        # print (members.get(pk=35).contribution)
+        # print (members.get(pk=37).contribution)
+        # print (members.get(pk=48).contribution)
 
         page = request.GET.get('page', 1)
 
-        paginator = Paginator(members, 10)
+        paginator = Paginator(members.order_by('id'), 10)
         page_obj = paginator.get_page(page)
 
+        result = page_obj.object_list
+
+        if con:
+            for member in result:
+                if MemberContribution.objects.filter(member=member, contribution=con):
+                    setattr(member, 'contribution', con.id)
+
+        context['result'] = result
         context['page_obj'] = page_obj
         context['grades'] = dict(GradeEnum.choices())
 

@@ -78,26 +78,24 @@
             </div>
         </div>
         <div class="ui column">
-            <div class="ui cards">
-                <div class="card">
-                    <div class="content">
-                        <div class="header">
-                            Cotisations
-                        </div>
+            <div class="ui fluid card">
+                <div class="content">
+                    <div class="header">
+                        Cotisations
                     </div>
-                    {% for mc in member_contributions %}
-                    <div class="extra content">
-                        <p>
-                            {{ mc.contribution.name }}
-                            {% if mc.contribution.is_active %}(<b>active</b>){% endif %}
-                        </p>
-                        <div class="ui two buttons">
-                            <a class="ui basic blue button" href="/admin/snippets/memberships/membercontribution/edit/{{ mc.id }}/" target="_blank">Modifier</a>
-                            <a class="ui basic green button" href="/mon-profil/mes-cotisations/facture/{{ mc.id }}/" target="_blank">Facture</a>
-                        </div>
-                    </div>
-                    {% endfor %}
                 </div>
+                {% for mc in member_contributions %}
+                <div class="extra content">
+                    <p>
+                        {{ mc.contribution.name }}
+                        {% if mc.contribution.is_active %}(<b>active</b>){% endif %}
+                    </p>
+                    <div class="ui two buttons">
+                        <a class="ui basic blue button" href="/admin/snippets/memberships/membercontribution/edit/{{ mc.id }}/" target="_blank">Modifier</a>
+                        <a class="ui basic green button" href="/mon-profil/mes-cotisations/facture/{{ mc.id }}/" target="_blank">Facture</a>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
         </div>
     </div>

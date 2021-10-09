@@ -6,6 +6,7 @@ from enum import Enum, IntEnum
 
 from django.db import models
 
+from wagtail.search import index
 from wagtail.snippets.models import register_snippet
 
 # Create your models here.
@@ -95,7 +96,7 @@ class GradeEnum (Enum):
 ''' MODELS '''
 
 @register_snippet
-class School (models.Model):
+class School (models.Model, index.Indexed):
     identifiant_de_l_etablissement  = models.CharField(max_length=128, default='', blank=True, null=True)
     nom_etablissement               = models.CharField(max_length=128, default='', blank=True, null=True)
 
@@ -188,6 +189,10 @@ class School (models.Model):
     # etablissement_multi_lignes            =
     # code_zone_animation_pedagogique       =
     # libelle_zone_animation_pedagogique    =
+
+    search_fields = [
+        index.SearchField('nom_etablissement', partial_match=True)
+    ]
 
     class Meta:
         verbose_name = 'Education: Ecole'

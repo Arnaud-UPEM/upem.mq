@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 
+import threading
+
 from django.db import models
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login, logout
@@ -14,6 +16,17 @@ from wagtail.snippets.models import register_snippet
 
 from .managers import AuthManager
 from core.models import SEOPage
+
+
+class EmailThread (threading.Thread):
+
+    def __init__(self, email):
+        self.email = email
+        threading.Thread.__init__(self)
+
+    def run (self):
+        self.email.send(fail_silently=False)
+    
 
 
 @register_snippet

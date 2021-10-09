@@ -22,6 +22,12 @@
                     <div class="field">
                         <input type="text" name="email" id="s_email" placeholder="Email">
                     </div>
+                    <div class="field">
+                        <div class="ui checkbox">
+                            <input type="checkbox" name="contribution" id="s_contribution">
+                            <label>Cotisation active ?</label>
+                        </div>
+                    </div>
                 </div>
                 <div class="fields">
                     <div class="field">
@@ -60,7 +66,10 @@
             <thead>
                 <tr>
                     <th rowspan="2">Noms</th>
-                    <th rowspan="2">Adhérant</th>
+                    <th rowspan="2">
+                        Adhérant<br>
+                        {% if contribution %}({{ contribution.years }}){% endif %}
+                    </th>
                     <th rowspan="2">Email</th>
                     <th rowspan="2">Téléphones</th>
                     <th colspan="4">Enfants</th>
@@ -111,7 +120,7 @@
                     <td></td>
                     <td></td>
                 </tr>
-                {% for member in page_obj %}
+                {% for member in result %}
                 {% for child in member.children.all %}
                 <tr>
                     {% if forloop.counter == 1 %}
@@ -123,6 +132,7 @@
                         </a>
                     </td>
                     <td rowspan="{{ children_length }}" class="center aligned">
+                        {{ member.contribution }}
                         {% if member.contribution %}
                         <div class="ui label green">Oui</div>
                         {% else %}
@@ -166,82 +176,67 @@
         </table>
     </section>
         
-        {% comment %}
-        <div class="ui segment" id="list">
-            <div class="ui relaxed divided list big">
-                {% for school in page_obj %}
-                <a class="item" href="{{ school.id }}/" target="_blank">
-                    <div class="content">
-                        <div class="header">{{ school.nom_etablissement }} ({{ school.count }})</div>
-                    </div>
-                </a>
-                {% endfor %}
-            </div>
-        </div>
-        {% endcomment %}
-        
-        <div class="ui basic segment" id="pagination">
-        </div>
-        {% endif %}
-    </article>
-    {% endblock articles %}
-    
-    {% block profile_js %}
-    <script src="/static/vendor/simplePagination/simplePagination.js"></script>
-    <script>
-        $(function () {
-            $('#pagination').pagination({
-                pages: {{ page_obj.paginator.num_pages }},
-                prevText: 'Préc',
-                nextText: 'Suiv',
-                currentPage: {{ page_obj.number }},
-                onPageClick: function(page, event) {
-                    console.log(page);
-                    window.location.href = `?page=${page}`;
-                }
-            });
-        });
+    <div class="ui basic segment" id="pagination">
+    </div>
+    {% endif %}
+</article>
+{% endblock articles %}
 
-        $(function () {
-            const urlParams = new URLSearchParams(window.location.search);
-
-            var parameters = {
-                page:          urlParams.get('page') || '',
-
-                names:          urlParams.get('names') || '',
-                email:          urlParams.get('email') || '',
-
-                children_names: urlParams.get('children_names') || '',
-
-                grade:          urlParams.get('grade') || '',
-                school:         urlParams.get('school') || '',
-            };
-            
-            function batchEvents () {
-                const inputs = [
-                    's_names',
-                    's_email',
-                    's_children_names',
-                    's_school_name',
-                    // 's_grade',
-                ];
-                
-                for (const id of inputs) {
-                    document.getElementById(id).addEventListener('input', (e) => {
-                        const target = e.target;
-                        console.log (target);
-                        
-                        const name = target.getAttribute('name');
-                        parameters[name] = target.value;
-                    });
-                }
+{% block profile_js %}
+<script src="/static/vendor/simplePagination/simplePagination.js"></script>
+<script>
+    $(function () {
+        $('#pagination').pagination({
+            pages: {{ page_obj.paginator.num_pages }},
+            prevText: 'Préc',
+            nextText: 'Suiv',
+            currentPage: {{ page_obj.number }},
+            onPageClick: function(page, event) {
+                console.log(page);
+                window.location.href = `?page=${page}`;
             }
-            
-            
-            console.log( parameters);
-
-            batchEvents();
         });
-    </script>
-    {% endblock profile_js %}
-    
+    });
+
+    $(function () {
+        const urlParams = new URLSearchParams(window.location.search);
+
+        var parameters = {
+            page:          urlParams.get('page') || '',
+
+            names:          urlParams.get('names') || '',
+            email:          urlParams.get('email') || '',
+
+            children_names: urlParams.get('children_names') || '',
+
+            grade:          urlParams.get('grade') || '',
+            school:         urlParams.get('school') || '',
+        };
+        
+        function batchEvents () {
+            const inputs = [
+                's_names',
+                's_email',
+                's_children_names',
+                's_school_name',
+                // 's_grade',
+            ];
+            
+            for (const id of inputs) {
+                document.getElementById(id).addEventListener('input', (e) => {
+                    const target = e.target;
+                    console.log (target);
+                    
+                    const name = target.getAttribute('name');
+                    parameters[name] = target.value;
+                });
+            }
+        }
+        
+        
+        console.log( parameters);
+
+        batchEvents();
+    });
+</script>
+{% endblock profile_js %}
