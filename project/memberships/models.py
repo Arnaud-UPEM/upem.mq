@@ -1924,8 +1924,6 @@ class AdminMembers (RoutablePageMixin, Page):
 
         members = Member.objects.all()
 
-        
-
         # members = Member.objects.annotate(
         #     contribution=Case(
         #         When(contributions__contribution=con, then=Value(con.id)),
@@ -1966,9 +1964,11 @@ class AdminMembers (RoutablePageMixin, Page):
         # members = Member.objects.annotate(c_id=F('children__id'), c_first_name=F('children__first_name')).values('id', 'first_name', 'last_name', 'c_id', 'c_first_name').filter(Q(c_first_name='Emerson'))
         # condition=)).filter(Q(children_f__is_null=False))
 
-        members = self._filtering (request, members)
+        app = None
+        con = None
 
         try:
+            app = Application.objects.get(is_active=True)
             con = Contribution.objects.get(is_active=True)
             # members = members.annotate(contribution=FilteredRelation('contributions', condition=Q(contributions__contribution=con)))
             # members = members.annotate(contribution=F('contributions__contribution')).filter(Q(contribution=con.id) | Q(contribution__isnull=True))
@@ -1997,7 +1997,9 @@ class AdminMembers (RoutablePageMixin, Page):
             context['contribution'] = con
 
         except:
-            con = None
+            pass
+
+        members = self._filtering (request, members)
 
         # print (members.get(pk=34).contribution)
         # print (members.get(pk=35).contribution)
@@ -2011,10 +2013,13 @@ class AdminMembers (RoutablePageMixin, Page):
 
         result = page_obj.object_list
 
+        # Add extra data
         if con:
             for member in result:
                 if MemberContribution.objects.filter(member=member, contribution=con):
                     setattr(member, 'contribution', con.id)
+
+        result = self._sub_filtering(request, result)
 
         context['result'] = result
         context['page_obj'] = page_obj
@@ -2124,6 +2129,25 @@ class AdminMembers (RoutablePageMixin, Page):
         if school_name:
             members = members.filter(children__school__nom_etablissement__icontains=school_name)
 
+        return members.distinct('id')
+
+    def _sub_filtering (self, request, members):
+        school_name = request.GET.get('school_name', False)
+
+        for member in members:
+            if school_name:
+                setattr (member, 'f_children', member.children.filter(school__nom_etablissement__icontains=school_name))
+
+            else:
+                setattr (member, 'f_children', member.children.all())
+                
         return members
+
+        # for child in member.children.all():
+        #     if school_name in child.school.nom_etablissement:
+
+        #     if school_name:
+        #         members = members.filter(children__school__nom_etablissement__icontains=school_name)
+            
 
         

@@ -14,7 +14,7 @@
         {% block top_side %}
         {% endblock %}
         
-        <div class="ui grid two columns">
+        <div class="ui stackable two column grid">
             <div class="four wide column">
                 {% block left_side %}
                 <div class="menu">
@@ -22,8 +22,8 @@
                         <a href="/mon-profil/dashboard">Vue d'ensemble</a>
                         <a href="/mon-profil/compte">Mon profil</a>
                         <a href="/mon-profil/mes-enfants">Mes enfants</a>
-                        <a href="/mon-profil/candidatures">Mes candidatures </a>
                         <a href="/mon-profil/mes-cotisations">Mes cotisations</a>
+                        <a href="/mon-profil/candidatures">Mes candidatures </a>
                         <!-- <a href="">Mes dons</a> -->
                         <a href="/mon-profil/documents">Documents</a>
                         {% if user.is_superuser %}

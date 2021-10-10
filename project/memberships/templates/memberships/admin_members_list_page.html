@@ -62,7 +62,7 @@
     
     {% if page_obj %}    
     <section class="list">
-        <table class="ui celled structured table">
+        <table class="ui celled structured table unstackable">
             <thead>
                 <tr>
                     <th rowspan="2">Noms</th>
@@ -121,10 +121,10 @@
                     <td></td>
                 </tr>
                 {% for member in result %}
-                {% for child in member.children.all %}
+                {% for child in member.f_children %}
                 <tr>
                     {% if forloop.counter == 1 %}
-                    {% with children_length=member.children.all|length %}
+                    {% with children_length=member.f_children|length %}
                     <td rowspan="{{ children_length }}" class="center aligned">
                         <a href="/mon-profil/listes-membres/membre/{{ member.id }}/" target="_blank">
                             <i class="external alternate icon"></i>
@@ -132,7 +132,6 @@
                         </a>
                     </td>
                     <td rowspan="{{ children_length }}" class="center aligned">
-                        {{ member.contribution }}
                         {% if member.contribution %}
                         <div class="ui label green">Oui</div>
                         {% else %}
@@ -186,6 +185,36 @@
 <script src="/static/vendor/simplePagination/simplePagination.js"></script>
 <script>
     $(function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        const parameters = {
+            page:           urlParams.get('page') || '1',
+
+            names:          urlParams.get('names') || '',
+            email:          urlParams.get('email') || '',
+            
+            children_names: urlParams.get('children_names') || '',
+            
+            grade:          urlParams.get('grade') || '',
+            school_name:    urlParams.get('school_name') || '',
+        };
+
+        function buildURL (page='') {
+            let url = '';
+
+            for (const p in parameters) {
+                if (p === 'page' && page) url += `&page=${page}`;
+                else url += `&${p}=${parameters[p]}`;
+            }
+
+            if (url) url[0] = '?'
+            
+            return url;
+        }
+
+        console.log(buildURL());
+        console.log(buildURL(3));
+
         $('#pagination').pagination({
             pages: {{ page_obj.paginator.num_pages }},
             prevText: 'Préc',
@@ -193,25 +222,10 @@
             currentPage: {{ page_obj.number }},
             onPageClick: function(page, event) {
                 console.log(page);
-                window.location.href = `?page=${page}`;
+    
+                window.location.href = `?page=${buildURL(page)}`;
             }
         });
-    });
-
-    $(function () {
-        const urlParams = new URLSearchParams(window.location.search);
-
-        var parameters = {
-            page:          urlParams.get('page') || '',
-
-            names:          urlParams.get('names') || '',
-            email:          urlParams.get('email') || '',
-
-            children_names: urlParams.get('children_names') || '',
-
-            grade:          urlParams.get('grade') || '',
-            school:         urlParams.get('school') || '',
-        };
         
         function batchEvents () {
             const inputs = [
